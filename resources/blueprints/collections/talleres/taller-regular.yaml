@@ -1,0 +1,103 @@
+title: 'Taller Regular'
+tabs:
+  main:
+    display: Taller
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              display: Nombre del curso
+              required: true
+              validate:
+                - required
+          -
+            handle: descripcion
+            field:
+              type: bard
+              display: Descripción
+              buttons:
+                - bold
+                - italic
+                - underline
+                - strike
+                - unorderedlist
+                - orderedlist
+                - h2
+                - h3
+                - blockquote
+              save_html: true
+          -
+            handle: mensaje_importante
+            field:
+              type: text
+              display: Mensaje importante
+              instructions: 'Mensaje destacado visible en la página del taller'
+          -
+            handle: edad
+            field:
+              type: text
+              display: Edad
+              instructions: 'Ej: 6-8 años'
+          -
+            handle: dias
+            field:
+              type: checkboxes
+              display: Días
+              options:
+                lunes: Lunes
+                martes: Martes
+                miercoles: Miércoles
+                jueves: Jueves
+                viernes: Viernes
+                sabado: Sábado
+                domingo: Domingo
+          -
+            handle: hora_inicio
+            field:
+              type: time
+              display: Hora de inicio
+          -
+            handle: hora_fin
+            field:
+              type: time
+              display: Hora de fin
+          -
+            handle: fecha_inicio
+            field:
+              type: date
+              display: Fecha de inicio
+              time_enabled: false
+          -
+            handle: enlace
+            field:
+              type: text
+              display: Enlace de reserva (PayPal)
+              instructions: 'Pega el enlace de pago de PayPal'
+          -
+            handle: personaje
+            field:
+              type: entries
+              display: Personaje
+              collections:
+                - personajes
+              max_items: 1
+              mode: default
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'
+          -
+            handle: template
+            field:
+              type: hidden
+              default: talleres/taller-regular

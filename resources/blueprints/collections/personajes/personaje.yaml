@@ -1,0 +1,56 @@
+title: Personaje
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: cargo
+            field:
+              type: text
+              display: Cargo
+          -
+            handle: color
+            field:
+              type: select
+              display: Color
+              options:
+                '#F5E554': Amarillo
+                '#F1D5E5': Rosa
+                '#FFC18E': Durazno
+                '#89F0D8': Menta
+                '#C5CBEE': Lavanda
+                '#F289B8': Fucsia
+                '#DBD5F1': Lila
+          -
+            handle: imagen
+            field:
+              container: assets
+              max_files: 1
+              type: assets
+              display: Imagen
+          -
+            handle: template
+            field:
+              type: template
+              display: Template
+              localizable: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

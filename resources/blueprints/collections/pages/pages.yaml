@@ -1,0 +1,225 @@
+title: Pages
+tabs:
+  hero:
+    display: Hero
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: hero_type
+            field:
+              type: button_group
+              display: 'Hero Type'
+              default: video
+              options:
+                video: Video
+                slider: Slider
+          -
+            handle: hero_video_source
+            field:
+              type: button_group
+              display: 'Video Source'
+              default: url
+              options:
+                url: 'YouTube / Vimeo URL'
+                upload: 'Upload Video'
+              if:
+                hero_type: 'equals video'
+          -
+            handle: hero_video_url
+            field:
+              type: video
+              display: 'Video URL'
+              instructions: 'Paste a YouTube or Vimeo URL'
+              if:
+                hero_type: 'equals video'
+                hero_video_source: 'equals url'
+          -
+            handle: hero_video_file
+            field:
+              type: assets
+              display: 'Video File'
+              max_files: 1
+              container: assets
+              if:
+                hero_type: 'equals video'
+                hero_video_source: 'equals upload'
+          -
+            handle: hero_slides
+            field:
+              type: assets
+              display: Slides
+              instructions: 'Upload images for the Ken Burns slideshow'
+              container: assets
+              if:
+                hero_type: 'equals slider'
+  circle:
+    display: 'El Viaje'
+    sections:
+      -
+        fields:
+          -
+            handle: circle_image
+            field:
+              type: assets
+              display: 'Circle Image'
+              instructions: 'Image displayed inside the animated circle'
+              max_files: 1
+              container: assets
+          -
+            handle: circle_slides
+            field:
+              type: replicator
+              display: Slides
+              instructions: 'Each slide appears as the circle animates. Up to 6 slides.'
+              max_sets: 6
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    slide:
+                      display: Slide
+                      fields:
+                        -
+                          handle: title
+                          field:
+                            type: bard
+                            display: Título
+                            buttons:
+                              - bold
+                              - italic
+                              - underline
+                            save_html: true
+                        -
+                          handle: imagen
+                          field:
+                            type: assets
+                            display: Imagen
+                            max_files: 1
+                            container: assets
+                        -
+                          handle: pasos_del_creador
+                          field:
+                            type: replicator
+                            display: 'Pasos del creador'
+                            sets:
+                              nuevo_grupo_de_conjuntos:
+                                display: 'Nuevo grupo de conjuntos'
+                                sets:
+                                  pasos:
+                                    display: Pasos
+                                    fields:
+                                      -
+                                        handle: titulo
+                                        field:
+                                          type: text
+                                          display: Titulo
+                                      -
+                                        handle: descripcion
+                                        field:
+                                          container: assets
+                                          remove_empty_nodes: false
+                                          type: bard
+                                          display: Descripción
+                                      -
+                                        handle: color
+                                        field:
+                                          type: select
+                                          display: Color
+                                          options:
+                                            verde: Verde
+                                            azul: Azul
+                                            naranja: Naranja
+                                            rojo: Rojo
+                                            negro: Negro
+  image_section:
+    display: 'Sección de descanso'
+    sections:
+      -
+        fields:
+          -
+            handle: image_section_image
+            field:
+              type: assets
+              display: Image
+              max_files: 1
+              container: assets
+          -
+            handle: personajes_cards
+            field:
+              type: entries
+              display: Personajes
+              collections:
+                - personajes
+  talleres:
+    display: Talleres
+    sections:
+      -
+        fields:
+          -
+            handle: talleres_titulo
+            field:
+              type: text
+              display: Título
+          -
+            handle: talleres_entries
+            field:
+              type: entries
+              display: Talleres
+              collections:
+                - talleres
+  marca:
+    display: Marca
+    sections:
+      -
+        fields:
+          -
+            handle: marca_supertitulo
+            field:
+              type: bard
+              display: Super-título
+              buttons:
+                - bold
+                - italic
+              save_html: true
+          -
+            handle: marca_titulo
+            field:
+              type: bard
+              display: Título
+              buttons:
+                - bold
+                - italic
+              save_html: true
+          -
+            handle: marca_imagen_logo
+            field:
+              type: assets
+              display: 'Imagen logo'
+              max_files: 1
+              container: assets
+          -
+            handle: marca_imagen_personajes
+            field:
+              type: assets
+              display: 'Imagen personajes'
+              max_files: 1
+              container: assets
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

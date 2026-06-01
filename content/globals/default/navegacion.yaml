@@ -1,0 +1,7 @@
+favicon: favicon.svg
+logo: branding/animondo-olor.svg
+navegacion:
+  - main_nav
+boton_de_navegacion:
+  teto_de_boton: 'Aparta tu lugar'
+  enlace_de_boton: 'entry::talleres'

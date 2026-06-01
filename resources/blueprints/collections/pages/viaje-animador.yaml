@@ -1,0 +1,115 @@
+title: 'Viaje del Animador'
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: viaje_descripcion
+            field:
+              type: bard
+              display: Descripción
+              buttons:
+                - bold
+                - italic
+              save_html: true
+          -
+            handle: viaje_imagen_personajes
+            field:
+              type: assets
+              display: 'Imagen personajes (top)'
+              max_files: 1
+              container: assets
+          -
+            handle: pasos_del_animador
+            field:
+              type: replicator
+              display: 'Pasos del animador'
+              sets:
+                nuevo_grupo_de_conjuntos:
+                  display: Pasos
+                  sets:
+                    nuevo_conjunto:
+                      display: Paso
+                      fields:
+                        -
+                          handle: titulo
+                          field:
+                            type: text
+                            display: Título
+                        -
+                          handle: subtitulo
+                          field:
+                            type: text
+                            display: Subtítulo
+                        -
+                          handle: titulo_de_descripcion
+                          field:
+                            type: text
+                            display: 'Título de descripción'
+                        -
+                          handle: descripcion
+                          field:
+                            type: bard
+                            display: Descripción
+                            buttons:
+                              - bold
+                              - italic
+                              - unorderedlist
+                              - orderedlist
+                            save_html: true
+          -
+            handle: misiones
+            field:
+              type: group
+              display: Misiones
+              fields:
+                -
+                  handle: imagen_de_misiones
+                  field:
+                    type: assets
+                    display: 'Imagen de misiones'
+                    max_files: 1
+                    container: assets
+                -
+                  handle: titulo_de_misiones
+                  field:
+                    type: text
+                    display: 'Título de misiones'
+                -
+                  handle: descripcion_de_misiones
+                  field:
+                    type: bard
+                    display: 'Descripción de misiones'
+                    buttons:
+                      - bold
+                      - italic
+                      - unorderedlist
+                      - orderedlist
+                    save_html: true
+          -
+            handle: viaje_imagen_principal
+            field:
+              type: assets
+              display: 'Imagen principal (full width)'
+              max_files: 1
+              container: assets
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

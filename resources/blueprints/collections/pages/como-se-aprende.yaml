@@ -1,0 +1,64 @@
+title: 'Como se Aprende'
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: subtitulo
+            field:
+              type: text
+              display: Subtítulo
+          -
+            handle: galeria
+            field:
+              type: assets
+              display: Galería
+              container: assets
+              max_files: 20
+          -
+            handle: bloques
+            field:
+              type: replicator
+              display: Bloques
+              sets:
+                bloque:
+                  display: Bloque
+                  fields:
+                    -
+                      handle: imagen
+                      field:
+                        type: assets
+                        display: Imagen
+                        max_files: 1
+                        container: assets
+                    -
+                      handle: texto
+                      field:
+                        type: bard
+                        display: Texto
+                        buttons:
+                          - bold
+                          - italic
+                          - unorderedlist
+                          - orderedlist
+                        save_html: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

@@ -205,7 +205,7 @@ return [
     |
     */
 
-    'additional_uploadable_extensions' => [],
+    'additional_uploadable_extensions' => ['woff', 'woff2', 'ttf', 'otf'],
 
     /*
     |--------------------------------------------------------------------------

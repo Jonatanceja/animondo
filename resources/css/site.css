@@ -2,3 +2,361 @@
 @plugin "@tailwindcss/typography";
 @source "../views";
 @source "../../content";
+
+/* ── Fonts ───────────────────────────────────── */
+
+@font-face {
+  font-family: 'Gonzaga';
+  src: url('../fonts/gonzaga-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gonzaga';
+  src: url('../fonts/gonzaga-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gonzaga';
+  src: url('../fonts/gonzaga-extrabold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-regularitalic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-semibolditalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-bolditalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --color-stone-50: #F4F3F0;
+  --color-blush: #F1D5E5;
+  --color-animondo-green: #36BA9B;
+  --font-sans: 'Gooper', serif;
+  --font-display: 'Gonzaga', sans-serif;
+}
+
+/* ── Hero slider (Ken Burns) ─────────────────── */
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  overflow: hidden;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+}
+
+@keyframes kenburns-1 {
+  from { transform: scale(1.04) translate(0%,    0%);   }
+  to   { transform: scale(1.08) translate(-1%,  -0.5%); }
+}
+@keyframes kenburns-2 {
+  from { transform: scale(1.08) translate(1%,    0.5%); }
+  to   { transform: scale(1.04) translate(0%,    0%);   }
+}
+@keyframes kenburns-3 {
+  from { transform: scale(1.04) translate(-0.5%, 0.5%); }
+  to   { transform: scale(1.08) translate(0.5%, -1%);   }
+}
+@keyframes kenburns-4 {
+  from { transform: scale(1.06) translate(0.5%, -0.5%); }
+  to   { transform: scale(1.04) translate(-0.5%, 0.5%); }
+}
+
+/* ── Video section ───────────────────────────── */
+
+.video-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(-50vw + 50%);
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.video-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #111;
+}
+
+.video-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.video-bg iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 177.78vh;
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+  pointer-events: none;
+}
+
+/* ── Nav logo hide on scroll ─────────────────── */
+
+#nav-logo {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+#nav-logo.logo-hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+/* ── Circle scroll animation ─────────────────── */
+
+#circle-scroll-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(-50vw + 50%);
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+#circle-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background-color: #F1D5E5;
+}
+
+@media (max-width: 639px) {
+  #circle-scroll-wrapper {
+    display: none;
+  }
+}
+
+.frame-content {
+  position: absolute;
+  pointer-events: auto;
+  max-width: 38vw;
+  opacity: 0;
+  z-index: 10;
+}
+
+.frame-content h2 strong {
+  background-repeat: no-repeat;
+  background-position: 0% 88%;
+  background-size: 0% 42%;
+  padding-bottom: 3px;
+}
+
+.frame-content.inset-x-6 {
+  max-width: none;
+}
+
+
+#circle {
+  position: absolute;
+  width: 120vmin;
+  height: 120vmin;
+  top: 50%;
+  left: 50%;
+  margin-left: -60vmin;
+  margin-top: -60vmin;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ── Personajes grid cards ─────────────────── */
+
+.personajes-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+.personajes-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+}
+
+@media (max-width: 768px) {
+  .personajes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.personaje-card {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.personaje-card-inner {
+  position: absolute;
+  inset: 0;
+}
+
+.personaje-card-inner img {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82%;
+  height: 80%;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+}
+
+.personaje-card-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 0.75rem 0.75rem;
+  text-align: center;
+}
+
+.personaje-card-name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #323E81;
+}
+
+.personaje-card-role {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #323E81;
+}
+
+/* ── Mobile El Viaje slider ─────────────────── */
+
+#mobile-viaje {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(-50vw + 50%);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+#mobile-viaje-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background-color: #F1D5E5;
+  overflow: hidden;
+}
+
+#mobile-circle {
+  position: absolute;
+  width: 105vw;
+  height: 105vw;
+  left: 50%;
+  margin-left: -52.5vw;
+  top: 48%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.mobile-slide-content {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  max-height: 44%;
+  overflow: hidden;
+  pointer-events: auto;
+  opacity: 0;
+  z-index: 10;
+}
+
+.mobile-slide-content h2 strong {
+  background-repeat: no-repeat;
+  background-position: 0% 88%;
+  background-size: 0% 42%;
+  padding-bottom: 3px;
+}
+
+/* ── Viaje del Animador tabs ─────────────────── */
+
+.viaje-tab-btn {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.viaje-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.viaje-tab-active {
+  background: rgba(255, 255, 255, 0.55) !important;
+}
+
+

@@ -1,0 +1,51 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# ── Outer blush card ────────────────────────────────────────────────────── #}}
+    <div class="bg-blush rounded-3xl relative px-6 sm:px-10 pt-10 sm:pt-14 pb-10 sm:pb-14">
+
+        {{# ── Decorative gallery images ────────────────────────────────────────── #}}
+        {{ galeria }}
+        {{ if count == 1 }}
+        <div class="absolute right-4 sm:right-8 -top-20 sm:-top-28 w-32 sm:w-96 pointer-events-none z-10">
+            <img src="{{ url }}" alt="" class="w-full object-contain">
+        </div>
+        {{ elseif count == 2 }}
+        <div class="hidden sm:block absolute -left-24 top-1/2 -translate-y-1/2 w-72 pointer-events-none z-10">
+            <img src="{{ url }}" alt="" class="w-full object-contain">
+        </div>
+        {{ /if }}
+        {{ /galeria }}
+
+        {{# ── Title + subtitle ─────────────────────────────────────────────────── #}}
+        <div class="mb-8 sm:mb-10 pr-28 sm:pr-44">
+            <h1 class="font-display font-bold text-4xl sm:text-6xl text-zinc-800 mb-2">{{ title }}</h1>
+            {{ if subtitulo }}
+            <p class="font-sans text-base sm:text-xl text-zinc-800">{{ subtitulo }}</p>
+            {{ /if }}
+        </div>
+
+        {{# ── Blocks – zigzag staggered layout ────────────────────────────────── #}}
+        {{ if bloques }}
+        <div class="flex flex-col gap-4 sm:gap-6">
+            {{ bloques }}
+            <div class="relative {{ if count % 2 == 0 }}ml-[6%] sm:ml-[10%]{{ else }}mr-[6%] sm:mr-[10%]{{ /if }}">
+                {{ if imagen }}
+                {{ imagen }}
+                <img src="{{ url }}" alt="" class="w-full h-auto rounded-2xl sm:rounded-3xl block">
+                {{ /imagen }}
+                {{ else }}
+                <div class="w-full h-48 sm:h-64 bg-[#89F0D8] rounded-2xl sm:rounded-3xl"></div>
+                {{ /if }}
+                {{ if texto }}
+                <div class="absolute bottom-4 sm:bottom-6 {{ if count % 2 == 0 }}-right-4 sm:-right-6{{ else }}-left-4 sm:-left-6{{ /if }}">
+                    <div class="bg-white rounded-xl border-[3px] border-zinc-900 px-5 py-2 sm:px-7 sm:py-3 font-display font-bold text-zinc-800 text-base sm:text-xl [&_p]:inline [&_p]:m-0">{{ texto }}</div>
+                </div>
+                {{ /if }}
+            </div>
+            {{ /bloques }}
+        </div>
+        {{ /if }}
+
+    </div>
+
+</div>

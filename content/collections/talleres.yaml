@@ -1,0 +1,15 @@
+title: Talleres
+icon: collections
+template: talleres/taller
+layout: layout
+route: 'talleres/{slug}'
+revisions: false
+sort_dir: asc
+date_behavior:
+  past: null
+  future: null
+preview_targets:
+  -
+    label: Entry
+    url: '{permalink}'
+    refresh: true

@@ -1,0 +1,35 @@
+<footer class="bg-linear-to-b from-stone-50 to-[#F5E554] px-6 sm:px-16 pt-16 pb-12">
+
+    {{# Logo #}}
+    {{ if footer:footer_logo }}
+    <div class="flex justify-center mb-12">
+        <img src="{{ footer:footer_logo }}" alt="{{ site:name }}" class="h-16 sm:h-20 object-contain">
+    </div>
+    {{ /if }}
+
+    {{# Nav links #}}
+    {{ if footer:navegacion_footer }}
+    <nav class="flex flex-wrap justify-center gap-x-10 gap-y-3 mb-16">
+        {{ nav:footer }}
+        <a href="{{ url }}" class="font-sans text-base text-zinc-800 text-center hover:opacity-50 transition-opacity leading-snug">
+            {{ title }}
+        </a>
+        {{ /nav:footer }}
+    </nav>
+    {{ /if }}
+
+    {{# Address + Contact — right side #}}
+    <div class="flex justify-end gap-16">
+        {{ if footer:direccion }}
+        <div class="font-sans text-sm text-zinc-800 text-right [&_p]:leading-relaxed">
+            {{ footer:direccion }}
+        </div>
+        {{ /if }}
+        {{ if footer:contacto }}
+        <div class="font-sans text-sm text-zinc-800 text-right [&_p]:leading-relaxed">
+            {{ footer:contacto }}
+        </div>
+        {{ /if }}
+    </div>
+
+</footer>

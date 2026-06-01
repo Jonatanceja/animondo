@@ -1,0 +1,30 @@
+title: Talleres Página
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: talleres_titulo
+            field:
+              type: text
+              display: Título
+          -
+            handle: talleres_entries
+            field:
+              type: entries
+              display: Talleres
+              collections:
+                - talleres
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

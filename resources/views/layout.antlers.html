@@ -5,11 +5,20 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ title ?? site:name }}</title>
+        {{ navegacion:favicon }}
+        {{ if extension == 'svg' }}
+        <link rel="icon" type="image/svg+xml" href="{{ url }}">
+        {{ else }}
+        <link rel="icon" type="{{ mime_type }}" href="{{ url }}">
+        {{ /if }}
+        {{ /navegacion:favicon }}
         {{ vite src="resources/js/site.js|resources/css/site.css" }}
     </head>
-    <body class="bg-zinc-100 dark:bg-zinc-900 font-sans leading-normal text-zinc-800 dark:text-zinc-400">
-        <div class="mx-auto px-2 lg:min-h-screen flex flex-col items-center justify-center">
+    <body class="bg-stone-50 font-sans leading-normal text-zinc-800 [&_h1]:font-display [&_h2]:font-display [&_h3]:font-display">
+        {{ partial:nav }}
+        <div class="mx-auto flex flex-col w-full">
             {{ template_content }}
         </div>
+        {{ partial:footer }}
     </body>
 </html>

@@ -1,0 +1,113 @@
+<section class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# 1. Headline #}}
+    {{ if talleres_titulo }}
+    <h2 class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+        {{ talleres_titulo }}
+    </h2>
+    {{ /if }}
+
+    {{ if talleres_entries }}
+
+    {{# 2. First entry — full-width banner card #}}
+    {{ talleres_entries }}
+    {{ if first }}
+    <div class="relative pt-44 sm:pt-40 mb-4 sm:mb-6" data-taller-card>
+    {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
+
+        {{ if personaje }}
+        {{ personaje }}
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#FADADD' }}"></div>
+        {{ if imagen }}
+        <div class="absolute left-[8%] right-[8%] -top-44 h-64 pointer-events-none z-10 sm:left-0 sm:right-auto sm:w-[48%] sm:-top-40 sm:bottom-0 sm:h-auto">
+            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+        </div>
+        {{ /if }}
+        {{ /personaje }}
+        {{ else }}
+        {{ collection:personajes limit="1" }}
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#FADADD' }}"></div>
+        {{ if imagen }}
+        <div class="absolute left-[8%] right-[8%] -top-44 h-64 pointer-events-none z-10 sm:left-0 sm:right-auto sm:w-[48%] sm:-top-40 sm:bottom-0 sm:h-auto">
+            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+        </div>
+        {{ /if }}
+        {{ /collection:personajes }}
+        {{ /if }}
+
+        <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10">
+            <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
+            {{ if hora_inicio }}
+            <p class="font-sans text-lg text-zinc-800 mb-3">
+                {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
+                {{ hora_inicio }} – {{ hora_fin }}
+            </p>
+            <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+            {{ else }}
+            <p class="font-display font-bold text-lg text-zinc-700 mt-2">Próximamente</p>
+            {{ /if }}
+        </div>
+
+    {{ if hora_inicio }}</a>{{ else }}</div>{{ /if }}
+    </div>
+    {{ /if }}
+    {{ /talleres_entries }}
+
+    {{# 3. Remaining entries — 2-column grid #}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {{ talleres_entries }}
+        {{ unless first }}
+        <div class="relative pt-20 sm:pt-32" data-taller-card>
+        {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
+
+            {{ if personaje }}
+            {{ personaje }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F1D5E5' }}"></div>
+            {{ if imagen }}
+            <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
+                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            </div>
+            {{ /if }}
+            {{ /personaje }}
+            {{ elseif count == 2 }}
+            {{ collection:personajes limit="1" }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F1D5E5' }}"></div>
+            {{ if imagen }}
+            <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
+                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            </div>
+            {{ /if }}
+            {{ /collection:personajes }}
+            {{ else }}
+            {{ collection:personajes limit="1" offset="1" }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F5E554' }}"></div>
+            {{ if imagen }}
+            <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
+                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            </div>
+            {{ /if }}
+            {{ /collection:personajes }}
+            {{ /if }}
+
+            <div class="absolute bottom-0 inset-x-0 px-6 pb-8 text-center z-20">
+                <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
+                {{ if hora_inicio }}
+                <p class="font-sans text-base text-zinc-800 mb-3">
+                    {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
+                    {{ hora_inicio }} – {{ hora_fin }}
+                </p>
+                <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+                {{ else }}
+                <p class="font-display font-bold text-base text-zinc-700 mt-1">Próximamente</p>
+                {{ /if }}
+            </div>
+
+        {{ if hora_inicio }}</a>{{ else }}</div>{{ /if }}
+        </div>
+        {{ /unless }}
+        {{ /talleres_entries }}
+    </div>
+
+    {{ /if }}
+
+</section>

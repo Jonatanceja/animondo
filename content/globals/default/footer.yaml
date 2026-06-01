@@ -1,0 +1,29 @@
+footer_logo: branding/animondo-negro.svg
+navegacion_footer:
+  - footer
+direccion:
+  -
+    type: paragraph
+    content:
+      -
+        type: text
+        text: 'Calle Insurgente 290, Col. Centro'
+  -
+    type: paragraph
+    content:
+      -
+        type: text
+        text: 'Guadalajara, Jalisco C.P. '
+contacto:
+  -
+    type: paragraph
+    content:
+      -
+        type: text
+        text: 'Teléfono 33 331 4090'
+  -
+    type: paragraph
+    content:
+      -
+        type: text
+        text: hola@animondo.edu

@@ -1,0 +1,45 @@
+title: Navegación
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: favicon
+            field:
+              type: assets
+              display: Favicon
+              instructions: 'Archivo .ico o .png (32×32 recomendado)'
+              max_files: 1
+              container: assets
+          -
+            handle: logo
+            field:
+              container: assets
+              max_files: 1
+              type: assets
+              display: Logo
+          -
+            handle: navegacion
+            field:
+              type: navs
+              display: Navegación
+          -
+            handle: boton_de_navegacion
+            field:
+              type: group
+              display: 'Botón de navegación'
+              fields:
+                -
+                  handle: teto_de_boton
+                  field:
+                    type: text
+                    display: 'Teto de botón'
+                -
+                  handle: enlace_de_boton
+                  field:
+                    collections:
+                      - pages
+                    type: link
+                    display: 'Enlace de botón'

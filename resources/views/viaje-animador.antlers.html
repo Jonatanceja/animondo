@@ -1,0 +1,121 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# ── Hero card with tabs ─────────────────────────────────────────────────── #}}
+    <div class="relative rounded-3xl mb-6 bg-[#89F0D8]">
+        <div class="max-w-6xl mx-auto">
+
+            {{# Characters overflowing above #}}
+            {{ if viaje_imagen_personajes }}
+            <div class="absolute inset-x-0 pointer-events-none -top-24 h-72">
+                <img src="{{ viaje_imagen_personajes:url }}" alt=""
+                     class="w-full h-full object-contain object-bottom">
+            </div>
+            {{ /if }}
+    
+            <div class="relative z-10 text-center px-6 sm:px-16 pt-48 sm:pt-52 pb-6">
+    
+                {{ if title }}
+                <h1 class="font-display font-bold text-4xl sm:text-6xl mb-4 text-[#323E81]">
+                    {{ title }}
+                </h1>
+                {{ /if }}
+    
+                {{ if viaje_descripcion }}
+                <div class="font-sans text-base sm:text-lg text-zinc-800 mb-6 [&_p]:leading-snug [&_p+p]:mt-1">
+                    {{ viaje_descripcion }}
+                </div>
+                {{ /if }}
+    
+                {{# ── Tabs navigation ─────────────────────────────────────────────── #}}
+                {{ if pasos_del_animador }}
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
+                    {{ pasos_del_animador }}
+                    <button class="viaje-tab-btn rounded-2xl px-4 sm:px-5 py-12 text-center transition-all duration-200"
+                            data-viaje-tab="{{ count }}">
+                        {{ if titulo }}
+                        <div class="font-display font-bold text-base sm:text-xl leading-tight text-[#323E81]">
+                            {{ titulo }}
+                        </div>
+                        {{ /if }}
+                        {{ if subtitulo }}
+                        <div class="font-sans text-xs sm:text-sm text-zinc-600 mt-0.5 leading-tight">
+                            {{ subtitulo }}
+                        </div>
+                        {{ /if }}
+                    </button>
+                    {{ /pasos_del_animador }}
+                </div>
+                <div class="h-2 rounded-full bg-linear-to-r from-[#89F0D8] via-[#F5E554] to-[#F289B8] mx-auto w-full mt-6"></div>
+                {{ /if }}
+    
+            </div>
+    
+            {{# ── Tab panels ──────────────────────────────────────────────────────── #}}
+            {{ if pasos_del_animador }}
+            {{ pasos_del_animador }}
+            <div class="viaje-tab-panel px-6 sm:px-14 pt-2 pb-10 sm:pb-12"
+                 data-viaje-tab="{{ count }}">
+    
+                <div class="flex flex-col gap-8 sm:gap-10">
+    
+                    {{# Step info – right aligned #}}
+                    <div class="text-right">
+                        {{ if titulo }}
+                        <h2 class="font-display font-bold text-3xl sm:text-5xl mb-2 text-[#323E81]">
+                            {{ titulo }}
+                        </h2>
+                        {{ /if }}
+                        {{ if titulo_de_descripcion }}
+                        <p class="font-sans font-bold text-base sm:text-lg text-zinc-800 mb-3">{{ titulo_de_descripcion }}</p>
+                        {{ /if }}
+                        {{ if descripcion }}
+                        <div class="font-sans text-base text-zinc-800 [&_p]:leading-relaxed [&_ul]:list-none [&_ul]:p-0 [&_li]:leading-relaxed">
+                            {{ descripcion }}
+                        </div>
+                        {{ /if }}
+                    </div>
+    
+                    {{# Misiones – image left, text right #}}
+                    {{ misiones }}
+                    <div class="relative {{ if imagen_de_misiones }}min-h-56 sm:min-h-64{{ /if }}">
+                        {{ if imagen_de_misiones }}
+                        <div class="sm:absolute sm:left-0 sm:bottom-0 sm:w-[30%] pointer-events-none mb-4 sm:mb-0">
+                            {{ imagen_de_misiones }}
+                            <img src="{{ url }}" alt=""
+                                 class="w-full object-contain object-bottom max-h-48 sm:max-h-none sm:h-full">
+                            {{ /imagen_de_misiones }}
+                        </div>
+                        {{ /if }}
+                        <div class="{{ if imagen_de_misiones }}sm:ml-[32%]{{ /if }} text-right">
+                            {{ if titulo_de_misiones }}
+                            <h2 class="font-display font-bold text-3xl sm:text-5xl mb-3 text-[#323E81]">
+                                {{ titulo_de_misiones }}
+                            </h2>
+                            {{ /if }}
+                            {{ if descripcion_de_misiones }}
+                            <div class="font-sans text-base text-zinc-800 [&_p]:leading-relaxed [&_ul]:list-none [&_ul]:p-0 [&_li]:leading-relaxed">
+                                {{ descripcion_de_misiones }}
+                            </div>
+                            {{ /if }}
+                        </div>
+                    </div>
+                    {{ /misiones }}
+    
+                </div>
+            </div>
+            {{ /pasos_del_animador }}
+            {{ /if }}
+        </div>
+
+
+    </div>
+
+    {{# ── Full-width image ───────────────────────────────────────────────────── #}}
+    {{ if viaje_imagen_principal }}
+    <div class="mt-6 rounded-3xl overflow-hidden">
+        <img src="{{ viaje_imagen_principal:url }}" alt=""
+             class="w-full object-cover max-h-[80vh]">
+    </div>
+    {{ /if }}
+
+</div>

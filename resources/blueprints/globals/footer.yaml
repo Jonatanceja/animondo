@@ -1,0 +1,35 @@
+title: Footer
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: footer_logo
+            field:
+              container: assets
+              max_files: 1
+              type: assets
+              display: 'footer logo'
+          -
+            handle: navegacion_footer
+            field:
+              type: navs
+              display: 'Navegación footer'
+          -
+            handle: direccion
+            field:
+              container: assets
+              remove_empty_nodes: false
+              type: bard
+              display: Dirección
+              width: 50
+          -
+            handle: contacto
+            field:
+              container: assets
+              remove_empty_nodes: false
+              type: bard
+              display: Contacto
+              width: 50
