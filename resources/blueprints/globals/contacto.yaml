@@ -1,0 +1,41 @@
+title: Contacto
+tabs:
+  main:
+    display: Contacto
+    sections:
+      -
+        fields:
+          -
+            handle: telefonos
+            field:
+              type: replicator
+              display: Teléfonos
+              instructions: 'Agrega los números de contacto. Solo el número marcado como activo se usará en el botón de WhatsApp.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    telefono:
+                      display: Teléfono
+                      fields:
+                        -
+                          handle: nombre
+                          field:
+                            type: text
+                            display: Nombre
+                            instructions: 'Ej: WhatsApp principal, Ventas, etc.'
+                            width: 50
+                        -
+                          handle: numero
+                          field:
+                            type: text
+                            display: Número
+                            instructions: 'Formato internacional sin espacios ni +. Ej: 5215512345678'
+                            width: 50
+                        -
+                          handle: activo
+                          field:
+                            type: toggle
+                            display: Activo
+                            instructions: 'Activar este número en el botón de WhatsApp'
+                            default: false

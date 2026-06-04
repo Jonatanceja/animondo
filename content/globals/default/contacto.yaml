@@ -1,0 +1,8 @@
+telefonos:
+  -
+    id: Q3fZEEy5LxrfjgvELvFke
+    nombre: Roberto
+    numero: '523312806185'
+    activo: true
+    type: telefono
+    enabled: true
