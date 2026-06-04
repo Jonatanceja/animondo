@@ -1,0 +1,23 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    <div class="max-w-3xl mx-auto">
+
+        {{# ── Title ──────────────────────────────────────────────────────────────── #}}
+        <h1 class="font-display font-bold text-4xl sm:text-6xl text-zinc-900 mb-10 sm:mb-14 leading-none">
+            {{ title }}
+        </h1>
+
+        {{# ── Content ────────────────────────────────────────────────────────────── #}}
+        {{ if content }}
+        <div class="prose prose-zinc prose-lg max-w-none
+            [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-zinc-900
+            [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-zinc-900
+            [&_a]:text-[#323E81] [&_a]:underline [&_a:hover]:opacity-70
+            [&_strong]:font-bold">
+            {{ content }}
+        </div>
+        {{ /if }}
+
+    </div>
+
+</div>

@@ -1,4 +1,7 @@
 import gsap from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(SplitText, ScrollTrigger);
 
 // ── Mobile nav toggle ─────────────────────────────────────────────────────
 const hamburger   = document.getElementById('nav-hamburger');
@@ -64,6 +67,33 @@ if (videoBg) {
   }
 }
 
+// ── Hero headline animation ────────────────────────────────────────────────
+const heroHeadline = document.querySelector('.hero-headline-text');
+if (heroHeadline) {
+  const split = new SplitText(heroHeadline, { type: 'words', wordsClass: 'hero-word' });
+
+  gsap.fromTo(split.words,
+    { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' },
+    {
+      opacity: 1, y: 0, rotateX: 0,
+      duration: 0.7, delay: 0.3,
+      ease: 'back.out(1.6)',
+      stagger: 0.07,
+      onComplete() {
+        const markerColors = ['#89F0D8cc', '#F5E554cc', '#F289B8cc', '#F57F20cc'];
+        heroHeadline.querySelectorAll('strong').forEach((el, i) => {
+          const hex = markerColors[i % markerColors.length];
+          el.style.backgroundImage = `linear-gradient(${hex}, ${hex})`;
+          gsap.fromTo(el,
+            { backgroundSize: '0% 42%' },
+            { backgroundSize: '108% 42%', duration: 0.55, delay: i * 0.18, ease: 'back.out(1.4)' }
+          );
+        });
+      }
+    }
+  );
+}
+
 // ── Hero slider (Ken Burns) ────────────────────────────────────────────────
 const heroSlider = document.getElementById('hero-slider');
 if (heroSlider) {
@@ -119,6 +149,52 @@ if (personajesGrid) {
   observer.observe(personajesGrid);
 }
 
+// ── Talleres headline ──────────────────────────────────────────────────────
+const talleresHeadline = document.getElementById('talleres-headline');
+if (talleresHeadline) {
+  const split = new SplitText(talleresHeadline, { type: 'words' });
+  gsap.set(split.words, { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' });
+
+  const aboveFold = talleresHeadline.getBoundingClientRect().top < window.innerHeight;
+  if (aboveFold) {
+    gsap.to(split.words, { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay: 0.3, ease: 'back.out(1.6)', stagger: 0.07 });
+  } else {
+    const obs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        gsap.to(split.words, { opacity: 1, y: 0, rotateX: 0, duration: 0.7, ease: 'back.out(1.6)', stagger: 0.07 });
+        obs.disconnect();
+      }
+    }, { threshold: 0.2 });
+    obs.observe(talleresHeadline);
+  }
+}
+
+// ── Marca section ─────────────────────────────────────────────────────────
+const marcaSuper  = document.querySelector('[data-marca="super"]');
+const marcaTitulo = document.querySelector('[data-marca="titulo"]');
+
+if (marcaSuper || marcaTitulo) {
+  const splits = [];
+
+  [marcaSuper, marcaTitulo].forEach((el, i) => {
+    if (!el) return;
+    const split = new SplitText(el, { type: 'words' });
+    gsap.set(split.words, { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' });
+    splits.push({ words: split.words, delay: i * 0.25 });
+  });
+
+  const anchor = marcaSuper || marcaTitulo;
+  const obs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      splits.forEach(({ words, delay }) => {
+        gsap.to(words, { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay, ease: 'back.out(1.6)', stagger: 0.07 });
+      });
+      obs.disconnect();
+    }
+  }, { threshold: 0.2 });
+  obs.observe(anchor);
+}
+
 // ── Talleres cards ─────────────────────────────────────────────────────────
 const tallerCards = document.querySelectorAll('[data-taller-card]');
 if (tallerCards.length) {
@@ -142,6 +218,94 @@ if (tallerCards.length) {
   }, { threshold: 0.08 });
 
   tallerCards.forEach(el => cardIO.observe(el));
+}
+
+// ── Annotation helpers (marker + circle effects) ──────────────────────────
+const annoColors = ['#89F0D8', '#F5E554', '#F289B8', '#F57F20', '#AFFFEC'];
+
+function shuffled(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function makeAnnoCircle(el, color, delay) {
+  // Defer SVG creation to the moment it should start drawing so layout is settled
+  gsap.delayedCall(delay, () => {
+    el.style.position = 'relative';
+    el.style.display  = 'inline-block';
+
+    const padX = 14, padY = 8;
+    const w  = el.offsetWidth  + padX * 2;
+    const h  = el.offsetHeight + padY * 2;
+    const cx = w / 2;
+    const cy = h / 2;
+    const rx = cx - 3;
+    const ry = cy - 3;
+    const perim = 2 * Math.PI * Math.sqrt((rx * rx + ry * ry) / 2);
+
+    const ns  = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('class', 'anno-circle');
+    svg.style.cssText = `position:absolute;left:${-padX}px;top:${-padY}px;width:${w}px;height:${h}px;pointer-events:none;overflow:visible;`;
+
+    const ellipse = document.createElementNS(ns, 'ellipse');
+    ellipse.setAttribute('cx', cx);
+    ellipse.setAttribute('cy', cy);
+    ellipse.setAttribute('rx', rx);
+    ellipse.setAttribute('ry', ry);
+    ellipse.setAttribute('fill', 'none');
+    ellipse.setAttribute('stroke', color);
+    ellipse.setAttribute('stroke-width', '4');
+    ellipse.setAttribute('stroke-linecap', 'round');
+    ellipse.style.strokeDasharray  = perim;
+    ellipse.style.strokeDashoffset = perim;
+
+    svg.appendChild(ellipse);
+    el.appendChild(svg);
+
+    gsap.to(ellipse, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.inOut' });
+  });
+}
+
+function clearAnnoCircles(el) {
+  el.querySelectorAll('.anno-circle').forEach(svg => {
+    const ellipse = svg.querySelector('ellipse');
+    if (ellipse) {
+      const perim = parseFloat(ellipse.style.strokeDasharray);
+      gsap.to(ellipse, { strokeDashoffset: perim, duration: 0.18, ease: 'power2.in', onComplete: () => svg.remove() });
+    } else { svg.remove(); }
+  });
+}
+
+function animateAnnotations(panel, enter, baseDelay = 1.1) {
+  const strongs = Array.from(panel.querySelectorAll('h2 strong'));
+  if (!strongs.length) return;
+
+  if (!enter) {
+    strongs.forEach(el => {
+      gsap.to(el, { backgroundSize: '0% 42%', duration: 0.18, ease: 'power2.in' });
+      clearAnnoCircles(el);
+    });
+    return;
+  }
+
+  const colors = shuffled(annoColors);
+  const startCircle = Math.random() > 0.5;
+
+  strongs.forEach((el, i) => {
+    const color = colors[i % colors.length];
+    const delay = baseDelay + i * 0.18;
+    const useCircle = (i % 2 === 0) === startCircle;
+
+    if (useCircle) {
+      makeAnnoCircle(el, color, delay);
+    } else {
+      el.style.backgroundImage = `linear-gradient(${color}cc, ${color}cc)`;
+      gsap.fromTo(el,
+        { backgroundSize: '0% 42%' },
+        { backgroundSize: '108% 42%', duration: 0.55, delay, ease: 'back.out(1.4)' }
+      );
+    }
+  });
 }
 
 // ── Circle scroll animation ────────────────────────────────────────────────
@@ -173,32 +337,38 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
   panels.slice(1).forEach(p => gsap.set(p, { opacity: 0 }));
 
   function getPanelChildren(panel) {
-    return Array.from(panel.querySelectorAll('h2, p, a, .flex > div, img'));
+    return Array.from(panel.querySelectorAll('p, a, .flex > div, img'));
   }
 
-  // Set initial state for all panels
+  // Pre-split all panel h2s into words
+  const panelSplits = panels.map(panel => {
+    const h2 = panel.querySelector('h2');
+    return h2 ? new SplitText(h2, { type: 'words' }) : null;
+  });
+
+  // Set initial state for all panels — all hidden until section activates
   panels.forEach((p, i) => {
     gsap.set(getPanelChildren(p), { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 18 });
+    if (panelSplits[i]) {
+      gsap.set(panelSplits[i].words, { opacity: 0, y: 18, rotateX: -40, transformOrigin: '50% 0%' });
+    }
   });
-  const markerColors = ['#89F0D8cc', '#F5E554cc', '#F289B8cc', '#F57F20cc', '#AFFFECCC'];
-
   function animateMarkers(panel, enter = true) {
-    const strongs = Array.from(panel.querySelectorAll('h2 strong'));
-    strongs.forEach((el, i) => {
-      const hex = markerColors[i % markerColors.length];
-      el.style.backgroundImage = `linear-gradient(${hex}, ${hex})`;
-      if (enter) {
-        gsap.fromTo(el,
-          { backgroundSize: '0% 42%' },
-          { backgroundSize: '108% 42%', duration: 0.55, delay: 1.1 + i * 0.18, ease: 'back.out(1.4)' }
-        );
-      } else {
-        gsap.to(el, { backgroundSize: '0% 42%', duration: 0.18, ease: 'power2.in' });
-      }
-    });
+    animateAnnotations(panel, enter, 1.1);
   }
 
-  animateMarkers(panels[0], true);
+  let firstPanelAnimated = false;
+  function animateFirstPanel() {
+    if (firstPanelAnimated) return;
+    firstPanelAnimated = true;
+    if (panelSplits[0]) {
+      gsap.fromTo(panelSplits[0].words,
+        { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay: 0.3, ease: 'back.out(1.6)', stagger: 0.07 }
+      );
+    }
+    animateMarkers(panels[0], true);
+  }
 
   function sectionInRange(scrollingDown) {
     const r = wrapper.getBoundingClientRect();
@@ -243,6 +413,9 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
     animateMarkers(panels[prev], false);
     gsap.to(panels[prev], { opacity: 0, duration: 0.25, ease: 'power1.out' });
     gsap.to(getPanelChildren(panels[prev]), { opacity: 0, y: dir * -12, duration: 0.2, ease: 'power1.out', stagger: 0.04 });
+    if (panelSplits[prev]) {
+      gsap.to(panelSplits[prev].words, { opacity: 0, y: dir * -12, rotateX: dir * 30, duration: 0.2, ease: 'power1.out', stagger: 0.03 });
+    }
 
     // Fade in new panel + stagger-animate children + markers
     gsap.to(panels[current], { opacity: 1, duration: 0.1, delay: 0.3 });
@@ -251,6 +424,12 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
       { opacity: 0, y: dir * 20 },
       { opacity: 1, y: 0, duration: 0.5, delay: 0.32, ease: 'power2.out', stagger: 0.07 }
     );
+    if (panelSplits[current]) {
+      gsap.fromTo(panelSplits[current].words,
+        { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay: 0.32, ease: 'back.out(1.6)', stagger: 0.07 }
+      );
+    }
     animateMarkers(panels[current], true);
 
     setTimeout(() => { animating = false; lastFrameChange = Date.now(); }, 1100);
@@ -265,6 +444,7 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
     if (!circleActive) {
       if (!sectionInRange(delta > 0)) return;
       circleActive = true;
+      animateFirstPanel();
       e.preventDefault();
       if (Math.abs(wrapper.getBoundingClientRect().top) > 2) snapToCircle();
       return;
@@ -304,6 +484,7 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
       // Activate if wrapper is filling the viewport (already snapped)
       if (Math.abs(r.top) < 10) {
         circleActive = true;
+        animateFirstPanel();
       }
     }
   }, { passive: true });
@@ -319,6 +500,7 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
     if (!circleActive) {
       if (!sectionInRange(delta > 0)) return;
       circleActive = true;
+      animateFirstPanel();
       if (Math.abs(wrapper.getBoundingClientRect().top) > 2) snapToCircle();
       return;
     }
@@ -387,26 +569,37 @@ if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matc
   mPanels.slice(1).forEach(p => gsap.set(p, { opacity: 0 }));
 
   function mChildren(panel) {
-    return Array.from(panel.querySelectorAll('h2, p, img, .flex > div'));
+    return Array.from(panel.querySelectorAll('p, img, .flex > div'));
   }
-  mPanels.forEach((p, i) => {
-    gsap.set(mChildren(p), { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 18 });
+
+  const mSplits = mPanels.map(panel => {
+    const h2 = panel.querySelector('h2');
+    return h2 ? new SplitText(h2, { type: 'words' }) : null;
   });
 
-  const mColors = ['#89F0D8cc', '#F5E554cc', '#F289B8cc', '#F57F20cc', '#AFFFECCC'];
+  mPanels.forEach((p, i) => {
+    gsap.set(mChildren(p), { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 18 });
+    if (mSplits[i]) {
+      gsap.set(mSplits[i].words, { opacity: 0, y: 18, rotateX: -40, transformOrigin: '50% 0%' });
+    }
+  });
 
   function mMarkers(panel, enter) {
-    Array.from(panel.querySelectorAll('h2 strong')).forEach((el, i) => {
-      el.style.backgroundImage = `linear-gradient(${mColors[i % mColors.length]}, ${mColors[i % mColors.length]})`;
-      if (enter) {
-        gsap.fromTo(el, { backgroundSize: '0% 42%' },
-          { backgroundSize: '108% 42%', duration: 0.55, delay: 1.0 + i * 0.18, ease: 'back.out(1.4)' });
-      } else {
-        gsap.to(el, { backgroundSize: '0% 42%', duration: 0.18, ease: 'power2.in' });
-      }
-    });
+    animateAnnotations(panel, enter, 1.0);
   }
-  mMarkers(mPanels[0], true);
+
+  let mFirstAnimated = false;
+  function mAnimateFirstPanel() {
+    if (mFirstAnimated) return;
+    mFirstAnimated = true;
+    if (mSplits[0]) {
+      gsap.fromTo(mSplits[0].words,
+        { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay: 0.3, ease: 'back.out(1.6)', stagger: 0.07 }
+      );
+    }
+    mMarkers(mPanels[0], true);
+  }
 
   // Body scroll lock — stops iOS momentum scroll completely
   function mLock(snapToDocY) {
@@ -445,10 +638,19 @@ if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matc
     mMarkers(mPanels[prev], false);
     gsap.to(mPanels[prev], { opacity: 0, duration: 0.25 });
     gsap.to(mChildren(mPanels[prev]), { opacity: 0, y: dir * -12, duration: 0.2, stagger: 0.04 });
+    if (mSplits[prev]) {
+      gsap.to(mSplits[prev].words, { opacity: 0, y: dir * -12, rotateX: dir * 30, duration: 0.2, ease: 'power1.out', stagger: 0.03 });
+    }
     gsap.to(mPanels[mCur], { opacity: 1, duration: 0.1, delay: 0.3 });
     gsap.fromTo(mChildren(mPanels[mCur]),
       { opacity: 0, y: dir * 20 },
       { opacity: 1, y: 0, duration: 0.5, delay: 0.32, ease: 'power2.out', stagger: 0.07 });
+    if (mSplits[mCur]) {
+      gsap.fromTo(mSplits[mCur].words,
+        { opacity: 0, y: 40, rotateX: -60, transformOrigin: '50% 0%' },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, delay: 0.32, ease: 'back.out(1.6)', stagger: 0.07 }
+      );
+    }
     mMarkers(mPanels[mCur], true);
     setTimeout(() => { mAnim = false; mLastChg = Date.now(); }, 1100);
   }
@@ -462,6 +664,7 @@ if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matc
       const r = mobileViaje.getBoundingClientRect();
       if (r.top > -window.innerHeight * 0.1 && r.top < window.innerHeight * 0.4) {
         mActive = true;
+        mAnimateFirstPanel();
         mLock(r.top + window.scrollY);
       }
     }
@@ -495,6 +698,30 @@ if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matc
   }, { passive: true });
 }
 
+// ── Marca section scroll animation ────────────────────────────────────────
+const marcaSection = document.querySelector('[data-marca="super"], [data-marca="titulo"]')?.closest('section');
+if (marcaSection) {
+  const marcaSuper = marcaSection.querySelector('[data-marca="super"]');
+  const marcaTitulo = marcaSection.querySelector('[data-marca="titulo"]');
+  const marcaLogo   = marcaSection.querySelector('[data-marca="logo"]');
+  const marcaChars  = marcaSection.querySelector('[data-marca="chars"]');
+
+  const toAnimate = [marcaSuper, marcaTitulo, marcaLogo].filter(Boolean);
+  if (toAnimate.length) gsap.set(toAnimate, { opacity: 0, y: 40 });
+  if (marcaChars) gsap.set(marcaChars, { y: 120, opacity: 0 });
+
+  const marcaIO = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    marcaIO.disconnect();
+    gsap.to(toAnimate, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.12 });
+    if (marcaChars) {
+      gsap.to(marcaChars, { y: 0, opacity: 1, duration: 1.0, delay: 0.35, ease: 'power3.out' });
+    }
+  }, { threshold: 0.15 });
+
+  marcaIO.observe(marcaSection);
+}
+
 // ── Taller schedule formatting ────────────────────────────────────────────
 const WEEKDAYS = ['lunes','martes','miercoles','jueves','viernes'];
 const MESES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -502,19 +729,44 @@ const MESES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agos
 document.querySelectorAll('.taller-dias[data-dias]').forEach(el => {
   const dias = el.dataset.dias ? el.dataset.dias.split(',').map(s => s.trim()) : [];
   const isWeekdays = WEEKDAYS.every(d => dias.includes(d)) && !dias.includes('sabado') && !dias.includes('domingo');
-  if (isWeekdays) el.textContent = 'De Lunes a Viernes';
+  if (isWeekdays) el.textContent = 'De lunes a viernes';
 });
 
 document.querySelectorAll('[data-time]').forEach(el => {
   const [hStr, mStr] = el.dataset.time.split(':');
   const h = parseInt(hStr, 10);
-  const ampm = h >= 12 ? 'pm' : 'am';
+  const ampm = h >= 12 ? 'p.m.' : 'a.m.';
   el.textContent = `${h % 12 || 12}:${mStr} ${ampm}`;
 });
 
 document.querySelectorAll('[data-date]').forEach(el => {
-  const parts = el.dataset.date.split('-').map(Number);
-  el.textContent = `${parts[2]} de ${MESES[parts[1] - 1]} de ${parts[0]}`;
+  const start = el.dataset.date.split('-').map(Number);
+  const startMes = MESES[start[1] - 1];
+  const startYear = start[0];
+
+  if (el.dataset.dateFin) {
+    const end = el.dataset.dateFin.split('-').map(Number);
+    const endMes = MESES[end[1] - 1];
+    const endYear = end[0];
+    const sameYear = startYear === endYear;
+    const label = sameYear
+      ? `Talleres semanales de ${startMes} a ${endMes} de ${endYear}`
+      : `Talleres semanales de ${startMes} ${startYear} a ${endMes} de ${endYear}`;
+    el.textContent = label;
+  } else {
+    el.textContent = `Talleres semanales de ${startMes} de ${startYear}`;
+  }
+});
+
+document.querySelectorAll('[data-semana-inicio]').forEach(el => {
+  const fmt = d => `${d[2]} de ${MESES[d[1] - 1]}`;
+  const start = el.dataset.semanaInicio.split('-').map(Number);
+  if (el.dataset.semanaFin) {
+    const end = el.dataset.semanaFin.split('-').map(Number);
+    el.textContent = `${fmt(start)} – ${fmt(end)}`;
+  } else {
+    el.textContent = fmt(start);
+  }
 });
 
 // ── Taller page scroll animations ─────────────────────────────────────────
@@ -573,3 +825,4 @@ if (viajeBtns.length) {
   viajeBtns.forEach((b, i) => b.addEventListener('click', () => setViajeTab(i)));
   setViajeTab(0);
 }
+

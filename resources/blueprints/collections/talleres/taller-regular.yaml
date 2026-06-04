@@ -71,6 +71,18 @@ tabs:
               display: Fecha de inicio
               time_enabled: false
           -
+            handle: fecha_fin
+            field:
+              type: date
+              display: Fecha de fin
+              time_enabled: false
+          -
+            handle: precio
+            field:
+              type: text
+              display: Precio
+              instructions: 'Ej: $500 MXN'
+          -
             handle: enlace
             field:
               type: text

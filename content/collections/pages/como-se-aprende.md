@@ -1,7 +1,7 @@
 ---
 id: como-se-aprende
 blueprint: como-se-aprende
-title: 'Como se Aprende'
+title: 'Como se aprende'
 slug: como-se-aprende
 template: como-se-aprende
 subtitulo: 'Tres espacios, una experiencia completa.'
@@ -28,5 +28,5 @@ bloques:
     type: bloque
     enabled: true
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1779927973
+updated_at: 1780536860
 ---

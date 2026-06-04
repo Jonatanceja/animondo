@@ -1,5 +1,5 @@
 {{ if hero_type == 'slider' }}
-<section class="video-section" id="hero-slider">
+<section class="video-section relative" id="hero-slider">
     <div class="video-inner">
         {{ hero_slides }}
         <div class="hero-slide">
@@ -7,9 +7,14 @@
         </div>
         {{ /hero_slides }}
     </div>
+    {{ if hero_headline }}
+    <div class="absolute inset-0 flex items-center justify-center px-6 pointer-events-none z-10">
+        <div class="hero-headline-text max-w-6xl font-display font-bold text-white text-center text-[clamp(2rem,5vw,4rem)] leading-tight drop-shadow-lg">{{ hero_headline }}</div>
+    </div>
+    {{ /if }}
 </section>
 {{ else }}
-<section class="video-section">
+<section class="video-section relative">
     <div class="video-inner">
         {{ if hero_video_source == 'upload' }}
             {{ if hero_video_file }}
@@ -21,6 +26,11 @@
             {{ /if }}
         {{ /if }}
     </div>
+    {{ if hero_headline }}
+    <div class="absolute inset-0 flex items-center justify-center px-6 pointer-events-none z-10">
+        <div class="hero-headline-text max-w-6xl font-display font-bold text-white text-center text-[clamp(2rem,5vw,4rem)] leading-tight drop-shadow-lg">{{ hero_headline }}</div>
+    </div>
+    {{ /if }}
 </section>
 {{ /if }}
 
@@ -53,7 +63,7 @@
                         {{ elseif color == 'rojo' }}bg-[#F04040]
                         {{ elseif color == 'negro' }}bg-zinc-900
                         {{ else }}bg-[#36BA9B]{{ /if }}"></div>
-                    {{ if titulo }}<p class="font-display font-bold text-sm sm:text-base text-zinc-800 leading-tight mb-1">{{ titulo }}</p>{{ /if }}
+                    {{ if titulo }}<p class="font-display font-bold text-xl sm:text-2xl text-zinc-800 leading-tight mb-1">{{ titulo }}</p>{{ /if }}
                     {{ if descripcion }}<div class="font-sans text-xs sm:text-sm text-zinc-600 [&_p]:m-0 [&_p]:leading-snug">{{ descripcion }}</div>{{ /if }}
                 </div>
                 {{ /if }}
@@ -128,7 +138,7 @@
             {{ elseif color == 'rojo' }}bg-[#F04040]
             {{ elseif color == 'negro' }}bg-zinc-900
             {{ else }}bg-[#36BA9B]{{ /if }}"></div>
-          {{ if titulo }}<p class="font-display font-bold text-[10px] text-zinc-800 leading-tight">{{ titulo }}</p>{{ /if }}
+          {{ if titulo }}<p class="font-display font-bold text-sm text-zinc-800 leading-tight">{{ titulo }}</p>{{ /if }}
         </div>
         {{ /if }}
         {{ /pasos_del_creador }}
@@ -162,10 +172,6 @@
         <div class="personaje-card">
             <div class="personaje-card-inner" style="background-color: {{ color }}">
                 {{ if imagen }}<img src="{{ imagen:url }}" alt="{{ title }}">{{ /if }}
-                <div class="personaje-card-text">
-                    <span class="personaje-card-name">{{ title }}</span>
-                    {{ if cargo }}<span class="personaje-card-role">{{ cargo }}</span>{{ /if }}
-                </div>
             </div>
         </div>
         {{ /personajes_cards }}
@@ -179,7 +185,7 @@
 
     {{# 1. Headline #}}
     {{ if talleres_titulo }}
-    <h2 class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 id="talleres-headline" class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ talleres_titulo }}
     </h2>
     {{ /if }}
@@ -216,10 +222,8 @@
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if hora_inicio }}
             <p class="font-sans text-lg text-zinc-800 mb-3">
-                {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
-                {{ hora_inicio }} – {{ hora_fin }}
-            </p>
-            <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+                {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}<br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
+            <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
             {{ else }}
             <p class="font-display font-bold text-lg text-zinc-700 mt-2">Próximamente</p>
             {{ /if }}
@@ -270,10 +274,10 @@
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
                 {{ if hora_inicio }}
                 <p class="font-sans text-base text-zinc-800 mb-3">
-                    {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
-                    {{ hora_inicio }} – {{ hora_fin }}
+                    {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a Viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}
+                    de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
                 </p>
-                <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+                <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
                 {{ else }}
                 <p class="font-display font-bold text-base text-zinc-700 mt-1">Próximamente</p>
                 {{ /if }}
@@ -290,28 +294,73 @@
 </section>
 {{ /if }}
 
+{{# ── Instructores section ────────────────────────────────────────────────── #}}
+{{ if entradas }}
+<section class="px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
+
+    {{ if instructores_titulo }}
+    <h2 class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+        {{ instructores_titulo }}
+    </h2>
+    {{ /if }}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {{ entradas }}
+        <div class="relative pt-20">
+            <div class="rounded-3xl px-8 pt-20 pb-10 text-center flex flex-col items-center gap-3
+                {{ if count % 7 == 1 }}bg-[#AFFFEC]
+                {{ elseif count % 7 == 2 }}bg-[#FFC18E]
+                {{ elseif count % 7 == 3 }}bg-[#F289B8]
+                {{ elseif count % 7 == 4 }}bg-[#C5CBEE]
+                {{ elseif count % 7 == 5 }}bg-[#89F0D8]
+                {{ elseif count % 7 == 6 }}bg-[#F1D5E5]
+                {{ else }}bg-[#DBD5F1]{{ /if }}">
+
+                {{ if foto_de_instructor }}
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-36 rounded-full overflow-hidden">
+                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover">
+                </div>
+                {{ /if }}
+
+                <h3 class="font-display font-bold text-3xl sm:text-4xl text-[#323E81] leading-tight">{{ title }}</h3>
+                {{ if profesion }}
+                <p class="font-display font-bold text-xs uppercase tracking-widest text-zinc-600 -mt-1">{{ profesion }}</p>
+                {{ /if }}
+
+                {{ if biografia }}
+                <div class="font-sans text-base text-zinc-700 leading-relaxed prose prose-zinc max-w-none">{{ biografia }}</div>
+                {{ /if }}
+
+            </div>
+        </div>
+        {{ /entradas }}
+    </div>
+
+</section>
+{{ /if }}
+
 {{# ── Marca section ───────────────────────────────────────────────────────── #}}
 {{ if marca_supertitulo or marca_titulo or marca_imagen_logo or marca_imagen_personajes }}
 <section class="text-center pt-16 sm:pt-24 pb-0 overflow-hidden">
 
     {{ if marca_supertitulo }}
-    <div class="font-sans text-2xl sm:text-3xl mb-4 [&_p]:leading-snug [&_p]:block [&_p+p]:mt-1 text-[#323E81]">{{ marca_supertitulo }}</div>
+    <div data-marca="super" class="font-sans text-2xl sm:text-3xl mb-4 [&_p]:leading-snug [&_p]:block [&_p+p]:mt-1 text-[#323E81]">{{ marca_supertitulo }}</div>
     {{ /if }}
 
     {{ if marca_titulo }}
-    <div class="font-display font-bold leading-none px-4 mb-10 sm:mb-14 [&_p]:leading-none [&_strong]:text-[#323E81] [&_strong]:font-bold text-[clamp(4rem,12vw,10rem)]">
+    <div data-marca="titulo" class="font-display font-bold leading-none px-4 mb-10 sm:mb-14 [&_p]:leading-none [&_strong]:text-[#323E81] [&_strong]:font-bold text-[clamp(4rem,12vw,10rem)]">
         {{ marca_titulo }}
     </div>
     {{ /if }}
 
     {{ if marca_imagen_logo }}
-    <div class="flex justify-center mb-10 sm:mb-16 px-4">
+    <div data-marca="logo" class="flex justify-center mb-10 sm:mb-16 px-4">
         <img src="{{ marca_imagen_logo:url }}" alt="" class="w-56 sm:w-80 object-contain">
     </div>
     {{ /if }}
 
     {{ if marca_imagen_personajes }}
-    <img src="{{ marca_imagen_personajes:url }}" alt="" class="w-full object-contain object-bottom">
+    <img data-marca="chars" src="{{ marca_imagen_personajes:url }}" alt="" class="w-full object-contain object-bottom">
     {{ /if }}
 
 </section>

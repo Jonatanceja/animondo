@@ -23,12 +23,17 @@
                    data-dias="{{ dias | pluck:value | join:',' }}">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</p>
                 {{ /if }}
                 <p class="font-display text-xl sm:text-2xl text-zinc-700">
-                    <span data-time="{{ hora_inicio }}">{{ hora_inicio }}</span>
-                    –
-                    <span data-time="{{ hora_fin }}">{{ hora_fin }}</span>
+                    de
+                    <span data-time="{{ hora_inicio }}">{{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
+                    a
+                    <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
                 </p>
-                {{ if fecha_inicio }}
-                <p class="mt-3 font-display font-semibold text-base text-zinc-500" data-date="{{ fecha_inicio format='Y-m-d' }}">{{ fecha_inicio format="d/m/Y" }}</p>
+                {{ if horario_extendido }}
+                <p class="font-display text-base sm:text-lg text-zinc-700">(opción de horario extendido hasta las {{ horario_extendido | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }})</p>
+                {{ /if }}
+                {{ if resumen }}
+                <p class="mt-3 font-display font-semibold text-xl text-zinc-900"
+                   {{ resumen }}{{ if first }}data-date="{{ fecha_de_inicio format='Y-m-d' }}"{{ /if }}{{ if last }} data-date-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}{{ /resumen }}></p>
                 {{ /if }}
             </div>
             {{ /if }}
@@ -39,33 +44,51 @@
 
     {{# ── Descripción ────────────────────────────────────────────────────────── #}}
     {{ if descripcion }}
-    <div class="bg-[#FFD340] rounded-3xl px-8 py-8 sm:px-12 sm:py-12 mb-4" data-reveal>
+    <div class="bg-[#FFC18E] rounded-3xl px-8 py-8 sm:px-12 sm:py-12 mb-4" data-reveal>
         <h2 class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 mb-5">Descripción</h2>
         <div class="prose prose-zinc max-w-none text-lg">{{ descripcion }}</div>
+        {{ if precio }}
+        <div class="mt-6">
+            <p class="font-sans text-sm text-zinc-700 mb-1">Costo por curso semanal</p>
+            <p class="font-display font-bold text-2xl sm:text-3xl text-zinc-800">${{ precio | format_number:2:'.':',' }} MXN</p>
+        </div>
+        {{ /if }}
     </div>
     {{ /if }}
 
     {{ if mensaje_importante }}
-    <p class="block w-full font-display font-bold text-sm uppercase tracking-wide bg-zinc-900 text-white px-6 py-3 rounded-2xl mb-8 text-center" data-reveal>{{ mensaje_importante }}</p>
+    <p class="block w-full font-display font-bold text-2xl sm:text-3xl bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 text-center leading-snug" data-reveal>{{ mensaje_importante }}</p>
     {{ /if }}
 
     {{# ── Semanas temáticas ───────────────────────────────────────────────────── #}}
     {{ if resumen }}
-    <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800 mb-6" data-reveal>Semanas Temáticas</h2>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800 mb-6" data-reveal>Semanas temáticas</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger-cards>
         {{ resumen }}
         {{ if type == 'opcion' }}
-        <div class="bg-[#AFFFEC] rounded-3xl px-8 py-8 flex flex-col gap-4" data-stagger-child>
-            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-500">Semana {{ count }}</p>
+        <div class="rounded-3xl px-8 py-8 flex flex-col gap-4
+            {{ if count % 7 == 1 }}bg-[#AFFFEC]
+            {{ elseif count % 7 == 2 }}bg-[#FFC18E]
+            {{ elseif count % 7 == 3 }}bg-[#F289B8]
+            {{ elseif count % 7 == 4 }}bg-[#C5CBEE]
+            {{ elseif count % 7 == 5 }}bg-[#89F0D8]
+            {{ elseif count % 7 == 6 }}bg-[#F1D5E5]
+            {{ else }}bg-[#DBD5F1]{{ /if }}" data-stagger-child>
+            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-900">Semana {{ count }}</p>
             {{ if titulo }}
             <h3 class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 -mt-2">{{ titulo }}</h3>
+            {{ /if }}
+            {{ if fecha_de_inicio }}
+            <p class="font-display text-sm text-zinc-800 -mt-2"
+               data-semana-inicio="{{ fecha_de_inicio format='Y-m-d' }}"
+               {{ if fecha_de_finalizacion }}data-semana-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}></p>
             {{ /if }}
             {{ if descripcion }}
             <p class="font-sans text-base text-zinc-700 flex-1">{{ descripcion }}</p>
             {{ /if }}
             {{ if enlace }}
             <a href="{{ enlace }}" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center justify-center gap-2 mt-auto font-display font-bold text-lg text-zinc-800 bg-[#F5E554] px-6 py-3 rounded-full hover:opacity-80 transition-opacity">
+               class="inline-flex items-center justify-center gap-2 mt-auto font-display font-bold text-lg text-white bg-zinc-900 px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">
                 Reservar lugar →
             </a>
             {{ else }}

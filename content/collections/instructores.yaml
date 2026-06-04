@@ -1,9 +1,8 @@
-title: Talleres
-icon: pencil
-template: talleres/taller
+title: Instructores
+icon: fieldtype-users
+template: default
 layout: layout
 revisions: false
-route: 'talleres/{slug}'
 sort_dir: asc
 date_behavior:
   past: null

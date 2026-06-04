@@ -18,7 +18,7 @@
             <h1 class="text-4xl sm:text-6xl font-display font-bold text-zinc-800 mb-6 sm:mb-10">{{ title }}</h1>
 
             {{ if hora_inicio }}
-            <div class="bg-linear-to-b from-[#F5E554] to-[#F289B8] rounded-2xl px-5 py-4 sm:px-6 sm:py-5 inline-block mb-6">
+            <div class="bg-linear-to-b from-[#FFC18E] to-[#F289B8] rounded-2xl px-5 py-4 sm:px-6 sm:py-5 inline-block mb-6">
                 {{ if dias }}
                 <p class="text-base text-zinc-800 mb-2">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</p>
                 {{ /if }}
@@ -52,7 +52,7 @@
         {{ /if }}
 
         {{ if temario }}
-        <div class="bg-[#F5E554] rounded-3xl px-8 py-8 sm:px-12 sm:py-12">
+        <div class="bg-[#FFC18E] rounded-3xl px-8 py-8 sm:px-12 sm:py-12">
             <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800 mb-6">Temario</h2>
             <div class="prose prose-zinc max-w-none text-lg">{{ temario }}</div>
         </div>

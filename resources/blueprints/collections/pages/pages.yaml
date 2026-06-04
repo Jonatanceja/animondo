@@ -60,6 +60,16 @@ tabs:
               container: assets
               if:
                 hero_type: 'equals slider'
+          -
+            handle: hero_headline
+            field:
+              type: bard
+              display: Headline
+              instructions: 'Text overlay displayed on top of the hero'
+              buttons:
+                - bold
+                - italic
+              save_html: true
   circle:
     display: 'El Viaje'
     sections:
@@ -175,6 +185,23 @@ tabs:
               display: Talleres
               collections:
                 - talleres
+  instructores:
+    display: Instructores
+    sections:
+      -
+        fields:
+          -
+            handle: instructores_titulo
+            field:
+              type: text
+              display: Título
+          -
+            handle: entradas
+            field:
+              collections:
+                - instructores
+              type: entries
+              display: Entradas
   marca:
     display: Marca
     sections:

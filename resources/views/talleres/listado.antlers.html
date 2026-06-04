@@ -2,7 +2,7 @@
 
     {{# 1. Headline #}}
     {{ if talleres_titulo }}
-    <h2 class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 id="talleres-headline" class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ talleres_titulo }}
     </h2>
     {{ /if }}
@@ -39,10 +39,9 @@
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if hora_inicio }}
             <p class="font-sans text-lg text-zinc-800 mb-3">
-                {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
-                {{ hora_inicio }} – {{ hora_fin }}
+                {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}<br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
             </p>
-            <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+            <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
             {{ else }}
             <p class="font-display font-bold text-lg text-zinc-700 mt-2">Próximamente</p>
             {{ /if }}
@@ -93,10 +92,9 @@
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
                 {{ if hora_inicio }}
                 <p class="font-sans text-base text-zinc-800 mb-3">
-                    {{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}
-                    {{ hora_inicio }} – {{ hora_fin }}
-                </p>
-                <span class="inline-block font-display font-bold text-sm bg-zinc-900 text-white px-4 py-1.5 rounded-full">Reserva tu lugar →</span>
+                    {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a Viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}
+                    de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}                </p>
+                <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
                 {{ else }}
                 <p class="font-display font-bold text-base text-zinc-700 mt-1">Próximamente</p>
                 {{ /if }}

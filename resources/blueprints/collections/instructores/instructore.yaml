@@ -1,0 +1,50 @@
+title: Instructores
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+              display: Nombre
+          -
+            handle: profesion
+            field:
+              type: text
+              display: Profesión
+          -
+            handle: biografia
+            field:
+              type: markdown
+              display: Biografía
+              localizable: true
+          -
+            handle: foto_de_instructor
+            field:
+              container: assets
+              max_files: 1
+              type: assets
+              display: 'Foto de instructor'
+          -
+            handle: template
+            field:
+              type: template
+              display: Template
+              localizable: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

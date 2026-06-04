@@ -9,8 +9,8 @@ tabs:
             handle: title
             field:
               type: text
-              display: Nombre del curso
               required: true
+              display: 'Nombre del curso'
               validate:
                 - required
           -
@@ -33,7 +33,7 @@ tabs:
             handle: mensaje_importante
             field:
               type: text
-              display: Mensaje importante
+              display: 'Mensaje importante'
               instructions: 'Mensaje destacado visible en la página del taller'
           -
             handle: edad
@@ -41,6 +41,7 @@ tabs:
               type: text
               display: Edad
               instructions: 'Ej: 6-8 años'
+              width: 50
           -
             handle: dias
             field:
@@ -54,47 +55,92 @@ tabs:
                 viernes: Viernes
                 sabado: Sábado
                 domingo: Domingo
+              width: 50
           -
             handle: hora_inicio
             field:
               type: time
-              display: Hora de inicio
+              display: 'Hora de inicio'
+              width: 33
           -
             handle: hora_fin
             field:
               type: time
-              display: Hora de fin
+              display: 'Hora de fin'
+              width: 33
+          -
+            handle: horario_extendido
+            field:
+              type: time
+              display: 'Horario Extendido'
+              width: 33
           -
             handle: fecha_inicio
             field:
               type: date
-              display: Fecha de inicio
-              time_enabled: false
+              display: 'Fecha de inicio'
+              width: 50
+          -
+            handle: fecha_fin
+            field:
+              type: date
+              display: 'Fecha de fin'
+              width: 50
+          -
+            handle: precio
+            field:
+              type: text
+              display: Precio
+              instructions: 'Ej: $500 MXN'
+              width: 50
           -
             handle: resumen
             field:
               type: replicator
-              display: Resumen
+              display: Talleres
               sets:
-                opcion:
-                  display: Opción
-                  fields:
-                    -
-                      handle: titulo
-                      field:
-                        type: text
-                        display: Título
-                    -
-                      handle: descripcion
-                      field:
-                        type: text
-                        display: Descripción
-                    -
-                      handle: enlace
-                      field:
-                        type: text
-                        display: Enlace de pago (PayPal)
-                        instructions: 'Pega el enlace de pago de PayPal'
+                main:
+                  display: Principal
+                  sets:
+                    opcion:
+                      display: Opción
+                      fields:
+                        -
+                          handle: titulo
+                          field:
+                            type: text
+                            display: Título
+                        -
+                          handle: fecha_de_inicio
+                          field:
+                            type: date
+                            display: 'Fecha de inicio'
+                            width: 50
+                        -
+                          handle: fecha_de_finalizacion
+                          field:
+                            type: date
+                            display: 'Fecha de finalización'
+                            width: 50
+                        -
+                          handle: descripcion
+                          field:
+                            type: text
+                            display: Descripción
+                        -
+                          handle: enlace
+                          field:
+                            type: text
+                            display: 'Enlace de pago (PayPal)'
+                            instructions: 'Pega el enlace de pago de PayPal'
+                        -
+                          handle: impartido_por
+                          field:
+                            collections:
+                              - instructores
+                            max_items: 1
+                            type: entries
+                            display: 'Impartido por'
           -
             handle: personaje
             field:
@@ -103,7 +149,6 @@ tabs:
               collections:
                 - personajes
               max_items: 1
-              mode: default
   sidebar:
     display: Sidebar
     sections:

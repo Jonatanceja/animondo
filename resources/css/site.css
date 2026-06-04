@@ -80,6 +80,11 @@
   --color-animondo-green: #36BA9B;
   --font-sans: 'Gooper', serif;
   --font-display: 'Gonzaga', sans-serif;
+  --default-bg: #F4F3F0;
+}
+
+html, body {
+  background-color: #F4F3F0;
 }
 
 /* ── Hero slider (Ken Burns) ─────────────────── */
@@ -204,7 +209,8 @@
   z-index: 10;
 }
 
-.frame-content h2 strong {
+.frame-content h2 strong,
+.hero-headline-text strong {
   background-repeat: no-repeat;
   background-position: 0% 88%;
   background-size: 0% 42%;

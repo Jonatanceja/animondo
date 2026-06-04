@@ -1,4 +1,4 @@
-footer_logo: branding/animondo-negro.svg
+footer_logo: animondo-es-negro.svg
 navegacion_footer:
   - footer
 direccion:
@@ -7,23 +7,42 @@ direccion:
     content:
       -
         type: text
-        text: 'Calle Insurgente 290, Col. Centro'
+        text: 'Calle Independencia #100'
   -
     type: paragraph
     content:
       -
         type: text
-        text: 'Guadalajara, Jalisco C.P. '
+        text: 'Colonia Centro, Guadalajara, Jalisco, 44100'
 contacto:
   -
     type: paragraph
     content:
       -
         type: text
-        text: 'Teléfono 33 331 4090'
+        text: 'Teléfono '
+      -
+        type: text
+        marks:
+          -
+            type: link
+            attrs:
+              href: 'tel:3312806185'
+              rel: null
+              target: null
+              title: null
+        text: '33 1280 6185'
   -
     type: paragraph
     content:
       -
         type: text
-        text: hola@animondo.edu
+        marks:
+          -
+            type: link
+            attrs:
+              href: 'mailto:hola@animondo.mx'
+              rel: null
+              target: null
+              title: null
+        text: hola@animondo.mx

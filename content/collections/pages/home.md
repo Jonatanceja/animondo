@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780022089
+updated_at: 1780532608
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>Aquí los niños <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     type: slide
     enabled: true
   -
@@ -133,8 +133,12 @@ hero_video_source: upload
 hero_video_file: video/hero-video.mp4
 talleres_entries:
   - dd00debb-9588-4144-aa71-14f8effb67f5
-  - fc361f30-59ac-434a-ac78-dafd900c3887
   - 6382ddc6-e313-4ca9-9c53-00bedb84097e
+  - fc361f30-59ac-434a-ac78-dafd900c3887
+hero_headline: '<p>Aquí los niños <strong>descubren</strong> que pueden <strong>animar.</strong></p>'
+entradas:
+  - 965f7a89-25ba-4d8e-95ea-40bc42966d5a
+instructores_titulo: Instructores
 ---
 ## Welcome to your brand new Statamic site!
 

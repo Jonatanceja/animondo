@@ -1,0 +1,47 @@
+title: Legal
+tabs:
+  main:
+    display: Contenido
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              display: Título
+              required: true
+              validate:
+                - required
+          -
+            handle: content
+            field:
+              type: bard
+              display: Contenido
+              buttons:
+                - bold
+                - italic
+                - underline
+                - unorderedlist
+                - orderedlist
+                - h2
+                - h3
+                - blockquote
+                - link
+              save_html: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'
+          -
+            handle: template
+            field:
+              type: hidden
+              default: legal
