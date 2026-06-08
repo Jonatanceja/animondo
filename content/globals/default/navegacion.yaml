@@ -3,5 +3,5 @@ logo: animondo-color.svg
 navegacion:
   - main_nav
 boton_de_navegacion:
-  teto_de_boton: 'Aparta tu lugar'
+  teto_de_boton: 'Talleres abiertos'
   enlace_de_boton: 'entry::talleres'

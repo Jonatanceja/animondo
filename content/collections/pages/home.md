@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780532608
+updated_at: 1780961184
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>Aquí los niños <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     type: slide
     enabled: true
   -
@@ -102,7 +102,7 @@ circle_slides:
     id: obUJ_0LbA36L1dnSGdgOm
     type: slide
     enabled: true
-    title: "<p>Los alumnos construyen sus propios <strong>artefactos\_</strong>y los usan para dar <strong>vida</strong> a sus animaciones.</p>"
+    title: '<p>Los alumnos construyen sus propios <strong>artefactos  </strong>y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
   -
     id: _TEg250DYsZKcEXW8a6g0
     type: slide
@@ -135,7 +135,7 @@ talleres_entries:
   - dd00debb-9588-4144-aa71-14f8effb67f5
   - 6382ddc6-e313-4ca9-9c53-00bedb84097e
   - fc361f30-59ac-434a-ac78-dafd900c3887
-hero_headline: '<p>Aquí los niños <strong>descubren</strong> que pueden <strong>animar.</strong></p>'
+hero_headline: '<p></p>'
 entradas:
   - 965f7a89-25ba-4d8e-95ea-40bc42966d5a
 instructores_titulo: Instructores

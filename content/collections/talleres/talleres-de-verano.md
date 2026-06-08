@@ -16,7 +16,7 @@ vespertino:
   hora_inicio: '09:00'
   hora_fin: '13:00'
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780536702
+updated_at: 1780695128
 dias:
   - lunes
   - martes
@@ -56,7 +56,7 @@ resumen:
   -
     id: '-HDq_KqwjRNxtfe77XYoK'
     titulo: Extraterrestres
-    descripcion: 'Lo que da miedo también puede ser divertido cuando tú lo creas.'
+    descripcion: 'Mundos imposibles con criaturas imposibles. Vamos al espacio.'
     type: opcion
     enabled: true
     fecha_de_inicio: '2026-07-27 06:00'
