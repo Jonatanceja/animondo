@@ -62,7 +62,10 @@
 
     {{# ── Semanas temáticas ───────────────────────────────────────────────────── #}}
     {{ if resumen }}
-    <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800 mb-6" data-reveal>Semanas temáticas</h2>
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-6" data-reveal>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800">Semanas temáticas</h2>
+        <span class="font-display font-bold text-sm bg-[#F5E554] text-zinc-900 px-4 py-2 rounded-full">🎉 10% de descuento al elegir 2 o más semanas</span>
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger-cards>
         {{ resumen }}
         {{ if type == 'opcion' }}
@@ -87,10 +90,16 @@
             <p class="font-sans text-base text-zinc-700 flex-1">{{ descripcion }}</p>
             {{ /if }}
             {{ if enlace }}
-            <a href="{{ enlace }}" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center justify-center gap-2 mt-auto font-display font-bold text-lg text-white bg-zinc-900 px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">
+            <button
+                class="snipcart-add-item inline-flex items-center justify-center gap-2 mt-auto font-display font-bold text-lg text-white bg-zinc-900 px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800 cursor-pointer"
+                data-item-id="{{ id }}"
+                data-item-name="{{ titulo }}"
+                data-item-price="{{ precio }}"
+                data-item-url="{{ url }}"
+                data-item-description="{{ descripcion }}"
+                data-item-max-quantity="1">
                 Reservar lugar →
-            </a>
+            </button>
             {{ else }}
             <span class="inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
                 Próximamente

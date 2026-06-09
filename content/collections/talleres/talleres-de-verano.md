@@ -16,7 +16,7 @@ vespertino:
   hora_inicio: '09:00'
   hora_fin: '13:00'
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780695128
+updated_at: 1780963889
 dias:
   - lunes
   - martes

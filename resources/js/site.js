@@ -826,3 +826,45 @@ if (viajeBtns.length) {
   setViajeTab(0);
 }
 
+// ── Snipcart: 10% discount when 2+ talleres in cart ───────────────────────
+const DISCOUNT_ID = 'descuento-verano-10pct';
+let syncingDiscount = false;
+
+function onCartItemChange() {
+  if (syncingDiscount) return;
+  syncDiscount();
+}
+
+async function syncDiscount() {
+  syncingDiscount = true;
+  try {
+    const state     = Snipcart.store.getState();
+    const all       = state.cart.items.items ?? [];
+    const real      = all.filter(i => i.id !== DISCOUNT_ID);
+    const existing  = all.find(i => i.id === DISCOUNT_ID);
+    const count     = real.length;
+    const subtotal  = real.reduce((s, i) => s + i.price * i.quantity, 0);
+    const discount  = parseFloat((subtotal * 0.1).toFixed(2));
+
+    if (existing) await Snipcart.api.items.remove(existing.uniqueId);
+
+    if (count >= 2) {
+      await Snipcart.api.items.add({
+        id:       DISCOUNT_ID,
+        name:     'Descuento por 2 talleres (10%)',
+        price:    -discount,
+        url:      window.location.pathname,
+        quantity: 1,
+      });
+    }
+  } finally {
+    syncingDiscount = false;
+  }
+}
+
+document.addEventListener('snipcart.ready', () => {
+  Snipcart.events.on('item.added',   onCartItemChange);
+  Snipcart.events.on('item.removed', onCartItemChange);
+  Snipcart.events.on('item.updated', onCartItemChange);
+});
+

@@ -13,6 +13,9 @@
         {{ /if }}
         {{ /navegacion:favicon }}
         {{ vite src="resources/js/site.js|resources/css/site.css" }}
+        <link rel="preconnect" href="https://app.snipcart.com">
+        <link rel="preconnect" href="https://cdn.snipcart.com">
+        <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.css">
     </head>
     <body class="bg-stone-50 font-sans leading-normal text-zinc-800 [&_h1]:font-display [&_h2]:font-display [&_h3]:font-display">
         {{ partial:nav }}
@@ -20,6 +23,10 @@
             {{ template_content }}
         </div>
         {{ partial:footer }}
+
+        {{# ── Snipcart ────────────────────────────────────────────────────────── #}}
+        <div hidden id="snipcart" data-api-key="{{ config:services.snipcart.key }}"></div>
+        <script async src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"></script>
 
         {{# ── WhatsApp floating button ───────────────────────────────────────── #}}
         {{ contacto:telefonos }}

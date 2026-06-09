@@ -3,6 +3,14 @@
 @source "../views";
 @source "../../content";
 
+/* ── Snipcart z-index override ───────────────── */
+#snipcart,
+.snipcart-modal,
+.snipcart-modal__container,
+.snipcart__overlay {
+  z-index: 99999 !important;
+}
+
 /* ── Fonts ───────────────────────────────────── */
 
 @font-face {

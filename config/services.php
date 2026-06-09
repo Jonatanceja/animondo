@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'snipcart' => [
+        'key' => env('SNIPCART_KEY', ''),
+    ],
+
 ];
