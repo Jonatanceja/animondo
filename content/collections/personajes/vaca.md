@@ -4,7 +4,7 @@ blueprint: personaje
 title: Claude
 imagen: vaca.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1779836083
+updated_at: 1781566165
 cargo: Eléctrico
 color: '#F1D5E5'
 ---

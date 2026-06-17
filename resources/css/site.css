@@ -3,7 +3,117 @@
 @source "../views";
 @source "../../content";
 
-/* ── Snipcart z-index override ───────────────── */
+/* ── Snipcart theme ──────────────────────────── */
+#snipcart {
+  /* Typography */
+  --font-family: 'Gooper', serif;
+
+  /* Text */
+  --color-default: #18181b;
+  --color-alt: #71717a;
+  --color-input: #18181b;
+  --color-input-hover: #18181b;
+  --color-input-focus: #323E81;
+  --color-input-disabled: #a1a1aa;
+  --color-input-checked: #fff;
+  --color-inputLabel: #3f3f46;
+  --color-inputPlaceholder: #a1a1aa;
+
+  /* Links */
+  --color-link: #323E81;
+  --color-link-hover: #36BA9B;
+  --color-link-focus: #323E81;
+  --color-link-active: #323E81;
+
+  /* Badges / pills */
+  --color-badge: #18181b;
+  --color-badge-active: #18181b;
+  --bgColor-badge: #e4e4e7;
+  --bgColor-badge-active: #AFFFEC;
+  --borderColor-badge: transparent;
+  --borderColor-badge-active: transparent;
+
+  /* Primary button (main CTA) */
+  --color-buttonPrimary: #fff;
+  --color-buttonPrimary-hover: #18181b;
+  --color-buttonPrimary-focus: #fff;
+  --color-buttonPrimary-active: #fff;
+  --bgColor-buttonPrimary: #18181b;
+  --bgColor-buttonPrimary-hover: #36BA9B;
+  --bgColor-buttonPrimary-focus: #18181b;
+  --bgColor-buttonPrimary-active: #18181b;
+  --borderColor-buttonPrimary: transparent;
+  --borderColor-buttonPrimary-hover: transparent;
+  --shadow-buttonPrimary-hover: 0 10px 4px -8px rgba(0,0,0,.25);
+  --shadow-buttonPrimary-focus: 0 0 0 3px rgba(54,186,155,.4);
+
+  /* Secondary button */
+  --color-buttonSecondary: #323E81;
+  --color-buttonSecondary-hover: #323E81;
+  --bgColor-buttonSecondary: #F4F3F0;
+  --bgColor-buttonSecondary-hover: #e4e4e7;
+  --borderColor-buttonSecondary: transparent;
+  --borderColor-buttonSecondary-hover: transparent;
+
+  /* States */
+  --color-success: #36BA9B;
+  --color-error: #F04040;
+  --bgColor-success: #AFFFEC;
+  --bgColor-error: #fce8e8;
+
+  /* Backgrounds */
+  --bgColor-default: #F4F3F0;
+  --bgColor-alt: #ede9e5;
+  --bgColor-modal: #F4F3F0;
+  --bgColor-input: #fff;
+  --bgColor-input-hover: #fff;
+  --bgColor-input-focus: #fff;
+  --bgColor-input-checked: #36BA9B;
+  --bgColor-modalVeil: hsla(40, 10%, 90%, 0.85);
+
+  /* Borders */
+  --borderColor-default: #e4e4e7;
+  --borderColor-input: #d4d4d8;
+  --borderColor-input-hover: #36BA9B;
+  --borderColor-input-focus: #323E81;
+  --borderColor-input-checked: #36BA9B;
+  --borderColor-input-error: #F04040;
+
+  /* Shadows */
+  --shadow-default: 0 20px 24px -20px rgba(0,0,0,.08);
+  --shadow-input-focus: 0 5px 10px -3px rgba(50,62,129,.15);
+}
+
+/* Headlines use Gonzaga */
+#snipcart h1, #snipcart h2, #snipcart h3,
+#snipcart .snipcart-cart__title,
+#snipcart .snipcart-order__title,
+#snipcart .snipcart-checkout__step-title,
+#snipcart .snipcart__font--large,
+#snipcart .snipcart__font--xlarge {
+  font-family: 'Gonzaga', sans-serif !important;
+  font-weight: 800;
+}
+
+/* Fully rounded buttons */
+#snipcart .snipcart-base-button,
+#snipcart .snipcart__actions--link {
+  border-radius: 9999px !important;
+}
+
+/* Rounded inputs */
+#snipcart .snipcart-input,
+#snipcart .snipcart-form__select,
+#snipcart .snipcart-textfield__field {
+  border-radius: 0.75rem !important;
+}
+
+/* Rounded panels */
+#snipcart .snipcart-modal__container {
+  border-radius: 1.5rem 0 0 1.5rem !important;
+}
+
+/* Z-index */
 #snipcart,
 .snipcart-modal,
 .snipcart-modal__container,
@@ -12,6 +122,13 @@
 }
 
 /* ── Fonts ───────────────────────────────────── */
+
+@font-face {
+  font-family: 'Gonzaga';
+  src: url('../fonts/gonzaga-light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Gonzaga';
@@ -79,6 +196,14 @@
   src: url('../fonts/gooper-bolditalic.woff2') format('woff2');
   font-weight: 700;
   font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gooper';
+  src: url('../fonts/gooper-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -251,7 +376,7 @@ html, body {
 
 .personajes-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0;
 }
 

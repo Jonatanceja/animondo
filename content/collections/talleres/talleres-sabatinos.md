@@ -4,6 +4,6 @@ blueprint: taller-regular
 title: 'Talleres sabatinos'
 template: talleres/taller-regular
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780536175
-personaje: f0d00257-e86d-459a-b298-51afb33a6d13
+updated_at: 1781575667
+personaje: 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
 ---

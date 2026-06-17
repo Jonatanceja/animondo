@@ -1,0 +1,95 @@
+title: Contacto
+tabs:
+  main:
+    display: Principal
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              validate:
+                - required
+          -
+            handle: logo
+            field:
+              type: assets
+              display: 'Logo (tarjeta)'
+              max_files: 1
+              container: assets
+              width: 50
+          -
+            handle: nombre_lugar
+            field:
+              type: text
+              display: 'Nombre del lugar'
+              width: 50
+          -
+            handle: direccion
+            field:
+              type: textarea
+              display: Dirección
+              instructions: 'Una línea por renglón.'
+          -
+            handle: telefono
+            field:
+              type: text
+              display: Teléfono
+              width: 50
+          -
+            handle: redes_usuario
+            field:
+              type: text
+              display: 'Usuario de redes'
+              instructions: 'Ej: @Animondo'
+              width: 50
+          -
+            handle: instagram
+            field:
+              type: text
+              display: 'Instagram (URL)'
+              width: 33
+          -
+            handle: tiktok
+            field:
+              type: text
+              display: 'TikTok (URL)'
+              width: 33
+          -
+            handle: facebook
+            field:
+              type: text
+              display: 'Facebook (URL)'
+              width: 33
+          -
+            handle: mapa_embed
+            field:
+              type: textarea
+              display: 'Mapa (código embed)'
+              instructions: 'Pega el código <iframe> del mapa de Google Maps.'
+          -
+            handle: imagen_final
+            field:
+              type: assets
+              display: 'Imagen final (personajes)'
+              max_files: 1
+              container: assets
+          -
+            handle: template
+            field:
+              type: template
+              display: Template
+              localizable: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'

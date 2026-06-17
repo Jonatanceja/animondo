@@ -7,7 +7,7 @@
         <div class="flex-1 flex items-center pl-4">
             <button id="nav-hamburger" class="w-12 h-12 flex flex-col justify-center items-center gap-2 bg-stone-50 rounded-xl outline-none focus:outline-none" aria-label="Menú">
                 <span id="ham-1" class="block h-[3px] bg-zinc-800 transition-all duration-300 w-9 rounded-full"></span>
-                <span id="ham-2" class="block h-[3px] bg-zinc-800 transition-all duration-300 w-6 rounded-full"></span>
+                <span id="ham-2" class="block self-start ml-1.5 h-[3px] bg-zinc-800 transition-all duration-300 w-6 rounded-full"></span>
                 <span id="ham-3" class="block h-[3px] bg-zinc-800 transition-all duration-300 w-9 rounded-full"></span>
             </button>
         </div>
@@ -19,14 +19,21 @@
             {{ /navegacion:logo }}
         </a>
 
-        {{# Right: CTA — desktop only #}}
-        <div class="flex-1 flex justify-end items-center pr-4">
+        {{# Right: CTA — desktop only + carrito #}}
+        <div class="flex-1 flex justify-end items-center gap-3 sm:gap-4 pr-4">
             {{ if navegacion:boton_de_navegacion:teto_de_boton }}
             <a href="{{ navegacion:boton_de_navegacion:enlace_de_boton }}"
-               class="hidden sm:inline-block text-2xl font-display font-bold text-zinc-800 bg-animondo-green px-10 py-5 rounded-full transition-colors duration-500 hover:bg-zinc-900 hover:text-white">
+               class="hidden sm:inline-block text-2xl font-display font-normal text-white bg-[#323E81] px-10 py-5 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">
                 {{ navegacion:boton_de_navegacion:teto_de_boton }}
             </a>
             {{ /if }}
+
+            {{# Carrito Snipcart #}}
+            <button type="button" aria-label="Carrito"
+                    class="snipcart-checkout relative w-18 h-18 p-0.5 flex items-center justify-center bg-stone-50 rounded-xl outline-none focus:outline-none cursor-pointer hover:bg-[#232B5C] transition-colors duration-300">
+                <img src="/assets/carrito.svg" alt="Carrito" class="w-full h-full object-contain">
+                <span class="snipcart-items-count absolute -top-1.5 -right-1.5 min-w-[1.4rem] h-6 px-1.5 flex items-center justify-center text-xs font-display font-bold text-white bg-zinc-900 rounded-full leading-none"></span>
+            </button>
         </div>
 
     </div>
@@ -55,7 +62,7 @@
             {{ /nav:main_nav }}
             {{ if navegacion:boton_de_navegacion:teto_de_boton }}
             <a href="{{ navegacion:boton_de_navegacion:enlace_de_boton }}"
-               class="mt-4 inline-block text-center text-xl font-display font-bold text-zinc-800 bg-animondo-green px-8 py-4 rounded-full transition-colors duration-500 hover:bg-zinc-900 hover:text-white">
+               class="mt-4 inline-block text-center text-xl font-display font-normal text-white bg-[#323E81] px-8 py-4 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">
                 {{ navegacion:boton_de_navegacion:teto_de_boton }}
             </a>
             {{ /if }}

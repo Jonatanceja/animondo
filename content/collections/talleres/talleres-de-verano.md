@@ -16,7 +16,7 @@ vespertino:
   hora_inicio: '09:00'
   hora_fin: '13:00'
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780963889
+updated_at: 1781648015
 dias:
   - lunes
   - martes
@@ -24,7 +24,7 @@ dias:
   - jueves
   - viernes
 hora_inicio: '09:00'
-hora_fin: '13:00'
+hora_fin: '14:00'
 resumen:
   -
     id: 81xHbhWD2WshtkB64wCjk
@@ -33,44 +33,29 @@ resumen:
     titulo: 'Princesas y dragones'
     descripcion: 'La semana donde los castillos cobran vida y las leyendas se animan.'
     enlace: 'https://www.paypal.com/ncp/payment/6S732WDFUPS3G'
-    fecha_de_inicio: '2026-07-06 06:00'
-    fecha_de_finalizacion: '2026-07-10 06:00'
-  -
-    id: 0FgmEacmFmjfDXIn8dlqD
-    titulo: Fútbol
-    descripcion: 'El Mundial llegó a Animondo. El deporte como nunca lo habías visto: cuadro por cuadro.'
-    type: opcion
-    enabled: true
-    fecha_de_inicio: '2026-07-13 06:00'
-    fecha_de_finalizacion: '2026-07-17 06:00'
-    enlace: 'https://www.paypal.com/ncp/payment/NP2FAUNQMPUDS'
-  -
-    id: Qv8yksBCUNcueym9lJq1J
-    titulo: Zombies
-    descripcion: 'Animación con sentido del humor, sesos y un poquito de horror.'
-    type: opcion
-    enabled: true
     fecha_de_inicio: '2026-07-20 06:00'
     fecha_de_finalizacion: '2026-07-24 06:00'
-    enlace: 'https://www.paypal.com/ncp/payment/ZSXKEET4JVZF8'
-  -
-    id: '-HDq_KqwjRNxtfe77XYoK'
-    titulo: Extraterrestres
-    descripcion: 'Mundos imposibles con criaturas imposibles. Vamos al espacio.'
-    type: opcion
-    enabled: true
-    fecha_de_inicio: '2026-07-27 06:00'
-    fecha_de_finalizacion: '2026-07-31 06:00'
-    enlace: 'https://www.paypal.com/ncp/payment/3A4MAH8J6MMA2'
+    personaje: da9a7ff6-2bc2-4288-8752-21c4ce137b79
   -
     id: MIgw3XrlS3UlVVmxik6Qq
     type: opcion
     enabled: true
     titulo: Dinosaurios
     descripcion: 'Cinco días para hacer que el pasado vuelva a caminar.'
+    fecha_de_inicio: '2026-07-27 06:00'
+    fecha_de_finalizacion: '2026-07-31 06:00'
+    enlace: 'https://www.paypal.com/ncp/payment/E5G3GU7HEFH42'
+    personaje: 58efa3a8-e64e-45f6-bd11-6a82b115d2e1
+  -
+    id: '-HDq_KqwjRNxtfe77XYoK'
+    titulo: Extraterrestres
+    descripcion: 'Mundos imposibles con criaturas imposibles. Vamos al espacio.'
+    type: opcion
+    enabled: true
     fecha_de_inicio: '2026-08-03 06:00'
     fecha_de_finalizacion: '2026-08-07 06:00'
-    enlace: 'https://www.paypal.com/ncp/payment/E5G3GU7HEFH42'
+    enlace: 'https://www.paypal.com/ncp/payment/3A4MAH8J6MMA2'
+    personaje: 8c6cbe1e-c737-4083-ba31-5fac3e909b67
   -
     id: braKtRtyyY2hJQBvpdRkq
     titulo: Selva
@@ -80,15 +65,17 @@ resumen:
     fecha_de_inicio: '2026-08-10 06:00'
     fecha_de_finalizacion: '2026-08-14 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/U5K79TPLV93SG'
+    personaje: f0d00257-e86d-459a-b298-51afb33a6d13
   -
-    id: 9tOVvXFHBT1dOvtHgvCU2
-    titulo: Superhéroes
-    descripcion: 'Crea a tu personaje, anima sus poderes y salva al mundo.'
+    id: Qv8yksBCUNcueym9lJq1J
+    titulo: Monstruos
+    descripcion: 'Lo que da miedo también puede ser divertido cuando tu lo creas.'
     type: opcion
     enabled: true
     fecha_de_inicio: '2026-08-17 06:00'
     fecha_de_finalizacion: '2026-08-21 06:00'
-    enlace: 'https://www.paypal.com/ncp/payment/HRQSS48SUVRQW'
+    enlace: 'https://www.paypal.com/ncp/payment/ZSXKEET4JVZF8'
+    personaje: 1e5b8c24-4402-4312-b6fd-b88b92a7a708
   -
     id: bU3MU_mboi2-W2Fal9TtO
     titulo: 'Mundo marino'
@@ -98,9 +85,11 @@ resumen:
     fecha_de_inicio: '2026-08-24 06:00'
     fecha_de_finalizacion: '2026-08-28 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/V8TYUSAPBWGS8'
+    personaje: b9663533-a5b3-4526-a362-a86c85598c13
 template: talleres/taller-verano
 fecha_inicio: '2026-07-20 06:00'
 personaje: b6899476-87c2-478f-ae88-e94e33263ed7
 precio: '1850'
 horario_extendido: '14:00'
+personaje_en_descripcion: 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
 ---

@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780961184
+updated_at: 1781658461
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -20,12 +20,12 @@ circle_slides:
       y convertirte en autor.
     type: slide
     enabled: true
-    title: '<p>Para dejar de ser espectador</p><p>y convertirte en <strong>autor.</strong></p>'
+    title: '<p>Para dejar de ser espectadores</p><p>y convertirse en <strong>creadores.</strong></p>'
   -
     id: 14ZcuabGk6urDHvEuovKA
     type: slide
     enabled: true
-    title: '<p>El viaje tiene 5 niveles</p>'
+    title: '<p>El viaje completo tiene 5 niveles.</p>'
     pasos_del_creador:
       -
         id: vtJUEOPnVu5EzNdaOkZ9K
@@ -107,19 +107,17 @@ circle_slides:
     id: _TEg250DYsZKcEXW8a6g0
     type: slide
     enabled: true
-    title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados</p>'
-image_section_image: branding/animondo-olor.svg
+    title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
+image_section_image: animondo-color.svg
 personajes_cards:
-  - 8d4f6765-d6b4-4c14-a745-ff54f03a2be2
   - f0d00257-e86d-459a-b298-51afb33a6d13
-  - 58efa3a8-e64e-45f6-bd11-6a82b115d2e1
-  - 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
-  - b9663533-a5b3-4526-a362-a86c85598c13
-  - da9a7ff6-2bc2-4288-8752-21c4ce137b79
-  - d97010ce-e535-4ab2-a76f-8a5fb239f357
+  - 8d4f6765-d6b4-4c14-a745-ff54f03a2be2
   - 1e5b8c24-4402-4312-b6fd-b88b92a7a708
-  - a0a7824d-eb97-4127-812c-9e63bba2349c
-  - b6899476-87c2-478f-ae88-e94e33263ed7
+  - 8c6cbe1e-c737-4083-ba31-5fac3e909b67
+  - b9663533-a5b3-4526-a362-a86c85598c13
+  - 854caaf0-b67c-4131-a189-3fa047126aa6
+  - da9a7ff6-2bc2-4288-8752-21c4ce137b79
+  - 58efa3a8-e64e-45f6-bd11-6a82b115d2e1
 talleres_titulo: Talleres
 talleres_imagen: chucha.png
 talleres_subtitulo: 'Talleres de verano animado'
@@ -127,7 +125,7 @@ talleres_texto: 'Vespertinos y Sabatinos'
 talleres_descripcion: '<p>Grupos pequeños<br>Cupos limitados</p>'
 marca_supertitulo: '<p>Descubrir que puedes crear...</p><p>lo cambia todo</p>'
 marca_titulo: '<p>Imagina<br><strong>Anima </strong><br>Comparte</p>'
-marca_imagen_logo: branding/animondo-olor.svg
+marca_imagen_logo: animondo-color.svg
 marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
 hero_video_file: video/hero-video.mp4
@@ -138,7 +136,15 @@ talleres_entries:
 hero_headline: '<p></p>'
 entradas:
   - 965f7a89-25ba-4d8e-95ea-40bc42966d5a
+  - 8d954090-121a-44a1-8ec6-1842f2c8c67d
+  - b1a17a5e-bf7b-4502-accf-feccbe4521d0
 instructores_titulo: Instructores
+personajes_en_posicion_absoluta:
+  - 475d4e9f-948e-4a62-8cb1-5bd643118b6a
+  - 8c6cbe1e-c737-4083-ba31-5fac3e909b67
+  - 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
+  - da9a7ff6-2bc2-4288-8752-21c4ce137b79
+  - 854caaf0-b67c-4131-a189-3fa047126aa6
 ---
 ## Welcome to your brand new Statamic site!
 

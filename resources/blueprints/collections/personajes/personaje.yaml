@@ -38,6 +38,14 @@ tabs:
               type: assets
               display: Imagen
           -
+            handle: enlace
+            field:
+              collections:
+                - instructores
+              type: entries
+              display: Enlace
+              max_items: 1
+          -
             handle: template
             field:
               type: template

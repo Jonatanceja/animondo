@@ -27,6 +27,14 @@
         {{# ── Snipcart ────────────────────────────────────────────────────────── #}}
         <div hidden id="snipcart" data-api-key="{{ config:services.snipcart.key }}"></div>
         <script async src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"></script>
+        <script>
+            document.addEventListener('snipcart.ready', function () {
+                fetch('/snipcart-es.json')
+                    .then(function (r) { return r.json(); })
+                    .then(function (es) { window.Snipcart.api.session.setLanguage('es', es); })
+                    .catch(function () {});
+            });
+        </script>
 
         {{# ── WhatsApp floating button ───────────────────────────────────────── #}}
         {{ contacto:telefonos }}

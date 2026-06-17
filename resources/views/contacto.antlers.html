@@ -1,0 +1,73 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# ── Top row: info card + título/redes card ──────────────────────────────── #}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-2 sm:mb-3">
+
+        {{# Tarjeta izquierda: logo + dirección #}}
+        <div class="bg-[#F5E554] rounded-3xl px-8 py-8 sm:px-10 sm:py-10 flex flex-col justify-center">
+            {{ if logo }}
+            <img src="{{ logo:url }}" alt="{{ title }}" class="h-7 sm:h-9 w-auto self-start mb-4">
+            {{ /if }}
+            {{ if nombre_lugar }}
+            <p class="font-display font-bold text-xl sm:text-2xl text-[#323E81] mb-2">{{ nombre_lugar }}</p>
+            {{ /if }}
+            {{ if direccion }}
+            <p class="font-display font-light text-base sm:text-lg text-[#323E81] leading-snug">{{ direccion | nl2br }}{{ if telefono }}<br>{{ telefono }}{{ /if }}</p>
+            {{ elseif telefono }}
+            <p class="font-display font-light text-base sm:text-lg text-[#323E81]">{{ telefono }}</p>
+            {{ /if }}
+        </div>
+
+        {{# Tarjeta derecha: título + redes #}}
+        <div class="flex flex-col gap-4 sm:gap-5">
+            <h1 class="font-display font-bold text-5xl sm:text-7xl leading-none text-[#323E81] px-2">{{ title }}</h1>
+            <div class="bg-[#F5E554] rounded-3xl px-8 py-8 sm:px-10 sm:py-10 flex-1 flex flex-col justify-center">
+                {{ if redes_usuario }}
+                <p class="font-display font-bold text-lg sm:text-xl text-[#323E81] mb-3">Redes {{ redes_usuario }}</p>
+                {{ /if }}
+                <div class="flex items-center gap-3">
+                {{ if instagram }}
+                <a href="{{ instagram }}" target="_blank" rel="noopener" aria-label="Instagram"
+                   class="w-12 h-12 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+                </a>
+                {{ /if }}
+                {{ if tiktok }}
+                <a href="{{ tiktok }}" target="_blank" rel="noopener" aria-label="TikTok"
+                   class="w-12 h-12 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M16.6 5.82a4.28 4.28 0 0 1-1.05-2.82h-2.9v11.6a2.36 2.36 0 0 1-2.36 2.36 2.36 2.36 0 0 1 0-4.72c.24 0 .47.04.69.1V9.4a5.3 5.3 0 0 0-.69-.05 5.27 5.27 0 1 0 5.27 5.27V8.9a7.13 7.13 0 0 0 4.16 1.33V7.32a4.28 4.28 0 0 1-3.11-1.5Z"/></svg>
+                </a>
+                {{ /if }}
+                {{ if facebook }}
+                <a href="{{ facebook }}" target="_blank" rel="noopener" aria-label="Facebook"
+                   class="w-12 h-12 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M14 13.5h2.5l.5-2.5H14V9.5c0-.72.2-1.2 1.23-1.2H17V6.06c-.29-.04-1.28-.12-2.43-.12-2.4 0-4.05 1.47-4.05 4.16V11H8.25v2.5H10.5V20h3.5v-6.5Z"/></svg>
+                </a>
+                {{ /if }}
+                {{ contacto:telefonos }}
+                {{ if type == 'telefono' and activo }}
+                <a href="https://wa.me/{{ numero }}" target="_blank" rel="noopener" aria-label="WhatsApp"
+                   class="w-12 h-12 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67a8.2 8.2 0 0 1 5.82 2.41 8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24Zm4.71 9.79c-.26-.13-1.52-.75-1.76-.84-.24-.09-.41-.13-.58.13-.17.26-.66.84-.81 1.01-.15.17-.3.19-.56.06-.26-.13-1.09-.4-2.08-1.28-.77-.69-1.29-1.53-1.44-1.79-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.46.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.8-1.92-.21-.5-.42-.43-.58-.44l-.49-.01c-.17 0-.45.06-.68.32-.24.26-.9.88-.9 2.15 0 1.27.92 2.49 1.05 2.66.13.17 1.81 2.76 4.38 3.87.61.26 1.09.42 1.46.54.61.2 1.17.17 1.61.1.49-.07 1.52-.62 1.73-1.22.21-.6.21-1.11.15-1.22-.06-.11-.24-.17-.5-.3Z"/></svg>
+                </a>
+                {{ /if }}
+                {{ /contacto:telefonos }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {{# ── Mapa + imagen de personajes al pie ───────────────────────────────────── #}}
+    <div class="bg-[#F5E554] rounded-3xl overflow-hidden aspect-[4/3] sm:aspect-[2/1]">
+        {{ if mapa_embed }}
+        <div class="w-full h-full [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:block [&_iframe]:border-0">{{ mapa_embed }}</div>
+        {{ /if }}
+    </div>
+    {{ if imagen_final }}
+    <div class="relative z-10 -mt-[12%] pointer-events-none">
+        <img src="{{ imagen_final:url }}" alt="" class="w-full object-contain">
+    </div>
+    {{ /if }}
+
+</div>

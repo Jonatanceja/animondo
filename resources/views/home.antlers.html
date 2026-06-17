@@ -181,11 +181,11 @@
 
 {{# ── Talleres section ────────────────────────────────────────────────────── #}}
 {{ if talleres_titulo or talleres_entries }}
-<section class="px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
+<section class="px-4 sm:px-6 pt-16 pb-0 sm:pt-24 sm:pb-0">
 
     {{# 1. Headline #}}
     {{ if talleres_titulo }}
-    <h2 id="talleres-headline" class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 id="talleres-headline" class="font-display font-bold text-center -mb-16 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ talleres_titulo }}
     </h2>
     {{ /if }}
@@ -195,23 +195,23 @@
     {{# 2. First entry — full-width banner card #}}
     {{ talleres_entries }}
     {{ if first }}
-    <div class="relative pt-44 sm:pt-40 mb-4 sm:mb-6" data-taller-card>
-    {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
+    <div class="relative pt-44 sm:pt-40 mb-0 sm:mb-0" data-taller-card>
+    {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
 
         {{ if personaje }}
         {{ personaje }}
-        <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#FADADD' }}"></div>
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
-        <div class="absolute left-[8%] right-[8%] -top-44 h-64 pointer-events-none z-10 sm:left-0 sm:right-auto sm:w-[48%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+        <div class="absolute left-[8%] right-[8%] -top-40 h-56 pointer-events-none z-10 sm:left-[22%] sm:right-auto sm:w-[38%] sm:-top-36 sm:bottom-0 sm:h-auto">
+            <img src="{{ imagen:url }}" alt="Personaje de animondo" class="w-full h-full object-contain object-bottom">
         </div>
         {{ /if }}
         {{ /personaje }}
         {{ else }}
         {{ collection:personajes limit="1" }}
-        <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#FADADD' }}"></div>
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
-        <div class="absolute left-[8%] right-[8%] -top-44 h-64 pointer-events-none z-10 sm:left-0 sm:right-auto sm:w-[48%] sm:-top-40 sm:bottom-0 sm:h-auto">
+        <div class="absolute left-[8%] right-[8%] -top-44 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
             <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
         </div>
         {{ /if }}
@@ -221,11 +221,11 @@
         <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10">
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if hora_inicio }}
-            <p class="font-sans text-lg text-zinc-800 mb-3">
+            <p class="font-display font-light text-2xl text-[#323E81] mb-3">
                 {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}<br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
-            <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
+            <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
             {{ else }}
-            <p class="font-display font-bold text-lg text-zinc-700 mt-2">Próximamente</p>
+            <p class="font-display font-light text-2xl text-[#323E81] mt-2">Próximamente</p>
             {{ /if }}
         </div>
 
@@ -238,12 +238,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {{ talleres_entries }}
         {{ unless first }}
-        <div class="relative pt-20 sm:pt-32" data-taller-card>
+        <div class="relative pt-6 sm:pt-6" data-taller-card>
         {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
 
             {{ if personaje }}
             {{ personaje }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F1D5E5' }}"></div>
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
             {{ if imagen }}
             <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
@@ -252,7 +252,7 @@
             {{ /personaje }}
             {{ elseif count == 2 }}
             {{ collection:personajes limit="1" }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F1D5E5' }}"></div>
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
             {{ if imagen }}
             <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
@@ -261,7 +261,7 @@
             {{ /collection:personajes }}
             {{ else }}
             {{ collection:personajes limit="1" offset="1" }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ color ?? '#F5E554' }}"></div>
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
             {{ if imagen }}
             <div class="absolute left-[8%] right-[8%] pointer-events-none z-10" style="top: -8rem; height: 20rem;">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
@@ -273,13 +273,13 @@
             <div class="absolute bottom-0 inset-x-0 px-6 pb-8 text-center z-20">
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
                 {{ if hora_inicio }}
-                <p class="font-sans text-base text-zinc-800 mb-3">
+                <p class="font-display font-light text-2xl text-[#323E81] mb-3">
                     {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a Viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}
                     de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
                 </p>
-                <span class="inline-block font-display font-bold text-base bg-zinc-900 text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800">Reserva tu lugar →</span>
+                <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
                 {{ else }}
-                <p class="font-display font-bold text-base text-zinc-700 mt-1">Próximamente</p>
+                <p class="font-display font-light text-2xl text-[#323E81] mt-1">Próximamente</p>
                 {{ /if }}
             </div>
 
@@ -296,44 +296,96 @@
 
 {{# ── Instructores section ────────────────────────────────────────────────── #}}
 {{ if entradas }}
-<section class="px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
+<section class="px-4 sm:px-6 pt-16 pb-0 sm:pt-24 sm:pb-0 overflow-hidden">
 
     {{ if instructores_titulo }}
-    <h2 class="font-display font-bold text-center mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 class="font-display font-bold text-center mb-8 sm:mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ instructores_titulo }}
     </h2>
     {{ /if }}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {{ entradas }}
-        <div class="relative pt-20">
-            <div class="rounded-3xl px-8 pt-20 pb-10 text-center flex flex-col items-center gap-3
-                {{ if count % 7 == 1 }}bg-[#AFFFEC]
-                {{ elseif count % 7 == 2 }}bg-[#FFC18E]
-                {{ elseif count % 7 == 3 }}bg-[#F289B8]
-                {{ elseif count % 7 == 4 }}bg-[#C5CBEE]
-                {{ elseif count % 7 == 5 }}bg-[#89F0D8]
-                {{ elseif count % 7 == 6 }}bg-[#F1D5E5]
-                {{ else }}bg-[#DBD5F1]{{ /if }}">
+    <div class="relative">
 
+        <div class="flex flex-wrap gap-4 sm:gap-6">
+            {{ entradas }}
+
+            {{ if count == 1 }}
+            {{# ── Tarjeta grande ── #}}
+            <div class="group relative w-full rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem]"
+                 style="background: linear-gradient(to right, #AFFFEC, #0A6DB4);">
+                <div class="w-full sm:w-1/2 relative z-10 sm:pr-2 flex flex-col">
+                    <h3 class="font-display font-bold text-[#323E81] text-3xl sm:text-6xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
+                </div>
                 {{ if foto_de_instructor }}
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-36 rounded-full overflow-hidden">
-                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover">
+                <div class="relative w-full mt-6 sm:mt-0 sm:absolute sm:right-0 sm:-top-16 sm:bottom-0 sm:w-[52%]">
+                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-auto sm:h-full object-cover grayscale rounded-[1.5rem]">
+                    {{# ── Personajes 2 y 3, hover en móvil, fijos en escritorio ── #}}
+                    {{ personajes_en_posicion_absoluta }}
+                    {{ if imagen and count == 2 }}
+                    <img src="{{ imagen:url }}" alt="{{ title }}"
+                         class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14">
+                    {{ elseif imagen and count == 3 }}
+                    <img src="{{ imagen:url }}" alt="{{ title }}"
+                         class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14">
+                    {{ /if }}
+                    {{ /personajes_en_posicion_absoluta }}
                 </div>
                 {{ /if }}
-
-                <h3 class="font-display font-bold text-3xl sm:text-4xl text-[#323E81] leading-tight">{{ title }}</h3>
-                {{ if profesion }}
-                <p class="font-display font-bold text-xs uppercase tracking-widest text-zinc-600 -mt-1">{{ profesion }}</p>
+                {{# ── Personaje 1 centrado (solo escritorio) ── #}}
+                {{ personajes_en_posicion_absoluta }}
+                {{ if imagen and count == 1 }}
+                <img src="{{ imagen:url }}" alt="{{ title }}"
+                     class="absolute z-20 pointer-events-none drop-shadow-md sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24">
                 {{ /if }}
-
-                {{ if biografia }}
-                <div class="font-sans text-base text-zinc-700 leading-relaxed prose prose-zinc max-w-none">{{ biografia }}</div>
-                {{ /if }}
-
+                {{ /personajes_en_posicion_absoluta }}
             </div>
+
+            {{ elseif count == 2 }}
+            {{# ── Tarjeta pequeña: foto arriba, nombre abajo ── #}}
+            <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem] flex flex-col gap-4"
+                 style="background: linear-gradient(135deg, #F5E554, #F57F20);">
+                {{ if foto_de_instructor }}
+                <div class="w-full aspect-[2/1] rounded-[1.25rem] overflow-hidden">
+                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover grayscale">
+                </div>
+                {{ /if }}
+                <div class="mt-auto flex items-center justify-center gap-4">
+                    <h3 class="font-display font-bold text-[#323E81] text-2xl sm:text-5xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
+                </div>
+                {{# ── Personaje 4 sobre esta card ── #}}
+                {{ personajes_en_posicion_absoluta }}
+                {{ if imagen and count == 4 }}
+                <img src="{{ imagen:url }}" alt="{{ title }}"
+                     class="absolute z-20 pointer-events-none drop-shadow-md sm:top-32 top-14 sm:right-32 right-24 w-[26%]">
+                {{ /if }}
+                {{ /personajes_en_posicion_absoluta }}
+            </div>
+
+            {{ else }}
+            {{# ── Tarjeta pequeña: nombre arriba, foto a la derecha ── #}}
+            <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem]"
+                 style="background: linear-gradient(135deg, #AFFFEC, #F57F20);">
+                <div class="relative z-10 max-w-[50%]">
+                    <h3 class="font-display font-bold text-[#323E81] text-2xl sm:text-5xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
+                </div>
+                {{ if foto_de_instructor }}
+                <div class="absolute top-5 right-5 bottom-5 w-[46%] rounded-[1.25rem] overflow-hidden">
+                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover grayscale">
+                </div>
+                {{ /if }}
+                {{# ── Personaje 5 sobre esta card ── #}}
+                {{ personajes_en_posicion_absoluta }}
+                {{ if imagen and count == 5 }}
+                <img src="{{ imagen:url }}" alt="{{ title }}"
+                     class="absolute z-20 pointer-events-none drop-shadow-md sm:bottom-12 bottom-6 sm:left-56 left-24 sm:w-42 w-32 transform -rotate-14">
+                {{ /if }}
+                {{ /personajes_en_posicion_absoluta }}
+            </div>
+            {{ /if }}
+
+            {{ /entradas }}
         </div>
-        {{ /entradas }}
+
     </div>
 
 </section>

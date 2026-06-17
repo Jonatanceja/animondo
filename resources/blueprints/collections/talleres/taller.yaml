@@ -29,6 +29,25 @@ tabs:
                 - h3
                 - blockquote
               save_html: true
+              width: 50
+          -
+            handle: personaje_en_descripcion
+            field:
+              type: entries
+              display: 'Personaje en descripción'
+              collections:
+                - personajes
+              max_items: 1
+              width: 25
+          -
+            handle: personaje
+            field:
+              type: entries
+              display: Personaje
+              collections:
+                - personajes
+              max_items: 1
+              width: 25
           -
             handle: mensaje_importante
             field:
@@ -128,12 +147,6 @@ tabs:
                             type: text
                             display: Descripción
                         -
-                          handle: enlace
-                          field:
-                            type: text
-                            display: 'Enlace de pago (PayPal)'
-                            instructions: 'Pega el enlace de pago de PayPal'
-                        -
                           handle: impartido_por
                           field:
                             collections:
@@ -141,14 +154,14 @@ tabs:
                             max_items: 1
                             type: entries
                             display: 'Impartido por'
-          -
-            handle: personaje
-            field:
-              type: entries
-              display: Personaje
-              collections:
-                - personajes
-              max_items: 1
+                        -
+                          handle: personaje
+                          field:
+                            collections:
+                              - personajes
+                            max_items: 1
+                            type: entries
+                            display: Personaje
   sidebar:
     display: Sidebar
     sections:

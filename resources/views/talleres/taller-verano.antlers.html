@@ -1,11 +1,11 @@
 <div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-20">
 
     {{# ── Top section ────────────────────────────────────────────────────────── #}}
-    <section class="relative z-10 bg-blush rounded-3xl px-6 py-8 sm:px-16 sm:py-12 mb-6">
+    <section class="relative bg-[#F5E554] rounded-3xl px-6 py-8 sm:px-16 sm:py-12 mb-6">
 
         {{ personaje }}
         {{ if imagen }}
-        <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[36%] pointer-events-none z-20" data-reveal-char>
+        <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[36%] pointer-events-none z-40" data-reveal-char>
             <img src="{{ imagen:url }}" alt="{{ title }}"
                  class="w-full h-48 sm:h-full object-contain object-bottom">
         </div>
@@ -14,25 +14,25 @@
 
         <div class="relative z-10 sm:max-w-[52%]">
 
-            <h1 class="text-4xl sm:text-6xl font-display font-bold text-zinc-800 mb-6 sm:mb-10" data-reveal data-delay="0">{{ title }}</h1>
+            <h1 class="text-4xl sm:text-6xl font-display font-bold text-[#323E81] mb-6 sm:mb-10" data-reveal data-delay="0">{{ title }}</h1>
 
             {{ if hora_inicio }}
             <div class="mb-6" data-reveal data-delay="0.15">
                 {{ if dias }}
-                <p class="taller-dias font-display font-bold text-2xl sm:text-3xl text-zinc-800 mb-1"
+                <p class="taller-dias font-display font-bold text-2xl sm:text-3xl text-[#323E81] mb-1"
                    data-dias="{{ dias | pluck:value | join:',' }}">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</p>
                 {{ /if }}
-                <p class="font-display text-xl sm:text-2xl text-zinc-700">
+                <p class="font-display text-xl sm:text-2xl text-[#323E81]">
                     de
                     <span data-time="{{ hora_inicio }}">{{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
                     a
                     <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
                 </p>
                 {{ if horario_extendido }}
-                <p class="font-display text-base sm:text-lg text-zinc-700">(opción de horario extendido hasta las {{ horario_extendido | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }})</p>
+                <p class="font-display text-base sm:text-lg text-[#323E81]">(opción de horario extendido hasta las {{ horario_extendido | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }})</p>
                 {{ /if }}
                 {{ if resumen }}
-                <p class="mt-3 font-display font-semibold text-xl text-zinc-900"
+                <p class="mt-3 font-display font-semibold text-xl text-[#323E81]"
                    {{ resumen }}{{ if first }}data-date="{{ fecha_de_inicio format='Y-m-d' }}"{{ /if }}{{ if last }} data-date-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}{{ /resumen }}></p>
                 {{ /if }}
             </div>
@@ -44,15 +44,24 @@
 
     {{# ── Descripción ────────────────────────────────────────────────────────── #}}
     {{ if descripcion }}
-    <div class="bg-[#FFC18E] rounded-3xl px-8 py-8 sm:px-12 sm:py-12 mb-4" data-reveal>
-        <h2 class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 mb-5">Descripción</h2>
-        <div class="prose prose-zinc max-w-none text-lg">{{ descripcion }}</div>
-        {{ if precio }}
-        <div class="mt-6">
-            <p class="font-sans text-sm text-zinc-700 mb-1">Costo por curso semanal</p>
-            <p class="font-display font-bold text-2xl sm:text-3xl text-zinc-800">${{ precio | format_number:2:'.':',' }} MXN</p>
+    <div class="mb-4 sm:flex sm:items-center sm:gap-6 relative" data-reveal>
+        {{ personaje_en_descripcion }}
+        {{ if imagen }}
+        <div class="hidden sm:block sm:w-1/2 shrink-0 pointer-events-none relative">
+            <img src="{{ imagen:url }}" alt="{{ title }}" class="w-3/4 absolute sm:-bottom-62 left-1/2 -translate-x-1/2 z-40">
         </div>
         {{ /if }}
+        {{ /personaje_en_descripcion }}
+        <div class="rounded-3xl px-8 py-8 sm:px-12 sm:py-12 sm:w-1/2" style="background: linear-gradient(to bottom, #F5E554, #FFC18E);">
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-[#323E81] mb-5">Descripción</h2>
+            <div class="prose max-w-none text-lg [&_p]:text-[#323E81] [&_em]:text-[#323E81]">{{ descripcion }}</div>
+            {{ if precio }}
+            <div class="mt-6">
+                <p class="font-display font-light text-base text-[#323E81] mb-1">costo por curso semanal</p>
+                <p class="font-display font-bold text-2xl sm:text-3xl text-[#323E81]">${{ precio | format_number:2:'.':',' }} MXN</p>
+            </div>
+            {{ /if }}
+        </div>
     </div>
     {{ /if }}
 
@@ -66,18 +75,24 @@
         <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800">Semanas temáticas</h2>
         <span class="font-display font-bold text-sm bg-[#F5E554] text-zinc-900 px-4 py-2 rounded-full">🎉 10% de descuento al elegir 2 o más semanas</span>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger-cards>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" data-stagger-cards>
         {{ resumen }}
         {{ if type == 'opcion' }}
-        <div class="rounded-3xl px-8 py-8 flex flex-col gap-4
-            {{ if count % 7 == 1 }}bg-[#AFFFEC]
-            {{ elseif count % 7 == 2 }}bg-[#FFC18E]
-            {{ elseif count % 7 == 3 }}bg-[#F289B8]
-            {{ elseif count % 7 == 4 }}bg-[#C5CBEE]
-            {{ elseif count % 7 == 5 }}bg-[#89F0D8]
-            {{ elseif count % 7 == 6 }}bg-[#F1D5E5]
+        <div class="relative rounded-3xl px-8 py-8 flex flex-col gap-4
+            {{ if count % 6 == 1 }}bg-[#C5CBEE]
+            {{ elseif count % 6 == 2 }}bg-[#FFC18E]
+            {{ elseif count % 6 == 3 }}bg-[#F5E554]
+            {{ elseif count % 6 == 4 }}bg-[#F1D5E5]
+            {{ elseif count % 6 == 5 }}bg-[#89F0D8]
             {{ else }}bg-[#DBD5F1]{{ /if }}" data-stagger-child>
-            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-900">Semana {{ count }}</p>
+            {{ personaje }}
+            {{ if imagen }}
+            <div class="absolute -top-12 right-2 w-24 sm:w-28 pointer-events-none z-20">
+                <img src="{{ imagen:url }}" alt="{{ title }}" class="w-full object-contain object-bottom drop-shadow-md">
+            </div>
+            {{ /if }}
+            {{ /personaje }}
+            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-900 sm:pr-28">Semana {{ count }}</p>
             {{ if titulo }}
             <h3 class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 -mt-2">{{ titulo }}</h3>
             {{ /if }}
@@ -91,17 +106,28 @@
             {{ /if }}
             {{ if enlace }}
             <button
-                class="snipcart-add-item inline-flex items-center justify-center gap-2 mt-auto font-display font-bold text-lg text-white bg-zinc-900 px-6 py-3 rounded-full transition-colors duration-500 hover:bg-animondo-green hover:text-zinc-800 cursor-pointer"
+                class="snipcart-add-item self-end inline-flex items-center justify-center gap-2 mt-auto font-display font-normal text-lg text-white bg-[#323E81] px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white cursor-pointer"
                 data-item-id="{{ id }}"
                 data-item-name="{{ titulo }}"
                 data-item-price="{{ precio }}"
                 data-item-url="{{ url }}"
                 data-item-description="{{ descripcion }}"
-                data-item-max-quantity="1">
+                data-item-max-quantity="1"
+                data-item-custom1-name="Nombre del niño/a"
+                data-item-custom1-required="true"
+                data-item-custom2-name="Edad"
+                data-item-custom2-required="true"
+                data-item-custom2-options="6|7|8|9|10|11|12|13|14|15|16"
+                data-item-custom3-name="Nombre del tutor"
+                data-item-custom3-required="true"
+                data-item-custom4-name="Teléfono de contacto"
+                data-item-custom4-required="true"
+                data-item-custom5-name="Notas o alergias"
+                data-item-custom5-type="textarea">
                 Reservar lugar →
             </button>
             {{ else }}
-            <span class="inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
+            <span class="self-end inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
                 Próximamente
             </span>
             {{ /if }}

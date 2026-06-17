@@ -826,6 +826,35 @@ if (viajeBtns.length) {
   setViajeTab(0);
 }
 
+// ── Snipcart: Spanish translations ────────────────────────────────────────
+document.addEventListener('snipcart.ready', () => {
+  Snipcart.api.session.setLanguage('es', {
+    default: { loading: 'Cargando...', error: 'Se ha producido un error.', success: '¡Éxito!' },
+    actions: { edit: 'Editar', cancel: 'Cancelar', continue_shopping: 'Seguir comprando', back_to_checkout: 'Volver a pago', checkout: 'Pagar', apply: 'Aplicar', dismiss: 'Descartar', type_address: 'Escribe tu dirección', use_this_address: 'Usar esta dirección', back_to_store: 'Volver a la tienda', close_cart: 'Cerrar carrito', show: 'Mostrar', hide: 'Ocultar', apply_changes: 'Aplicar cambios', yes_use_it: 'Sí, úsalo', save_changes: 'Guardar cambios', back_to_orders: 'Volver a pedidos', change_password: 'Cambiar contraseña', clear_cart: 'Vaciar carrito', add: 'Añadir' },
+    header: { title_cart_summary: 'Resumen carrito', loading: 'Cargando...' },
+    item: { quantity: 'Cantidad', quantity_short: 'Cant.', decrement_quantity: 'Reducir cantidad', increment_quantity: 'Aumentar cantidad', remove_item: 'Quitar artículo' },
+    cart: { subtotal: 'Subtotal', shipping_taxes_calculated_at_checkout: 'Gastos de envío e impuestos se calcularán antes del pago.', loading: 'Estamos preparando tu carrito...', secured_by: 'Asegurado por Snipcart', summary: 'Resumen del pedido', empty: 'Tu carrito está vacío.', invoice_number: 'Factura número', view_detailed_cart: 'Ver detalle del carrito' },
+    order: { loading: 'Estamos recuperando los detalles de tu pedido...', title: 'Pedido' },
+    discount_box: { promo_code: '¿Código promocional?', promo_code_placeholder: 'Código promocional', promocode_applied: 'Promoción aplicada' },
+    address_form: { name: 'Nombre completo', email: 'Email', firstName: 'Nombre', lastName: 'Apellido', address1: 'Dirección', address2: 'Número/Piso', city: 'Ciudad', country: 'País', phone: 'Teléfono', postalCode: 'Código Postal', province: 'Estado / Provincia', dont_see_address: 'No encuentro mi dirección' },
+    billing: { title: 'Facturación', address: 'Dirección de Facturación', continue_to_shipping: 'Seguir a envío', use_different_shipping_address: 'Usar una dirección de envío diferente' },
+    shipping: { title: 'Envío', shipping_to: 'Enviar a:', address: 'Dirección de envío', method: 'Método de envío' },
+    payment: { title: 'Pago', continue_to_payment: 'Continuar a pago', credit_card: 'Tarjeta de Crédito', place_order: 'Confirmar Pedido', preparing_payment_session: 'Preparando pago...', processing_payment: 'Procesando pago...', checkout_with: 'Pagar mediante', no_payment: 'Este pedido no requiere ningún pago.', form: { card_label: 'Tarjeta de Crédito', card_number: 'Número de Tarjeta', card_expiration: 'MM/AA', card_cvv: 'CVV', card_postal_code: 'Código Postal', invalid_number: 'El número de tarjeta no es válido.', invalid_expiration: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', invalid_postal_code: 'Código postal no válido' } },
+    cart_summary: { taxes: 'Impuestos', total: 'Total', subtotal: 'Subtotal', shipping: 'Envío', discount: 'Descuentos', quantity: 'x', calculated_at_checkout: 'Calculado antes del pago' },
+    discounts: { title: 'Descuentos' },
+    guest_checkout: { or: 'O', continue_as_a_guest: 'Continuar como invitado' },
+    signin_form: { signin: 'Identificarte', dont_have_an_account: '¿No tienes una cuenta?', email: 'Email', password: 'Contraseña', forgot_your_password: '¿Olvidaste tu contraseña?', close_form: 'Volver' },
+    register_form: { register: 'Registrarse', already_have_an_account: '¿Ya tienes una cuenta?', email: 'Email', password: 'Contraseña', confirm_password: 'Confirmar contraseña' },
+    customer: { information: 'Información de cliente' },
+    customer_dashboard: { my_account: 'Mi cuenta', ordered_on: 'Comprado el', price: 'Precio', total: 'Total', status: 'Estado', order_details: 'Detalles del Pedido', loading: 'Cargando...', no_orders: 'No se encontraron pedidos.', view_invoice: 'Ver factura', sign_out: 'Salir', orders: 'Pedidos' },
+    confirmation: { thank_you_for_your_order: 'Gracias por tu pedido', async_confirmation_notice: 'Hemos recibido tu pedido y actualmente se está preparando. Recibirás una confirmación en breve.' },
+    checkout: { shipping_taxes_calculated_when_address_provided: 'Los gastos de envío e impuestos se calcularán cuando se indique una dirección.' },
+    errors: { default: 'Ocurrió un error, inténtelo de nuevo o contáctenos.', required: 'Este campo es obligatorio', email: 'Por favor indique una dirección de correo válida', stringEmpty: 'Este campo es obligatorio', emailEmpty: 'El correo electrónico es obligatorio', promo_code_is_invalid: 'Este código promocional no es válido', promo_code_is_expired: 'Esta promoción ha expirado', card: { invalid_number: 'El número de tarjeta no es válido.', invalid_date: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', expired: 'La tarjeta está caducada.', declined: 'La tarjeta ha sido rechazada.' } },
+    digital_goods: { download: 'Descargar' },
+    shippingRates: { loading: 'Cargando...' },
+  });
+});
+
 // ── Snipcart: 10% discount when 2+ talleres in cart ───────────────────────
 const DISCOUNT_ID = 'descuento-verano-10pct';
 let syncingDiscount = false;

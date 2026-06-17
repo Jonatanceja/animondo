@@ -10,5 +10,7 @@ preferences:
       view: list
     talleres:
       view: list
+    instructores:
+      view: list
   locale: es
   theme: null
