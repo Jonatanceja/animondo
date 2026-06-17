@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781658461
+updated_at: 1781661535
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -102,7 +102,7 @@ circle_slides:
     id: obUJ_0LbA36L1dnSGdgOm
     type: slide
     enabled: true
-    title: '<p>Los alumnos construyen sus propios <strong>artefactos  </strong>y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
+    title: '<p>Los alumnos construyen sus propios <strong>artefactos </strong>y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
   -
     id: _TEg250DYsZKcEXW8a6g0
     type: slide

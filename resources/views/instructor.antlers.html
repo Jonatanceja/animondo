@@ -1,0 +1,77 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# ── Título ───────────────────────────────────────────────────────────────── #}}
+    <h2 class="font-display font-bold text-center mb-8 sm:mb-12 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">Instructores</h2>
+
+    {{# ── Card superior: nombre/cargo + foto + personajes ──────────────────────── #}}
+    <div class="relative mb-4 sm:mb-6">
+        <div class="rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem]"
+             style="background: linear-gradient(to right, {{ card_color_de ?? '#AFFFEC' }}, {{ card_color_a ?? '#0A6DB4' }});">
+            <div class="w-full sm:w-1/2 relative z-10 text-center">
+                <h1 class="font-display font-bold text-[#323E81] text-4xl sm:text-6xl leading-[0.95]">{{ title | replace:' ':'<br>' }}</h1>
+                {{ if profesion }}
+                <p class="font-display font-bold text-[#323E81] text-lg sm:text-2xl leading-tight mt-3">{{ profesion | nl2br }}</p>
+                {{ /if }}
+            </div>
+            {{ if foto_de_instructor }}
+            <div class="relative w-full mt-6 sm:mt-0 sm:absolute sm:right-0 sm:-top-16 sm:bottom-0 sm:w-[52%]">
+                <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-auto sm:h-full object-cover grayscale rounded-[1.5rem]">
+            </div>
+            {{ /if }}
+        </div>
+
+        {{# Personajes decorativos (todos menos el último) sobre la card superior #}}
+        {{ personajes_en_entradas }}
+        {{ if imagen }}{{ unless last }}
+        <img src="{{ imagen:url }}" alt="{{ title }}"
+             class="hidden sm:block absolute z-20 pointer-events-none drop-shadow-md
+                {{ if count == 1 }}top-[26%] left-[34%] w-[13%]
+                {{ elseif count == 2 }}-top-6 right-[3%] w-[13%]
+                {{ else }}top-[38%] right-0 w-[11%]{{ /if }}">
+        {{ /unless }}{{ /if }}
+        {{ /personajes_en_entradas }}
+    </div>
+
+    {{# ── Redes ─────────────────────────────────────────────────────────────────── #}}
+    {{ if instagram || tiktok || facebook }}
+    <div class="flex items-center gap-3 mb-4 sm:mb-6 sm:pl-2 justify-center sm:justify-start sm:ml-[52%]">
+        {{ if instagram }}
+        <a href="{{ instagram }}" target="_blank" rel="noopener" aria-label="Instagram"
+           class="w-11 h-11 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        {{ /if }}
+        {{ if tiktok }}
+        <a href="{{ tiktok }}" target="_blank" rel="noopener" aria-label="TikTok"
+           class="w-11 h-11 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M16.6 5.82a4.28 4.28 0 0 1-1.05-2.82h-2.9v11.6a2.36 2.36 0 0 1-2.36 2.36 2.36 2.36 0 0 1 0-4.72c.24 0 .47.04.69.1V9.4a5.3 5.3 0 0 0-.69-.05 5.27 5.27 0 1 0 5.27 5.27V8.9a7.13 7.13 0 0 0 4.16 1.33V7.32a4.28 4.28 0 0 1-3.11-1.5Z"/></svg>
+        </a>
+        {{ /if }}
+        {{ if facebook }}
+        <a href="{{ facebook }}" target="_blank" rel="noopener" aria-label="Facebook"
+           class="w-11 h-11 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M14 13.5h2.5l.5-2.5H14V9.5c0-.72.2-1.2 1.23-1.2H17V6.06c-.29-.04-1.28-.12-2.43-.12-2.4 0-4.05 1.47-4.05 4.16V11H8.25v2.5H10.5V20h3.5v-6.5Z"/></svg>
+        </a>
+        {{ /if }}
+    </div>
+    {{ /if }}
+
+    {{# ── Card de biografía + personaje ────────────────────────────────────────── #}}
+    {{ if biografia }}
+    <div class="relative">
+        <div class="rounded-[2rem] p-8 py-10 sm:px-12 sm:py-14 sm:w-[58%]"
+             style="background: linear-gradient(135deg, {{ bio_color_de ?? '#89F0D8' }}, {{ bio_color_a ?? '#F5E554' }});">
+            <div class="font-display font-light text-lg sm:text-xl text-[#323E81] leading-snug [&_p]:mb-4 [&_p:last-child]:mb-0">{{ biografia }}</div>
+        </div>
+
+        {{# Personaje decorativo (el último) junto a la bio #}}
+        {{ personajes_en_entradas }}
+        {{ if imagen }}{{ if last }}
+        <img src="{{ imagen:url }}" alt="{{ title }}"
+             class="hidden sm:block absolute z-20 pointer-events-none drop-shadow-md top-[18%] right-[12%] w-[18%]">
+        {{ /if }}{{ /if }}
+        {{ /personajes_en_entradas }}
+    </div>
+    {{ /if }}
+
+</div>

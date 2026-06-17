@@ -147,6 +147,12 @@ tabs:
                             type: text
                             display: Descripción
                         -
+                          handle: enlace
+                          field:
+                            type: text
+                            display: 'Enlace de pago (PayPal)'
+                            instructions: 'Pega el enlace de pago de PayPal de esta semana.'
+                        -
                           handle: impartido_por
                           field:
                             collections:

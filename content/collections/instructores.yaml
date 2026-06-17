@@ -1,7 +1,8 @@
 title: Instructores
 icon: fieldtype-users
-template: default
+template: instructor
 layout: layout
+route: 'instructores/{slug}'
 revisions: false
 sort_dir: asc
 date_behavior:

@@ -16,8 +16,55 @@ tabs:
           -
             handle: profesion
             field:
-              type: text
+              type: textarea
               display: Profesión
+              instructions: 'Una línea por renglón (ej: Instructora / Zona Construcción y Stop Motion).'
+          -
+            handle: card_color_de
+            field:
+              type: text
+              display: 'Card · color de (degradado)'
+              instructions: 'Hex, ej: #AFFFEC'
+              width: 25
+          -
+            handle: card_color_a
+            field:
+              type: text
+              display: 'Card · color a (degradado)'
+              instructions: 'Hex, ej: #0A6DB4'
+              width: 25
+          -
+            handle: bio_color_de
+            field:
+              type: text
+              display: 'Bio · color de (degradado)'
+              instructions: 'Hex, ej: #89F0D8'
+              width: 25
+          -
+            handle: bio_color_a
+            field:
+              type: text
+              display: 'Bio · color a (degradado)'
+              instructions: 'Hex, ej: #F5E554'
+              width: 25
+          -
+            handle: instagram
+            field:
+              type: text
+              display: 'Instagram (URL)'
+              width: 33
+          -
+            handle: tiktok
+            field:
+              type: text
+              display: 'TikTok (URL)'
+              width: 33
+          -
+            handle: facebook
+            field:
+              type: text
+              display: 'Facebook (URL)'
+              width: 33
           -
             handle: biografia
             field:
@@ -37,6 +84,13 @@ tabs:
               type: template
               display: Template
               localizable: true
+          -
+            handle: personajes_en_entradas
+            field:
+              collections:
+                - personajes
+              type: entries
+              display: 'Personajes en entradas'
   sidebar:
     display: Sidebar
     sections:
