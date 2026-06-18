@@ -28,30 +28,59 @@ class SnipcartWebhookController extends Controller
 
         $rate = (float) config('services.snipcart.discount_rate', 0.10);
         $min = (int) config('services.snipcart.discount_min_courses', 2);
+        $transportAmount = (float) config('services.snipcart.transport_amount', 500);
 
         $courseQty = 0;
-        $courseTotal = 0.0;
+        $discountBase = 0.0;
 
         foreach ($request->input('content.items', []) as $item) {
-            // El transporte es un producto aparte y nunca recibe descuento.
+            // El transporte viejo como producto aparte nunca recibe descuento.
             if (str_starts_with((string) ($item['id'] ?? ''), 'transporte-')) {
                 continue;
             }
-            $courseQty += (int) ($item['quantity'] ?? 0);
-            $courseTotal += (float) ($item['totalPrice'] ?? 0);
+
+            $qty = (int) ($item['quantity'] ?? 0);
+            $line = (float) ($item['totalPrice'] ?? 0);
+
+            // El transporte va empaquetado como casilla del taller: se descuenta del
+            // base para que el 10% aplique sólo al precio del curso, no al transporte.
+            if ($this->hasTransport($item)) {
+                $line -= $transportAmount * max($qty, 1);
+            }
+
+            $courseQty += $qty;
+            $discountBase += $line;
         }
 
         $taxes = [];
 
-        if ($courseQty >= $min && $courseTotal > 0) {
+        if ($courseQty >= $min && $discountBase > 0) {
             $taxes[] = [
                 'name' => 'Descuento '.round($rate * 100).'% ('.$min.'+ talleres)',
-                'amount' => -round($courseTotal * $rate, 2),
+                'amount' => -round($discountBase * $rate, 2),
                 'rate' => 0,
             ];
         }
 
         return response()->json(['taxes' => $taxes]);
+    }
+
+    /**
+     * Indica si el ítem (taller) tiene la casilla de transporte marcada.
+     */
+    private function hasTransport(array $item): bool
+    {
+        foreach ($item['customFields'] ?? [] as $field) {
+            $name = (string) ($field['name'] ?? '');
+            $value = strtolower((string) ($field['value'] ?? ''));
+
+            if (stripos($name, 'transporte') !== false
+                && in_array($value, ['true', 'sí', 'si', 'yes', '1'], true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

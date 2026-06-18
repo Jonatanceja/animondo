@@ -121,26 +121,16 @@
                 data-item-custom4-required="true"
                 data-item-custom5-name="Notas o alergias"
                 data-item-custom5-type="textarea"
-                data-item-categories="taller">
+                data-item-categories="taller"
+                {{ if precio_transporte }}
+                data-item-custom6-name="¿Agregar transporte? (ida y vuelta)"
+                data-item-custom6-type="checkbox"
+                data-item-custom6-options="true[{{ precio_transporte }}]|false"
+                data-item-custom6-value="false"
+                data-item-custom7-name="Colonia o Código Postal"
+                {{ /if }}>
                 Reservar lugar →
             </button>
-            {{ if precio_transporte }}
-            <button
-                class="snipcart-add-item self-end inline-flex items-center justify-center gap-2 font-display font-normal text-base text-[#323E81] bg-white/70 ring-1 ring-[#323E81]/40 px-5 py-2.5 rounded-full transition-colors duration-500 hover:bg-white cursor-pointer"
-                data-item-id="transporte-{{ id }}"
-                data-item-name="Transporte Animondo Express — {{ titulo }}"
-                data-item-price="{{ precio_transporte }}"
-                data-item-url="{{ url }}"
-                data-item-description="Paquete Animondo Express: transporte seguro al centro. Las rutas y puntos de encuentro se confirman por WhatsApp el sábado previo al taller."
-                data-item-max-quantity="1"
-                data-item-categories="transporte"
-                data-item-custom1-name="Nombre del niño/a"
-                data-item-custom1-required="true"
-                data-item-custom2-name="Colonia o Código Postal"
-                data-item-custom2-required="true">
-                + Transporte Express (+${{ precio_transporte }})
-            </button>
-            {{ /if }}
             {{ else }}
             <span class="self-end inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
                 Próximamente

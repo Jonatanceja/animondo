@@ -40,6 +40,7 @@ return [
         'secret' => env('SNIPCART_SECRET', ''),
         'discount_rate' => (float) env('SNIPCART_DISCOUNT_RATE', 0.10),
         'discount_min_courses' => (int) env('SNIPCART_DISCOUNT_MIN_COURSES', 2),
+        'transport_amount' => (float) env('SNIPCART_TRANSPORT_AMOUNT', 500),
     ],
 
 ];

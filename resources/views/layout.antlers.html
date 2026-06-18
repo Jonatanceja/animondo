@@ -27,12 +27,60 @@
         {{# ── Snipcart ────────────────────────────────────────────────────────── #}}
         <div hidden id="snipcart" data-api-key="{{ config:services.snipcart.key }}"></div>
         <script async src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"></script>
+        <style>
+            /* Separa la casilla de transporte en su propio renglón dentro del carrito */
+            .animondo-transporte-field {
+                flex-basis: 100% !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                grid-column: 1 / -1 !important;
+                margin-top: 0.75rem !important;
+                padding-top: 0.75rem !important;
+                border-top: 1px solid #e4e4e7 !important;
+            }
+            .animondo-transporte-info {
+                font-size: 0.85rem;
+                line-height: 1.45;
+                color: #3f3f46;
+                margin: 0 0 0.6rem;
+            }
+        </style>
         <script>
             document.addEventListener('snipcart.ready', function () {
                 fetch('/snipcart-es.json')
                     .then(function (r) { return r.json(); })
                     .then(function (es) { window.Snipcart.api.session.setLanguage('es', es); })
                     .catch(function () {});
+
+                // ── Transporte: casilla en su propio renglón + texto del Paquete Express ──
+                function syncTransporte() {
+                    var checks = document.querySelectorAll('input[type="checkbox"]');
+                    for (var i = 0; i < checks.length; i++) {
+                        var field = checks[i].closest('.snipcart-form__field');
+                        if (!field) {
+                            var node = checks[i];
+                            for (var k = 0; k < 6 && node; k++) {
+                                if (/transporte/i.test(node.textContent || '')) { field = node; break; }
+                                node = node.parentElement;
+                            }
+                        }
+                        if (field && /transporte/i.test(field.textContent || '')) {
+                            field.classList.add('animondo-transporte-field');
+                            if (!field.querySelector('.animondo-transporte-info')) {
+                                var info = document.createElement('p');
+                                info.className = 'animondo-transporte-info';
+                                info.innerHTML = '<strong>Paquete Animondo Express</strong><br>$500 MXN por semana.<br>Transporte seguro. Los puntos de encuentro y horarios serán definidos antes del sábado previo a tu taller y confirmados por WhatsApp.';
+                                field.insertBefore(info, field.firstChild);
+                            }
+                        }
+                    }
+                }
+
+                var raf = null;
+                new MutationObserver(function () {
+                    if (raf) return;
+                    raf = requestAnimationFrame(function () { raf = null; syncTransporte(); });
+                }).observe(document.body, { childList: true, subtree: true });
             });
         </script>
 

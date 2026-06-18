@@ -38,6 +38,17 @@ tabs:
               type: assets
               display: Imagen
           -
+            handle: lottie
+            field:
+              container: assets
+              max_files: 1
+              type: assets
+              display: 'Animación Lottie'
+              instructions: 'Opcional. Sube el archivo .json o .lottie de la animación (además de la imagen).'
+              allowed_extensions:
+                - json
+                - lottie
+          -
             handle: enlace
             field:
               collections:
