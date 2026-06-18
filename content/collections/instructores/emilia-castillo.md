@@ -1,6 +1,7 @@
 ---
 id: 8d954090-121a-44a1-8ec6-1842f2c8c67d
 blueprint: instructore
+template: emilia-instructor
 card_color_de: '#F5E554'
 card_color_a: '#F57F20'
 bio_color_de: '#89F0D8'

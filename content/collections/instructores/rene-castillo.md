@@ -1,6 +1,7 @@
 ---
 id: 965f7a89-25ba-4d8e-95ea-40bc42966d5a
 blueprint: instructore
+template: rene-instructor
 card_color_de: '#AFFFEC'
 card_color_a: '#0A6DB4'
 bio_color_de: '#89F0D8'
@@ -8,7 +9,7 @@ bio_color_a: '#F5E554'
 title: 'René Castillo'
 foto_de_instructor: 0fea900a46d3ff57c627e11a91665da7cc963638.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781662347
+updated_at: 1781738660
 profesion: 'Director e instructor principal'
 biografia: |-
   Pionero de la animación stop motion en México. Su obra ha recibido más de 50 premios y reconocimientos en festivales de cine y animación alrededor del mundo, incluyendo dos premios Ariel, dos premios Guadalajara, selección oficial en el Festival de Cannes, y un Cristal en el Festival de Annecy — el reconocimiento más alto en el mundo de la animación.

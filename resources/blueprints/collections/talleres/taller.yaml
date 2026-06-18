@@ -51,9 +51,20 @@ tabs:
           -
             handle: mensaje_importante
             field:
-              type: text
+              type: bard
               display: 'Mensaje importante'
               instructions: 'Mensaje destacado visible en la página del taller'
+              buttons:
+                - bold
+                - italic
+                - underline
+                - strike
+                - unorderedlist
+                - orderedlist
+                - h2
+                - h3
+                - blockquote
+              save_html: true
           -
             handle: edad
             field:
@@ -111,6 +122,13 @@ tabs:
               type: text
               display: Precio
               instructions: 'Ej: $500 MXN'
+              width: 50
+          -
+            handle: precio_transporte
+            field:
+              type: text
+              display: 'Precio del transporte'
+              instructions: 'Costo extra que se suma al taller si el cliente marca la casilla de transporte. Solo número, ej: 350'
               width: 50
           -
             handle: resumen

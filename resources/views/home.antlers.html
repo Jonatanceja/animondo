@@ -48,7 +48,7 @@
 
         {{ if pasos_del_creador }}
         {{# ── Wide layout: title + colored-dot columns + bottom image ── #}}
-        <div class="frame-content inset-x-6 max-w-none top-8 bottom-0" id="content-{{ count }}">
+        <div class="frame-content inset-x-6 max-w-none top-28 bottom-0" id="content-{{ count }}">
             {{ if title }}
             <h2 class="font-display font-bold text-4xl sm:text-5xl text-zinc-800 text-center mb-8 px-4">{{ title }}</h2>
             {{ /if }}
@@ -313,6 +313,7 @@
             {{# ── Tarjeta grande ── #}}
             <div class="group relative w-full rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem]"
                  style="background: linear-gradient(to right, #AFFFEC, #0A6DB4);">
+                {{ if url }}<a href="{{ url }}" class="absolute inset-0 z-30" aria-label="Ver biografía de {{ title }}"></a>{{ /if }}
                 <div class="w-full sm:w-1/2 relative z-10 sm:pr-2 flex flex-col">
                     <h3 class="font-display font-bold text-[#323E81] text-3xl sm:text-6xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
                 </div>
@@ -344,6 +345,7 @@
             {{# ── Tarjeta pequeña: foto arriba, nombre abajo ── #}}
             <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem] flex flex-col gap-4"
                  style="background: linear-gradient(135deg, #F5E554, #F57F20);">
+                {{ if url }}<a href="{{ url }}" class="absolute inset-0 z-30" aria-label="Ver biografía de {{ title }}"></a>{{ /if }}
                 {{ if foto_de_instructor }}
                 <div class="w-full aspect-[2/1] rounded-[1.25rem] overflow-hidden">
                     <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover grayscale">
@@ -365,6 +367,7 @@
             {{# ── Tarjeta pequeña: nombre arriba, foto a la derecha ── #}}
             <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem]"
                  style="background: linear-gradient(135deg, #AFFFEC, #F57F20);">
+                {{ if url }}<a href="{{ url }}" class="absolute inset-0 z-30" aria-label="Ver biografía de {{ title }}"></a>{{ /if }}
                 <div class="relative z-10 max-w-[50%]">
                     <h3 class="font-display font-bold text-[#323E81] text-2xl sm:text-5xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
                 </div>

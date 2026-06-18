@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Los webhooks de Snipcart no envían token CSRF.
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/snipcart/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

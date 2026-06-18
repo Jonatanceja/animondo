@@ -1,15 +1,16 @@
 ---
 id: b1a17a5e-bf7b-4502-accf-feccbe4521d0
 blueprint: instructore
+template: adriana-instructor
 card_color_de: '#AFFFEC'
 card_color_a: '#F57F20'
 bio_color_de: '#89F0D8'
 bio_color_a: '#F5E554'
-title: 'Adriana Arizaga'
+title: 'Adriana Arízaga'
 profesion: 'Instructora, Construcción, Mesas 2D y Stop Motion'
 foto_de_instructor: b24a4be3f42d2a8929dc5c6ae8c124203141e9c8.jpg
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781662250
+updated_at: 1781746892
 biografia: |-
   Artista figurativa especializada en esculto-pintura y una de las máximas exponentes del Claypainting en México. Ilustradora, docente, tallerista y directora del colectivo Un Mundo en Plastilina, dedicado a la promoción y enseñanza de la plastilina como medio artístico.
 

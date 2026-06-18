@@ -28,9 +28,6 @@
                     a
                     <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
                 </p>
-                {{ if horario_extendido }}
-                <p class="font-display text-base sm:text-lg text-[#323E81]">(opción de horario extendido hasta las {{ horario_extendido | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }})</p>
-                {{ /if }}
                 {{ if resumen }}
                 <p class="mt-3 font-display font-semibold text-xl text-[#323E81]"
                    {{ resumen }}{{ if first }}data-date="{{ fecha_de_inicio format='Y-m-d' }}"{{ /if }}{{ if last }} data-date-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}{{ /resumen }}></p>
@@ -57,7 +54,7 @@
             <div class="prose max-w-none text-lg [&_p]:text-[#323E81] [&_em]:text-[#323E81]">{{ descripcion }}</div>
             {{ if precio }}
             <div class="mt-6">
-                <p class="font-display font-light text-base text-[#323E81] mb-1">costo por curso semanal</p>
+                <p class="font-display font-light text-base text-[#323E81] mb-1">costo por taller semanal</p>
                 <p class="font-display font-bold text-2xl sm:text-3xl text-[#323E81]">${{ precio | format_number:2:'.':',' }} MXN</p>
             </div>
             {{ /if }}
@@ -66,7 +63,7 @@
     {{ /if }}
 
     {{ if mensaje_importante }}
-    <p class="block w-full font-display font-bold text-2xl sm:text-3xl bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 text-center leading-snug" data-reveal>{{ mensaje_importante }}</p>
+    <div class="block w-full font-display font-normal text-base sm:text-lg bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 text-center leading-snug [&_p]:my-0 [&_p+p]:mt-3 [&_a]:underline" data-reveal>{{ mensaje_importante }}</div>
     {{ /if }}
 
     {{# ── Semanas temáticas ───────────────────────────────────────────────────── #}}
@@ -87,7 +84,7 @@
             {{ else }}bg-[#DBD5F1]{{ /if }}" data-stagger-child>
             {{ personaje }}
             {{ if imagen }}
-            <div class="absolute -top-12 right-2 w-24 sm:w-28 pointer-events-none z-20">
+            <div class="absolute -top-8 right-2 w-28 sm:w-32 pointer-events-none z-20">
                 <img src="{{ imagen:url }}" alt="{{ title }}" class="w-full object-contain object-bottom drop-shadow-md">
             </div>
             {{ /if }}
@@ -123,9 +120,27 @@
                 data-item-custom4-name="Teléfono de contacto"
                 data-item-custom4-required="true"
                 data-item-custom5-name="Notas o alergias"
-                data-item-custom5-type="textarea">
+                data-item-custom5-type="textarea"
+                data-item-categories="taller">
                 Reservar lugar →
             </button>
+            {{ if precio_transporte }}
+            <button
+                class="snipcart-add-item self-end inline-flex items-center justify-center gap-2 font-display font-normal text-base text-[#323E81] bg-white/70 ring-1 ring-[#323E81]/40 px-5 py-2.5 rounded-full transition-colors duration-500 hover:bg-white cursor-pointer"
+                data-item-id="transporte-{{ id }}"
+                data-item-name="Transporte Animondo Express — {{ titulo }}"
+                data-item-price="{{ precio_transporte }}"
+                data-item-url="{{ url }}"
+                data-item-description="Paquete Animondo Express: transporte seguro al centro. Las rutas y puntos de encuentro se confirman por WhatsApp el sábado previo al taller."
+                data-item-max-quantity="1"
+                data-item-categories="transporte"
+                data-item-custom1-name="Nombre del niño/a"
+                data-item-custom1-required="true"
+                data-item-custom2-name="Colonia o Código Postal"
+                data-item-custom2-required="true">
+                + Transporte Express (+${{ precio_transporte }})
+            </button>
+            {{ /if }}
             {{ else }}
             <span class="self-end inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
                 Próximamente

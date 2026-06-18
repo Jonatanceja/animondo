@@ -316,7 +316,7 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
   const allFramePositions = [
     { x: '35vw',  y: '-5vh',  scale: 1    },
     { x: '-30vw', y: '25vh',  scale: 1    },
-    { x: '0vw',   y: '45vh',  scale: 1    },
+    { x: '0vw',   y: '60vh',  scale: 1    },
     { x: '32vw',  y: '38vh',  scale: 1    },
     { x: '-30vw', y: '0vh',   scale: 1    },
     { x: '0vw',   y: '14vh',  scale: 0.83 },
@@ -343,7 +343,7 @@ if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
   // Pre-split all panel h2s into words
   const panelSplits = panels.map(panel => {
     const h2 = panel.querySelector('h2');
-    return h2 ? new SplitText(h2, { type: 'words' }) : null;
+    return h2 ? new SplitText(h2, { type: 'words', reduceWhiteSpace: false }) : null;
   });
 
   // Set initial state for all panels — all hidden until section activates
@@ -574,7 +574,7 @@ if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matc
 
   const mSplits = mPanels.map(panel => {
     const h2 = panel.querySelector('h2');
-    return h2 ? new SplitText(h2, { type: 'words' }) : null;
+    return h2 ? new SplitText(h2, { type: 'words', reduceWhiteSpace: false }) : null;
   });
 
   mPanels.forEach((p, i) => {

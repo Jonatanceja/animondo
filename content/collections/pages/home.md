@@ -102,7 +102,7 @@ circle_slides:
     id: obUJ_0LbA36L1dnSGdgOm
     type: slide
     enabled: true
-    title: '<p>Los alumnos construyen sus propios <strong>artefactos </strong>y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
+    title: '<p>Los alumnos construyen sus propios <strong>artefactos</strong> y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
   -
     id: _TEg250DYsZKcEXW8a6g0
     type: slide

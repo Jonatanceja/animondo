@@ -4,37 +4,37 @@
     <h2 class="font-display font-bold text-center mb-8 sm:mb-12 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">Instructores</h2>
 
     {{# ── Card superior: nombre/cargo + foto + personajes ──────────────────────── #}}
-    <div class="relative mb-4 sm:mb-6">
-        <div class="rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem]"
-             style="background: linear-gradient(to right, {{ card_color_de ?? '#AFFFEC' }}, {{ card_color_a ?? '#0A6DB4' }});">
+    <div class="relative mb-4 sm:mb-6" data-reveal>
+        <div class="rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem] bg-[linear-gradient(to_bottom,var(--c1),var(--c2))] sm:bg-[linear-gradient(to_right,var(--c1),var(--c2))]"
+             style="--c1: {{ card_color_de ?? '#AFFFEC' }}; --c2: {{ card_color_a ?? '#0A6DB4' }};">
             <div class="w-full sm:w-1/2 relative z-10 text-center">
                 <h1 class="font-display font-bold text-[#323E81] text-4xl sm:text-6xl leading-[0.95]">{{ title | replace:' ':'<br>' }}</h1>
                 {{ if profesion }}
-                <p class="font-display font-bold text-[#323E81] text-lg sm:text-2xl leading-tight mt-3">{{ profesion | nl2br }}</p>
+                <p class="font-display font-normal text-[#323E81] text-lg sm:text-2xl leading-tight mt-3">{{ profesion | nl2br }}</p>
                 {{ /if }}
             </div>
             {{ if foto_de_instructor }}
-            <div class="relative w-full mt-6 sm:mt-0 sm:absolute sm:right-0 sm:-top-16 sm:bottom-0 sm:w-[52%]">
+            <div class="relative w-full mt-6 sm:mt-0 sm:absolute sm:right-8 sm:inset-y-6 sm:w-[44%]">
                 <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-auto sm:h-full object-cover grayscale rounded-[1.5rem]">
+
+                {{# Personajes decorativos (todos menos el último) sobre la foto #}}
+                {{ personajes_en_entradas }}
+                {{ if imagen }}{{ unless last }}
+                <img src="{{ imagen:url }}" alt="{{ title }}"
+                     class="block absolute z-20 pointer-events-none drop-shadow-md
+                        {{ if count == 1 }}sm:top-[60%] top-[60%] -left-[5%] sm:w-[40%] w-[50%] transform -rotate-12
+                        {{ elseif count == 2 }}sm:top-13 top-10 right-[10%] w-[20%] transform rotate-12
+                        {{ else }}bottom-[0%] sm:right-0 -right-[5%] w-[20%]{{ /if }}">
+                {{ /unless }}{{ /if }}
+                {{ /personajes_en_entradas }}
             </div>
             {{ /if }}
         </div>
-
-        {{# Personajes decorativos (todos menos el último) sobre la card superior #}}
-        {{ personajes_en_entradas }}
-        {{ if imagen }}{{ unless last }}
-        <img src="{{ imagen:url }}" alt="{{ title }}"
-             class="hidden sm:block absolute z-20 pointer-events-none drop-shadow-md
-                {{ if count == 1 }}top-[26%] left-[34%] w-[13%]
-                {{ elseif count == 2 }}-top-6 right-[3%] w-[13%]
-                {{ else }}top-[38%] right-0 w-[11%]{{ /if }}">
-        {{ /unless }}{{ /if }}
-        {{ /personajes_en_entradas }}
     </div>
 
     {{# ── Redes ─────────────────────────────────────────────────────────────────── #}}
     {{ if instagram || tiktok || facebook }}
-    <div class="flex items-center gap-3 mb-4 sm:mb-6 sm:pl-2 justify-center sm:justify-start sm:ml-[52%]">
+    <div class="flex items-center gap-3 mb-4 sm:mb-6 sm:pl-2 justify-center sm:justify-start sm:ml-[52%]" data-reveal data-delay="0.1">
         {{ if instagram }}
         <a href="{{ instagram }}" target="_blank" rel="noopener" aria-label="Instagram"
            class="w-11 h-11 rounded-full bg-[#323E81] text-white flex items-center justify-center transition-transform duration-300 hover:scale-110">
@@ -58,19 +58,21 @@
 
     {{# ── Card de biografía + personaje ────────────────────────────────────────── #}}
     {{ if biografia }}
-    <div class="relative">
+    <div class="relative" data-reveal data-delay="0.15">
         <div class="rounded-[2rem] p-8 py-10 sm:px-12 sm:py-14 sm:w-[58%]"
              style="background: linear-gradient(135deg, {{ bio_color_de ?? '#89F0D8' }}, {{ bio_color_a ?? '#F5E554' }});">
-            <div class="font-display font-light text-lg sm:text-xl text-[#323E81] leading-snug [&_p]:mb-4 [&_p:last-child]:mb-0">{{ biografia }}</div>
+            <div class="text-center font-display font-light text-lg sm:text-xl text-[#323E81] leading-snug [&_p]:mb-4 [&_p:last-child]:mb-0">{{ biografia }}</div>
         </div>
 
-        {{# Personaje decorativo (el último) junto a la bio #}}
-        {{ personajes_en_entradas }}
-        {{ if imagen }}{{ if last }}
-        <img src="{{ imagen:url }}" alt="{{ title }}"
-             class="hidden sm:block absolute z-20 pointer-events-none drop-shadow-md top-[18%] right-[12%] w-[18%]">
-        {{ /if }}{{ /if }}
-        {{ /personajes_en_entradas }}
+        {{# Personaje decorativo (el último) sobre su columna (derecha), no sobre toda la fila #}}
+        <div class="hidden sm:block absolute top-0 bottom-0 right-0 w-[42%]">
+            {{ personajes_en_entradas }}
+            {{ if imagen }}{{ if last }}
+            <img src="{{ imagen:url }}" alt="{{ title }}"
+                 class="absolute z-20 pointer-events-none drop-shadow-md top-[18%] -left-[5%] w-[50%]">
+            {{ /if }}{{ /if }}
+            {{ /personajes_en_entradas }}
+        </div>
     </div>
     {{ /if }}
 

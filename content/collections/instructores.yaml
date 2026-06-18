@@ -1,6 +1,6 @@
 title: Instructores
 icon: fieldtype-users
-template: instructor
+template: rene-instructor
 layout: layout
 route: 'instructores/{slug}'
 revisions: false
