@@ -73,7 +73,7 @@
     },
     "cart": {
         "subtotal": "Subtotal",
-        "shipping_taxes_calculated_at_checkout": "Gastos de envío e impuestos se calcularán antes del pago.",
+        "shipping_taxes_calculated_at_checkout": "",
         "loading": "Estamos preparando tu carrito...",
         "secured_by": "Asegurado por Snipcart",
         "summary": "Resumen del pedido",

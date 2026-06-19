@@ -13,6 +13,8 @@
         {{ /if }}
         {{ /navegacion:favicon }}
         {{ vite src="resources/js/site.js|resources/css/site.css" }}
+        {{# Reproductor dotLottie (soporta .json y .lottie) — animaciones de personajes #}}
+        <script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"></script>
         <link rel="preconnect" href="https://app.snipcart.com">
         <link rel="preconnect" href="https://cdn.snipcart.com">
         <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.css">
@@ -43,6 +45,18 @@
                 line-height: 1.45;
                 color: #3f3f46;
                 margin: 0 0 0.6rem;
+            }
+            /* Oculta el selector de Cantidad de cada artículo en el carrito (conserva el precio) */
+            .snipcart-item-quantity__label,
+            .snipcart-item-quantity__quantity {
+                display: none !important;
+            }
+            /* Precio del artículo un poco más grande */
+            .snipcart-item-quantity__price,
+            .snipcart-cart-summary-item__price,
+            .snipcart-cart-summary-expanded-item__price {
+                font-size: 1.25rem !important;
+                font-weight: 700 !important;
             }
         </style>
         <script>

@@ -4,10 +4,9 @@
     <section class="relative bg-[#F5E554] rounded-3xl px-6 py-8 sm:px-16 sm:py-12 mb-6">
 
         {{ personaje }}
-        {{ if imagen }}
+        {{ if imagen || lottie }}
         <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[36%] pointer-events-none z-40" data-reveal-char>
-            <img src="{{ imagen:url }}" alt="{{ title }}"
-                 class="w-full h-48 sm:h-full object-contain object-bottom">
+            {{ partial:personaje-media class="w-full h-48 sm:h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
         {{ /personaje }}
@@ -43,9 +42,9 @@
     {{ if descripcion }}
     <div class="mb-4 sm:flex sm:items-center sm:gap-6 relative" data-reveal>
         {{ personaje_en_descripcion }}
-        {{ if imagen }}
+        {{ if imagen || lottie }}
         <div class="hidden sm:block sm:w-1/2 shrink-0 pointer-events-none relative">
-            <img src="{{ imagen:url }}" alt="{{ title }}" class="w-3/4 absolute sm:-bottom-62 left-1/2 -translate-x-1/2 z-40">
+            {{ partial:personaje-media class="w-[160%] absolute sm:-bottom-[34rem] left-1/2 -translate-x-1/2 z-40" }}
         </div>
         {{ /if }}
         {{ /personaje_en_descripcion }}
@@ -63,7 +62,7 @@
     {{ /if }}
 
     {{ if mensaje_importante }}
-    <div class="block w-full font-display font-normal text-base sm:text-lg bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 text-center leading-snug [&_p]:my-0 [&_p+p]:mt-3 [&_a]:underline" data-reveal>{{ mensaje_importante }}</div>
+    <div class="block w-full font-display font-normal text-base sm:text-lg bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 sm:text-center text-left leading-snug [&_p]:my-0 [&_p+p]:mt-3 [&_a]:underline" data-reveal>{{ mensaje_importante }}</div>
     {{ /if }}
 
     {{# ── Semanas temáticas ───────────────────────────────────────────────────── #}}
@@ -83,9 +82,9 @@
             {{ elseif count % 6 == 5 }}bg-[#89F0D8]
             {{ else }}bg-[#DBD5F1]{{ /if }}" data-stagger-child>
             {{ personaje }}
-            {{ if imagen }}
+            {{ if imagen || lottie }}
             <div class="absolute -top-8 right-2 w-28 sm:w-32 pointer-events-none z-20">
-                <img src="{{ imagen:url }}" alt="{{ title }}" class="w-full object-contain object-bottom drop-shadow-md">
+                {{ partial:personaje-media class="w-full object-contain object-bottom drop-shadow-md" }}
             </div>
             {{ /if }}
             {{ /personaje }}
@@ -115,7 +114,7 @@
                 data-item-custom2-name="Edad"
                 data-item-custom2-required="true"
                 data-item-custom2-options="6|7|8|9|10|11|12|13|14|15|16"
-                data-item-custom3-name="Nombre del tutor"
+                data-item-custom3-name="Nombre del padre o tutor"
                 data-item-custom3-required="true"
                 data-item-custom4-name="Teléfono de contacto"
                 data-item-custom4-required="true"

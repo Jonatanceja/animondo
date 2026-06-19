@@ -1,0 +1,16 @@
+{{#
+    Muestra el personaje: si tiene animación Lottie la reproduce (autoplay+loop),
+    si no, usa la imagen. Acepta el parámetro `class` para el tamaño/posición.
+
+    El <dotlottie-player> no tiene altura propia, así que usamos la imagen como
+    "espaciador" invisible (define el tamaño/aspecto) y superponemos el reproductor
+    encima, ocupando el mismo espacio que ocuparía la imagen.
+#}}
+{{ if lottie }}
+<span class="{{ class }}" style="display:inline-block; line-height:0;">
+    {{ if imagen }}<img src="{{ imagen:url }}" alt="" aria-hidden="true" style="display:block; width:100%; height:auto; visibility:hidden;">{{ /if }}
+    <dotlottie-player src="{{ lottie:url }}" autoplay loop background="transparent" style="position:absolute; inset:0; width:100%; height:100%;"></dotlottie-player>
+</span>
+{{ elseif imagen }}
+<img src="{{ imagen:url }}" alt="{{ alt ?? title }}" class="{{ class }}">
+{{ /if }}

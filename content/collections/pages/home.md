@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781661535
+updated_at: 1781899584
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>Aquí los niños <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>Aquí las niñas, niños y jovenes <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     type: slide
     enabled: true
   -

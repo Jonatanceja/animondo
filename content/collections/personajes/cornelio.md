@@ -6,5 +6,6 @@ cargo: Animador
 color: '#DBD5F1'
 imagen: unicornio-v002.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1779904960
+updated_at: 1781754001
+lottie: lotties/unicornio_lottietest.lottie
 ---
