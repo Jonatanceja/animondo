@@ -30,22 +30,6 @@
         <div hidden id="snipcart" data-api-key="{{ config:services.snipcart.key }}"></div>
         <script async src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"></script>
         <style>
-            /* Separa la casilla de transporte en su propio renglón dentro del carrito */
-            .animondo-transporte-field {
-                flex-basis: 100% !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                grid-column: 1 / -1 !important;
-                margin-top: 0.75rem !important;
-                padding-top: 0.75rem !important;
-                border-top: 1px solid #e4e4e7 !important;
-            }
-            .animondo-transporte-info {
-                font-size: 0.85rem;
-                line-height: 1.45;
-                color: #3f3f46;
-                margin: 0 0 0.6rem;
-            }
             /* Oculta el selector de Cantidad de cada artículo en el carrito (conserva el precio) */
             .snipcart-item-quantity__label,
             .snipcart-item-quantity__quantity {
@@ -58,6 +42,23 @@
                 font-size: 1.25rem !important;
                 font-weight: 700 !important;
             }
+            /* Bloque "Agregar transporte" inyectado bajo cada taller en el carrito */
+            .animondo-transporte-add {
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid #e4e4e7;
+                font-size: 0.85rem;
+                line-height: 1.45;
+                color: #3f3f46;
+            }
+            .animondo-transporte-add a {
+                display: inline-block;
+                margin-top: 0.5rem;
+                font-weight: 700;
+                color: #323E81;
+                text-decoration: underline;
+                cursor: pointer;
+            }
         </style>
         <script>
             document.addEventListener('snipcart.ready', function () {
@@ -66,35 +67,69 @@
                     .then(function (es) { window.Snipcart.api.session.setLanguage('es', es); })
                     .catch(function () {});
 
-                // ── Transporte: casilla en su propio renglón + texto del Paquete Express ──
-                function syncTransporte() {
-                    var checks = document.querySelectorAll('input[type="checkbox"]');
-                    for (var i = 0; i < checks.length; i++) {
-                        var field = checks[i].closest('.snipcart-form__field');
-                        if (!field) {
-                            var node = checks[i];
-                            for (var k = 0; k < 6 && node; k++) {
-                                if (/transporte/i.test(node.textContent || '')) { field = node; break; }
-                                node = node.parentElement;
+                // ── Transporte como producto aparte: enlace para agregarlo dentro del carrito ──
+                var TRANSPORTE_INFO = '<strong>Paquete Animondo Express</strong><br>Transporte seguro. Los puntos de encuentro y horarios serán definidos antes del sábado previo a tu taller y confirmados por WhatsApp.';
+
+                function cartItems() {
+                    try { return window.Snipcart.store.getState().cart.items.items || []; }
+                    catch (e) { return []; }
+                }
+
+                function renderTransporteLinks() {
+                    var items = cartItems();
+                    var lines = document.querySelectorAll('.snipcart-item-line');
+                    for (var l = 0; l < lines.length; l++) {
+                        (function (line) {
+                            var titleEl = line.querySelector('.snipcart-item-line__header__title');
+                            if (!titleEl) return;
+                            var title = (titleEl.textContent || '').trim();
+
+                            // Empareja la fila del carrito con su item del store (por nombre)
+                            var item = null;
+                            for (var i = 0; i < items.length; i++) {
+                                if ((items[i].name || '').trim() === title) { item = items[i]; break; }
                             }
-                        }
-                        if (field && /transporte/i.test(field.textContent || '')) {
-                            field.classList.add('animondo-transporte-field');
-                            if (!field.querySelector('.animondo-transporte-info')) {
-                                var info = document.createElement('p');
-                                info.className = 'animondo-transporte-info';
-                                info.innerHTML = '<strong>Paquete Animondo Express</strong><br>$500 MXN por semana.<br>Transporte seguro. Los puntos de encuentro y horarios serán definidos antes del sábado previo a tu taller y confirmados por WhatsApp.';
-                                field.insertBefore(info, field.firstChild);
-                            }
-                        }
+                            var meta = item && item.metadata ? item.metadata : null;
+                            var price = meta && meta.transportePrice;
+
+                            var existing = line.querySelector('.animondo-transporte-add');
+
+                            // No es un taller con transporte disponible → nada
+                            if (!item || !price) { if (existing) existing.remove(); return; }
+
+                            // ¿el transporte de este taller ya está en el carrito?
+                            var transId = 'transporte-' + item.id;
+                            var already = items.some(function (it) { return it.id === transId; });
+                            if (already) { if (existing) existing.remove(); return; }
+
+                            if (existing) return; // ya inyectado
+
+                            var box = document.createElement('div');
+                            box.className = 'animondo-transporte-add';
+                            box.innerHTML = TRANSPORTE_INFO + '<br><a role="button">+ Agregar transporte (+$' + price + ' MXN)</a>';
+                            box.querySelector('a').addEventListener('click', function () {
+                                window.Snipcart.api.cart.items.add({
+                                    id: transId,
+                                    name: 'Transporte Animondo Express — ' + item.name,
+                                    price: price,
+                                    url: item.url,
+                                    quantity: 1
+                                });
+                            });
+                            line.appendChild(box);
+                        })(lines[l]);
                     }
                 }
 
+                if (window.Snipcart.store && window.Snipcart.store.subscribe) {
+                    window.Snipcart.store.subscribe(renderTransporteLinks);
+                }
                 var raf = null;
                 new MutationObserver(function () {
                     if (raf) return;
-                    raf = requestAnimationFrame(function () { raf = null; syncTransporte(); });
+                    raf = requestAnimationFrame(function () { raf = null; renderTransporteLinks(); });
                 }).observe(document.body, { childList: true, subtree: true });
+                renderTransporteLinks();
             });
         </script>
 

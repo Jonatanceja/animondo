@@ -121,15 +121,26 @@
                 data-item-custom5-name="Notas o alergias"
                 data-item-custom5-type="textarea"
                 data-item-categories="taller"
-                {{ if precio_transporte }}
-                data-item-custom6-name="¿Agregar transporte? (ida y vuelta)"
-                data-item-custom6-type="checkbox"
-                data-item-custom6-options="true[{{ precio_transporte }}]|false"
-                data-item-custom6-value="false"
-                data-item-custom7-name="Colonia o Código Postal"
-                {{ /if }}>
+                {{ if precio_transporte }}data-item-metadata='{"transportePrice":{{ precio_transporte }}}'{{ /if }}>
                 Reservar lugar →
             </button>
+            {{ if precio_transporte }}
+            {{# Definición oculta del producto de transporte: Snipcart la valida al rastrear la URL.
+                El enlace para agregarlo se inyecta dentro del carrito (ver layout). #}}
+            <button type="button" hidden
+                class="snipcart-add-item"
+                data-item-id="transporte-{{ id }}"
+                data-item-name="Transporte Animondo Express — {{ titulo }}"
+                data-item-price="{{ precio_transporte }}"
+                data-item-url="{{ url }}"
+                data-item-description="Paquete Animondo Express: transporte seguro al centro. Las rutas y puntos de encuentro se confirman por WhatsApp el sábado previo al taller."
+                data-item-max-quantity="1"
+                data-item-categories="transporte"
+                data-item-custom1-name="Nombre del niño/a"
+                data-item-custom1-required="true"
+                data-item-custom2-name="Colonia o Código Postal"
+                data-item-custom2-required="true"></button>
+            {{ /if }}
             {{ else }}
             <span class="self-end inline-flex items-center justify-center mt-auto font-display font-bold text-lg text-zinc-500 bg-zinc-200 px-6 py-3 rounded-full">
                 Próximamente
