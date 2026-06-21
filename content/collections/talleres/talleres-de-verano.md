@@ -4,7 +4,7 @@ blueprint: taller
 title: 'Talleres de verano'
 descripcion: '<p>Cinco días para aprender a animar cuadro por cuadro. Los <em>animautas</em> entran el lunes sin saber nada y el viernes se van con sus propias animaciones, su primera gorra y la certeza de que pueden crear sus propios mundos.</p><p>Cada semana tiene un tema diferente, así que pueden venir una, dos o el verano completo.</p><p>No son clases. Es un viaje creativo.</p><p>Para<em> animautas </em>de 6 a 16 años en grupos separados por edades.</p>'
 temario: '<p><strong>SEMANAS TEMÁTICAS</strong></p><ul><li><p><strong>Semana 1 · Princesas y Dragones</strong> La semana donde los castillos cobran vida y las leyendas se animan.</p></li><li><p><strong>Semana 2 · Dinosaurios</strong> Cinco días para hacer que el pasado vuelva a caminar.</p></li><li><p><strong>Semana 3 · Zombies</strong> Animación con sentido del humor, sesos y un poquito de horror.</p></li><li><p><strong>Semana 4 · Extraterrestres</strong> Mundos imposibles con criaturas imposibles. Vamos al espacio.</p></li><li><p><strong>Semana 5 · Fútbol </strong>El Mundial llegó a Animondo. El deporte como nunca lo habías visto: cuadro por cuadro.</p></li><li><p><strong>Semana 6 · La Selva</strong> Tus animales favoritos, mascotas o salvajes, en su versión animada.</p></li><li><p><strong>Semana 7 · Superhéroes</strong> Crea a tu personaje, anima sus poderes y salva al mundo.</p></li><li><p><strong>Semana 8 · Mundo Marino</strong> Sumérgete en una semana de criaturas, corrientes y secretos submarinos.</p></li><li><p><strong>Semana 9 ·</strong> <strong>Monstruos</strong> Lo que da miedo también puede ser divertido cuando tú lo creas.</p></li></ul>'
-mensaje_importante: '<p><strong>Paquete Animondo Express: </strong>Transporte seguro al centro para tu animauta.</p><p><strong>+$500 MXN</strong> por semana.</p><p>Las rutas se definen cada semana según las colonias de quienes contraten. Con esa información armamos los puntos de encuentro más convenientes para todos. Confirmaremos tu punto de encuentro y horario por WhatsApp el sábado previo al inicio del curso.</p><p>Puedes contratar el Paquete Animondo Express al inscribirte o agregarlo después, hasta el jueves anterior al inicio del curso.</p>'
+mensaje_importante: '<p><strong>Paquete Animondo Express: </strong>Transporte seguro para tu animauta.</p><p><strong>+$500 MXN</strong> por semana.</p><p>Las rutas se definen cada semana según las colonias de quienes contraten. Con esa información armamos los puntos de encuentro más convenientes para todos. Confirmaremos tu punto de encuentro y horario por WhatsApp el sábado previo al inicio del curso.</p><p>Puedes contratar el Paquete Animondo Express al inscribirte o agregarlo después, hasta el jueves anterior al inicio del curso.</p>'
 edad: '6 - 16 años'
 vespertino:
   dias:
@@ -16,7 +16,7 @@ vespertino:
   hora_inicio: '09:00'
   hora_fin: '13:00'
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781745077
+updated_at: 1782001042
 dias:
   - lunes
   - martes

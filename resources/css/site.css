@@ -460,14 +460,14 @@ html, body {
   height: 105vw;
   left: 50%;
   margin-left: -52.5vw;
-  top: 48%;
+  top: 58%;
   will-change: transform;
   pointer-events: none;
 }
 
 .mobile-slide-content {
   position: absolute;
-  top: 1.5rem;
+  top: 4rem;
   left: 1.5rem;
   right: 1.5rem;
   max-height: 44%;

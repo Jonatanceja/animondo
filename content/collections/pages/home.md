@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781899584
+updated_at: 1782001198
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>Aquí las niñas, niños y jovenes <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>Aquí las niñas, niños y jóvenes <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     type: slide
     enabled: true
   -
@@ -128,7 +128,7 @@ marca_titulo: '<p>Imagina<br><strong>Anima </strong><br>Comparte</p>'
 marca_imagen_logo: animondo-color.svg
 marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
-hero_video_file: video/hero-video.mp4
+hero_video_file: video/hero-video-2.mp4
 talleres_entries:
   - dd00debb-9588-4144-aa71-14f8effb67f5
   - 6382ddc6-e313-4ca9-9c53-00bedb84097e
