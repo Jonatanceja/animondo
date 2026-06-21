@@ -77,11 +77,11 @@
 
                 function renderTransporteLinks() {
                     var items = cartItems();
-                    var lines = document.querySelectorAll('.snipcart-item-line');
-                    for (var l = 0; l < lines.length; l++) {
-                        (function (line) {
-                            var titleEl = line.querySelector('.snipcart-item-line__header__title');
-                            if (!titleEl) return;
+                    var titles = document.querySelectorAll('.snipcart-item-line__title');
+                    for (var t = 0; t < titles.length; t++) {
+                        (function (titleEl) {
+                            var line = titleEl.closest('.snipcart-item-line__container') || titleEl.parentElement;
+                            if (!line) return;
                             var title = (titleEl.textContent || '').trim();
 
                             // Empareja la fila del carrito con su item del store (por nombre)
@@ -117,7 +117,7 @@
                                 });
                             });
                             line.appendChild(box);
-                        })(lines[l]);
+                        })(titles[t]);
                     }
                 }
 
