@@ -80,6 +80,28 @@
                 text-decoration: underline;
                 cursor: pointer;
             }
+            /* Desglose de la cuenta antes del botón Pagar (sustituye el total por defecto) */
+            .snipcart-summary-fees { display: none !important; }
+            .animondo-desglose {
+                margin: 0.25rem 0 1rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid #e4e4e7;
+                font-size: 0.95rem;
+                color: #1f2933;
+            }
+            .animondo-desglose__row {
+                display: flex;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0.15rem 0;
+            }
+            .animondo-desglose__total {
+                margin-top: 0.35rem;
+                padding-top: 0.45rem;
+                border-top: 1px solid #e4e4e7;
+                font-weight: 700;
+                font-size: 1.15rem;
+            }
         </style>
         <script>
             document.addEventListener('snipcart.ready', function () {
@@ -162,15 +184,64 @@
                     }
                 }
 
+                // ── Desglose de la cuenta antes del botón Pagar ──
+                function money(n) {
+                    return '$' + (n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+                }
+                function desgloseRow(label, amount, extraClass) {
+                    return '<div class="animondo-desglose__row ' + (extraClass || '') + '"><span>' + label + '</span><span>' + money(amount) + '</span></div>';
+                }
+                function snipcartTotal() {
+                    try {
+                        var c = window.Snipcart.store.getState().cart;
+                        var cand = [c.total, c.grandTotal, c.finalTotal];
+                        for (var i = 0; i < cand.length; i++) {
+                            if (typeof cand[i] === 'number' && isFinite(cand[i])) return cand[i];
+                        }
+                    } catch (e) {}
+                    return null;
+                }
+                function renderDesglose() {
+                    var footerBtns = document.querySelector('.snipcart-cart__footer-buttons');
+                    var existing = document.querySelector('.animondo-desglose');
+                    var items = cartItems();
+                    if (!footerBtns || !items.length) { if (existing) existing.remove(); return; }
+
+                    var tallerSum = 0, transporteSum = 0;
+                    items.forEach(function (it) {
+                        var line = (it.price || 0) * (it.quantity || 1);
+                        if (String(it.id).indexOf('transporte-') === 0) transporteSum += line;
+                        else tallerSum += line;
+                    });
+                    var itemsSum = tallerSum + transporteSum;
+                    var total = snipcartTotal();
+                    if (!(total > 0)) total = itemsSum;
+                    var descuento = Math.max(0, Math.round((itemsSum - total) * 100) / 100);
+
+                    var box = existing;
+                    if (!box) {
+                        box = document.createElement('div');
+                        box.className = 'animondo-desglose';
+                        footerBtns.parentNode.insertBefore(box, footerBtns);
+                    }
+                    var rows = desgloseRow('Talleres', tallerSum);
+                    if (transporteSum > 0) rows += desgloseRow('Transporte', transporteSum);
+                    if (descuento > 0) rows += desgloseRow('Descuento', -descuento);
+                    rows += desgloseRow('Total', total, 'animondo-desglose__total');
+                    box.innerHTML = rows;
+                }
+
+                function renderAll() { renderTransporteLinks(); renderDesglose(); }
+
                 if (window.Snipcart.store && window.Snipcart.store.subscribe) {
-                    window.Snipcart.store.subscribe(renderTransporteLinks);
+                    window.Snipcart.store.subscribe(renderAll);
                 }
                 var raf = null;
                 new MutationObserver(function () {
                     if (raf) return;
-                    raf = requestAnimationFrame(function () { raf = null; renderTransporteLinks(); });
+                    raf = requestAnimationFrame(function () { raf = null; renderAll(); });
                 }).observe(document.body, { childList: true, subtree: true });
-                renderTransporteLinks();
+                renderAll();
             });
         </script>
 
