@@ -44,6 +44,8 @@
             }
             /* Bloque "Agregar transporte" inyectado bajo cada taller en el carrito */
             .animondo-transporte-add {
+                width: 100%;
+                clear: both;
                 margin-top: 0.75rem;
                 padding-top: 0.75rem;
                 border-top: 1px solid #e4e4e7;
@@ -80,7 +82,10 @@
                     var titles = document.querySelectorAll('.snipcart-item-line__title');
                     for (var t = 0; t < titles.length; t++) {
                         (function (titleEl) {
-                            var line = titleEl.closest('.snipcart-item-line__container') || titleEl.parentElement;
+                            // Apila el bloque a lo ancho dentro de la columna del producto (no en el flex del container)
+                            var line = titleEl.closest('.snipcart-item-line__product')
+                                || titleEl.closest('.snipcart-item-line__container')
+                                || titleEl.parentElement;
                             if (!line) return;
                             var title = (titleEl.textContent || '').trim();
 
