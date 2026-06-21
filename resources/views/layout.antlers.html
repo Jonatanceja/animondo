@@ -53,9 +53,28 @@
                 line-height: 1.45;
                 color: #3f3f46;
             }
+            .animondo-transporte-add label.animondo-cp-label {
+                display: block;
+                margin-top: 0.6rem;
+                font-size: 0.78rem;
+                color: #3f3f46;
+            }
+            .animondo-transporte-cp {
+                display: block;
+                width: 100%;
+                max-width: 22rem;
+                margin-top: 0.25rem;
+                padding: 0.5rem 0.75rem;
+                border: 1px solid #c9c9cf;
+                border-radius: 0.5rem;
+                font-size: 0.9rem;
+            }
+            .animondo-transporte-cp.animondo-cp-error {
+                border-color: #e02424;
+            }
             .animondo-transporte-add a {
                 display: inline-block;
-                margin-top: 0.5rem;
+                margin-top: 0.6rem;
                 font-weight: 700;
                 color: #323E81;
                 text-decoration: underline;
@@ -111,15 +130,32 @@
 
                             var box = document.createElement('div');
                             box.className = 'animondo-transporte-add';
-                            box.innerHTML = TRANSPORTE_INFO + '<br><a role="button">+ Agregar transporte (+$' + price + ' MXN)</a>';
+                            box.innerHTML = TRANSPORTE_INFO
+                                + '<label class="animondo-cp-label">Colonia o Código Postal</label>'
+                                + '<input type="text" class="animondo-transporte-cp" placeholder="Colonia o Código Postal">'
+                                + '<a role="button">+ Agregar transporte (+$' + price + ' MXN)</a>';
+
+                            var cpInput = box.querySelector('.animondo-transporte-cp');
                             box.querySelector('a').addEventListener('click', function () {
+                                var cp = (cpInput.value || '').trim();
+                                if (!cp) {
+                                    cpInput.classList.add('animondo-cp-error');
+                                    cpInput.focus();
+                                    return;
+                                }
                                 window.Snipcart.api.cart.items.add({
                                     id: transId,
                                     name: 'Transporte Animondo Express — ' + item.name,
                                     price: price,
                                     url: item.url,
-                                    quantity: 1
+                                    quantity: 1,
+                                    customFields: [
+                                        { name: 'Colonia o Código Postal', value: cp }
+                                    ]
                                 });
+                            });
+                            cpInput.addEventListener('input', function () {
+                                cpInput.classList.remove('animondo-cp-error');
                             });
                             line.appendChild(box);
                         })(titles[t]);
