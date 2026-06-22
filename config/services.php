@@ -37,6 +37,7 @@ return [
 
     'snipcart' => [
         'key' => env('SNIPCART_KEY', ''),
+        'secret' => env('SNIPCART_SECRET', ''),
     ],
 
 ];

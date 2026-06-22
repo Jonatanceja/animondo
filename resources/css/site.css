@@ -471,7 +471,7 @@ html, body {
   left: 1.5rem;
   right: 1.5rem;
   max-height: 44%;
-  overflow: hidden;
+  overflow: visible;
   pointer-events: auto;
   opacity: 0;
   z-index: 10;
@@ -499,3 +499,11 @@ html, body {
 }
 
 
+
+/* ── Taller agotado (botón "Reservar lugar" sin stock) ── */
+.animondo-agotado {
+  background-color: #d4d4d8 !important;
+  color: #71717a !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}

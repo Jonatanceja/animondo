@@ -813,6 +813,26 @@ if (staggerGrid) {
   staggerIO.observe(staggerGrid);
 }
 
+// ── Talleres agotados: marca en gris las semanas sin stock en Snipcart ──────
+const tallerBuyBtns = document.querySelectorAll('.snipcart-add-item[data-item-categories="taller"]');
+if (tallerBuyBtns.length) {
+  fetch('/api/snipcart/stock')
+    .then((r) => r.json())
+    .then((stock) => {
+      tallerBuyBtns.forEach((btn) => {
+        const id = btn.getAttribute('data-item-id');
+        const s = stock[id];
+        if (typeof s === 'number' && s <= 0) {
+          btn.classList.remove('snipcart-add-item');
+          btn.classList.add('animondo-agotado');
+          btn.setAttribute('disabled', 'disabled');
+          btn.textContent = 'Lugares agotados';
+        }
+      });
+    })
+    .catch(() => {});
+}
+
 // ── Viaje del Animador tabs ────────────────────────────────────────────────
 const viajeBtns   = document.querySelectorAll('.viaje-tab-btn');
 const viajePanels = document.querySelectorAll('.viaje-tab-panel');

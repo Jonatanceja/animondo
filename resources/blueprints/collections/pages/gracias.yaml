@@ -1,0 +1,36 @@
+title: Gracias
+tabs:
+  main:
+    display: Contenido
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              display: Título
+              required: true
+              validate:
+                - required
+          -
+            handle: texto
+            field:
+              type: text
+              display: Texto
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'
+          -
+            handle: template
+            field:
+              type: hidden
+              default: gracias

@@ -225,8 +225,8 @@
                         footerBtns.parentNode.insertBefore(box, footerBtns);
                     }
                     var rows = desgloseRow('Talleres', tallerSum);
-                    if (transporteSum > 0) rows += desgloseRow('Transporte', transporteSum);
                     if (descuento > 0) rows += desgloseRow('Descuento', -descuento);
+                    if (transporteSum > 0) rows += desgloseRow('Transporte', transporteSum);
                     rows += desgloseRow('Total', total, 'animondo-desglose__total');
                     box.innerHTML = rows;
                 }

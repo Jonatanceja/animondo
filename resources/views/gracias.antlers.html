@@ -1,0 +1,21 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24 min-h-[70vh] flex items-center justify-center">
+
+    <div class="max-w-2xl mx-auto text-center">
+
+        <h1 class="font-display font-bold text-4xl sm:text-6xl text-[#323E81] mb-6 sm:mb-8 leading-tight">
+            {{ title }}
+        </h1>
+
+        {{ if texto }}
+        <p class="font-display font-light text-xl sm:text-2xl text-zinc-700 leading-snug">
+            {{ texto }}
+        </p>
+        {{ /if }}
+
+        <a href="/" class="inline-block mt-10 font-display font-normal text-lg text-white bg-[#323E81] px-8 py-4 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">
+            Volver al inicio
+        </a>
+
+    </div>
+
+</div>
