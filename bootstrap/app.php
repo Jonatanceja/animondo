@@ -11,7 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Los endpoints de PayPal/Snipcart los llaman servidores externos
+        // (Snipcart) y el SDK de PayPal, no formularios con token CSRF.
+        $middleware->validateCsrfTokens(except: [
+            'api/paypal/*',
+        ]);
+
+        // Detrás del túnel/proxy: respeta X-Forwarded-Proto para generar URLs https.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
