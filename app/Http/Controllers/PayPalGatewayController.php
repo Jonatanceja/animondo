@@ -215,9 +215,12 @@ class PayPalGatewayController extends Controller
             $payload['links'] = ['refunds' => $extra['refundsUrl']];
         }
 
+        // El gateway se confirma con la Primary API key del Payment Gateway (por
+        // entorno), no con el secret REST de la cuenta. En live cae a SNIPCART_SECRET
+        // solo si no se configuró la llave dedicada.
         $secret = $mode === 'test'
             ? config('services.snipcart.test_secret')
-            : config('services.snipcart.secret');
+            : (config('services.snipcart.live_secret') ?: config('services.snipcart.secret'));
 
         $resp = Http::withToken($secret)
             ->acceptJson()
