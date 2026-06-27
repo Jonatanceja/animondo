@@ -102,6 +102,14 @@
                 font-weight: 700;
                 font-size: 1.15rem;
             }
+            /* Ocultar el método de Tarjeta de Crédito nativo de Snipcart (duplicado).
+               Se mantiene nuestro custom gateway (title="Pagar mediante PayPal"). */
+            .snipcart-payment-methods-list-item__button[title="Pagar mediante Tarjeta de Crédito"] {
+                display: none !important;
+            }
+            .snipcart-payment-methods-list-item:has(> .snipcart-payment-methods-list-item__button[title="Pagar mediante Tarjeta de Crédito"]) {
+                display: none !important;
+            }
         </style>
         <script>
             document.addEventListener('snipcart.ready', function () {
