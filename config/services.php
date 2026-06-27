@@ -38,9 +38,11 @@ return [
     'snipcart' => [
         'key' => env('SNIPCART_KEY', ''),
         'secret' => env('SNIPCART_SECRET', ''),
-        // Secret de TEST (Dashboard → Custom Gateway en modo Test). Se usa para
-        // confirmar pagos cuando la orden viene del entorno de prueba.
+        // Llaves del Custom Gateway (Dashboard → Payment Gateway → Primary API key),
+        // por entorno. Se usan para confirmar los pagos del gateway, y son distintas
+        // del secret REST de la cuenta (SNIPCART_SECRET).
         'test_secret' => env('SNIPCART_TEST_SECRET', ''),
+        'live_secret' => env('SNIPCART_LIVE_SECRET', ''),
     ],
 
     'paypal' => [
