@@ -102,15 +102,6 @@
                 font-weight: 700;
                 font-size: 1.15rem;
             }
-            /* Temporal: ocultar el botón viejo de PayPal Express Checkout.
-               Coincide solo con title="Pagar mediante PayPal" (el nuevo es
-               "Pagar mediante PayPal o tarjeta"). Quitar al desconectar la pasarela. */
-            .snipcart-payment-methods-list-item__button[title="Pagar mediante PayPal"] {
-                display: none !important;
-            }
-            .snipcart-payment-methods-list-item:has(> .snipcart-payment-methods-list-item__button[title="Pagar mediante PayPal"]) {
-                display: none !important;
-            }
         </style>
         <script>
             document.addEventListener('snipcart.ready', function () {
