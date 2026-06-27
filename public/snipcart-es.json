@@ -101,7 +101,7 @@
         "country": "País",
         "phone": "Teléfono",
         "postalCode": "Código Postal",
-        "province": "Provincia",
+        "province": "Estado",
         "dont_see_address": "No encuentro mi dirección"
     },
     "billing": {
