@@ -38,6 +38,27 @@ return [
     'snipcart' => [
         'key' => env('SNIPCART_KEY', ''),
         'secret' => env('SNIPCART_SECRET', ''),
+        // Secret de TEST (Dashboard → Custom Gateway en modo Test). Se usa para
+        // confirmar pagos cuando la orden viene del entorno de prueba.
+        'test_secret' => env('SNIPCART_TEST_SECRET', ''),
+    ],
+
+    'paypal' => [
+        // 'sandbox' para pruebas, 'live' para producción.
+        'mode' => env('PAYPAL_MODE', 'sandbox'),
+
+        // Resuelve las credenciales activas según el modo.
+        'client_id' => env('PAYPAL_MODE', 'sandbox') === 'live'
+            ? env('PAYPAL_LIVE_CLIENT_ID', '')
+            : env('PAYPAL_SANDBOX_CLIENT_ID', ''),
+        'secret' => env('PAYPAL_MODE', 'sandbox') === 'live'
+            ? env('PAYPAL_LIVE_SECRET', '')
+            : env('PAYPAL_SANDBOX_SECRET', ''),
+
+        // Base URL de la API REST de PayPal según el modo.
+        'base_url' => env('PAYPAL_MODE', 'sandbox') === 'live'
+            ? 'https://api-m.paypal.com'
+            : 'https://api-m.sandbox.paypal.com',
     ],
 
 ];
