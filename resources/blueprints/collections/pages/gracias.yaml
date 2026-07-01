@@ -34,3 +34,10 @@ tabs:
             field:
               type: hidden
               default: gracias
+  seo:
+    display: SEO
+    sections:
+      -
+        fields:
+          -
+            import: seo

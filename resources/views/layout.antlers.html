@@ -4,7 +4,25 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ title ?? site:name }}</title>
+
+        {{# ── SEO ─────────────────────────────────────────────────────────────── #}}
+        <title>{{ seo_title ?? title ?? site:name }}</title>
+        {{ if seo_description }}<meta name="description" content="{{ seo_description }}">{{ /if }}
+
+        {{# Open Graph (Facebook, WhatsApp, etc.) #}}
+        <meta property="og:site_name" content="{{ site:name }}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ permalink ?? current_url }}">
+        <meta property="og:title" content="{{ og_title ?? seo_title ?? title ?? site:name }}">
+        {{ if og_description || seo_description }}<meta property="og:description" content="{{ og_description ?? seo_description }}">{{ /if }}
+        {{ if og_image }}<meta property="og:image" content="{{ config:app.url }}{{ og_image:url }}">{{ /if }}
+
+        {{# Twitter #}}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ og_title ?? seo_title ?? title ?? site:name }}">
+        {{ if og_description || seo_description }}<meta name="twitter:description" content="{{ og_description ?? seo_description }}">{{ /if }}
+        {{ if og_image }}<meta name="twitter:image" content="{{ config:app.url }}{{ og_image:url }}">{{ /if }}
+
         {{ navegacion:favicon }}
         {{ if extension == 'svg' }}
         <link rel="icon" type="image/svg+xml" href="{{ url }}">
