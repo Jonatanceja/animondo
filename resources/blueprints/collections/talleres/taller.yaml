@@ -202,3 +202,10 @@ tabs:
             field:
               type: hidden
               default: talleres/taller-verano
+  seo:
+    display: SEO
+    sections:
+      -
+        fields:
+          -
+            import: seo

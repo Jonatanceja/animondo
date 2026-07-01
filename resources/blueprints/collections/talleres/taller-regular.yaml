@@ -113,3 +113,10 @@ tabs:
             field:
               type: hidden
               default: talleres/taller-regular
+  seo:
+    display: SEO
+    sections:
+      -
+        fields:
+          -
+            import: seo

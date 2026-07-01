@@ -1,0 +1,42 @@
+title: SEO
+fields:
+  -
+    handle: seo_title
+    field:
+      type: text
+      display: 'Título SEO'
+      instructions: 'Título para buscadores y la pestaña del navegador. Si se deja vacío, se usa el título de la página.'
+      localizable: true
+  -
+    handle: seo_description
+    field:
+      type: textarea
+      display: 'Meta descripción'
+      instructions: 'Resumen de ~155 caracteres que aparece en los resultados de búsqueda.'
+      character_limit: 160
+      localizable: true
+  -
+    handle: og_title
+    field:
+      type: text
+      display: 'Título para compartir (OG)'
+      instructions: 'Título al compartir en redes sociales. Si se deja vacío, se usa el Título SEO o el de la página.'
+      localizable: true
+  -
+    handle: og_description
+    field:
+      type: textarea
+      display: 'Descripción para compartir (OG)'
+      instructions: 'Descripción al compartir en redes. Si se deja vacío, se usa la Meta descripción.'
+      character_limit: 200
+      localizable: true
+  -
+    handle: og_image
+    field:
+      type: assets
+      display: 'Imagen para compartir (OG)'
+      instructions: 'Imagen al compartir en redes sociales. Recomendado 1200×630 px.'
+      max_files: 1
+      mode: grid
+      container: assets
+      localizable: true
