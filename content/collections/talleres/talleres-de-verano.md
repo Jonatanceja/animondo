@@ -16,7 +16,7 @@ vespertino:
   hora_inicio: '09:00'
   hora_fin: '13:00'
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1782001042
+updated_at: 1782434995
 dias:
   - lunes
   - martes
@@ -35,7 +35,7 @@ resumen:
     enlace: 'https://www.paypal.com/ncp/payment/6S732WDFUPS3G'
     fecha_de_inicio: '2026-07-20 06:00'
     fecha_de_finalizacion: '2026-07-24 06:00'
-    personaje: da9a7ff6-2bc2-4288-8752-21c4ce137b79
+    personaje: c4d277b0-56f7-4c03-9289-f625e4dcc34a
   -
     id: MIgw3XrlS3UlVVmxik6Qq
     type: opcion
@@ -45,7 +45,7 @@ resumen:
     fecha_de_inicio: '2026-07-27 06:00'
     fecha_de_finalizacion: '2026-07-31 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/E5G3GU7HEFH42'
-    personaje: 58efa3a8-e64e-45f6-bd11-6a82b115d2e1
+    personaje: 3041911d-3e9d-4786-9a8c-7364012e34fc
   -
     id: '-HDq_KqwjRNxtfe77XYoK'
     titulo: Extraterrestres
@@ -55,7 +55,7 @@ resumen:
     fecha_de_inicio: '2026-08-03 06:00'
     fecha_de_finalizacion: '2026-08-07 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/3A4MAH8J6MMA2'
-    personaje: 8c6cbe1e-c737-4083-ba31-5fac3e909b67
+    personaje: cbb9e84a-006b-4563-b554-85f606c6ebcd
   -
     id: braKtRtyyY2hJQBvpdRkq
     titulo: Selva
@@ -65,7 +65,7 @@ resumen:
     fecha_de_inicio: '2026-08-10 06:00'
     fecha_de_finalizacion: '2026-08-14 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/U5K79TPLV93SG'
-    personaje: f0d00257-e86d-459a-b298-51afb33a6d13
+    personaje: 3675ce2e-0067-4949-ac98-0daf4f061576
   -
     id: Qv8yksBCUNcueym9lJq1J
     titulo: Monstruos
@@ -75,7 +75,7 @@ resumen:
     fecha_de_inicio: '2026-08-17 06:00'
     fecha_de_finalizacion: '2026-08-21 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/ZSXKEET4JVZF8'
-    personaje: 1e5b8c24-4402-4312-b6fd-b88b92a7a708
+    personaje: 25c767c8-da6f-4edd-90de-3bbe1c15574c
   -
     id: bU3MU_mboi2-W2Fal9TtO
     titulo: 'Mundo marino'
@@ -85,7 +85,7 @@ resumen:
     fecha_de_inicio: '2026-08-24 06:00'
     fecha_de_finalizacion: '2026-08-28 06:00'
     enlace: 'https://www.paypal.com/ncp/payment/V8TYUSAPBWGS8'
-    personaje: b9663533-a5b3-4526-a362-a86c85598c13
+    personaje: 7e8d7c0e-7950-494f-abf1-e36988b871cb
 template: talleres/taller-verano
 fecha_inicio: '2026-07-20 06:00'
 personaje: b6899476-87c2-478f-ae88-e94e33263ed7

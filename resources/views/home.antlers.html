@@ -323,11 +323,9 @@
                     {{# ── Personajes 2 y 3, hover en móvil, fijos en escritorio ── #}}
                     {{ personajes_en_posicion_absoluta }}
                     {{ if imagen and count == 2 }}
-                    <img src="{{ imagen:url }}" alt="{{ title }}"
-                         class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14">
+                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14" }}
                     {{ elseif imagen and count == 3 }}
-                    <img src="{{ imagen:url }}" alt="{{ title }}"
-                         class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14">
+                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14" }}
                     {{ /if }}
                     {{ /personajes_en_posicion_absoluta }}
                 </div>
@@ -335,8 +333,7 @@
                 {{# ── Personaje 1 centrado (solo escritorio) ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 1 }}
-                <img src="{{ imagen:url }}" alt="{{ title }}"
-                     class="absolute z-20 pointer-events-none drop-shadow-md sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24">
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>
@@ -357,8 +354,7 @@
                 {{# ── Personaje 4 sobre esta card ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 4 }}
-                <img src="{{ imagen:url }}" alt="{{ title }}"
-                     class="absolute z-20 pointer-events-none drop-shadow-md sm:top-32 top-14 sm:right-32 right-24 w-[26%]">
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-32 top-14 sm:right-32 right-24 w-[26%]" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>
@@ -379,8 +375,7 @@
                 {{# ── Personaje 5 sobre esta card ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 5 }}
-                <img src="{{ imagen:url }}" alt="{{ title }}"
-                     class="absolute z-20 pointer-events-none drop-shadow-md sm:bottom-12 bottom-6 sm:left-56 left-24 sm:w-42 w-32 transform -rotate-14">
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:bottom-12 bottom-6 sm:left-56 left-24 sm:w-42 w-32 transform -rotate-14" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>

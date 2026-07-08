@@ -20,11 +20,13 @@
                 {{# Personajes decorativos (todos menos el último) sobre la foto #}}
                 {{ personajes_en_entradas }}
                 {{ if imagen }}{{ unless last }}
-                <img src="{{ imagen:url }}" alt="{{ title }}"
-                     class="block absolute z-20 pointer-events-none drop-shadow-md
-                        {{ if count == 1 }}sm:top-[30%] top-[40%] right-[20%] sm:w-[25%] w-[30%]
-                        {{ elseif count == 2 }}sm:top-13 top-10 right-[10%] w-[20%] transform rotate-12
-                        {{ else }}bottom-[0%] sm:right-0 -right-[5%] w-[20%]{{ /if }}">
+                {{ if count == 1 }}
+                {{ partial:_personaje-media class="block absolute z-20 pointer-events-none drop-shadow-md sm:top-[30%] top-[40%] right-[20%] sm:w-[25%] w-[30%]" }}
+                {{ elseif count == 2 }}
+                {{ partial:_personaje-media class="block absolute z-20 pointer-events-none drop-shadow-md sm:top-13 top-10 right-[10%] w-[20%] transform rotate-12" }}
+                {{ else }}
+                {{ partial:_personaje-media class="block absolute z-20 pointer-events-none drop-shadow-md bottom-[0%] sm:right-0 -right-[5%] w-[20%]" }}
+                {{ /if }}
                 {{ /unless }}{{ /if }}
                 {{ /personajes_en_entradas }}
             </div>
@@ -68,8 +70,7 @@
         <div class="hidden sm:block absolute top-0 bottom-0 right-0 w-[42%]">
             {{ personajes_en_entradas }}
             {{ if imagen }}{{ if last }}
-            <img src="{{ imagen:url }}" alt="{{ title }}"
-                 class="absolute z-20 pointer-events-none drop-shadow-md top-[18%] -left-[5%] w-[50%]">
+            {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md top-[18%] -left-[5%] w-[50%]" }}
             {{ /if }}{{ /if }}
             {{ /personajes_en_entradas }}
         </div>
