@@ -1,0 +1,218 @@
+title: 'Taller Sabatino'
+tabs:
+  main:
+    display: Taller
+    sections:
+      -
+        display: Portada
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              display: 'Nombre del curso'
+              instructions: 'Se usa en las tarjetas de la home y del listado.'
+              required: true
+              validate:
+                - required
+          -
+            handle: titulo_portada
+            field:
+              type: textarea
+              display: 'Título de portada'
+              instructions: 'El título grande dentro de la tarjeta. Si lo dejas vacío se usa el nombre del curso. Salto de línea = renglón nuevo.'
+          -
+            handle: dias
+            field:
+              type: checkboxes
+              display: Días
+              instructions: 'Necesario: sin días ni hora de inicio, la tarjeta de la home aparece como "Próximamente" y no es clicable.'
+              options:
+                lunes: Lunes
+                martes: Martes
+                miercoles: Miércoles
+                jueves: Jueves
+                viernes: Viernes
+                sabado: Sábado
+                domingo: Domingo
+          -
+            handle: hora_inicio
+            field:
+              type: time
+              display: 'Hora de inicio'
+              width: 50
+          -
+            handle: hora_fin
+            field:
+              type: time
+              display: 'Hora de fin'
+              width: 50
+          -
+            handle: notas
+            field:
+              type: list
+              display: 'Notas de portada'
+              instructions: 'Líneas pequeñas bajo el horario. Ej: Grupos pequeños / Cupos limitados'
+          -
+            handle: personajes_portada
+            field:
+              type: entries
+              display: 'Personajes de portada'
+              instructions: 'Se colocan asomándose por encima de la tarjeta, en orden.'
+              collections:
+                - personajes
+      -
+        display: 'Costos e inicio'
+        fields:
+          -
+            handle: fecha_inicio
+            field:
+              type: date
+              display: 'Fecha de inicio'
+              instructions: 'Se muestra como "A partir del …".'
+              time_enabled: false
+          -
+            handle: precio_mensual
+            field:
+              type: integer
+              display: 'Precio mensual'
+              instructions: 'Sólo el número, sin comas ni $ — es el precio que se le cobra a Snipcart. Ej: 1500'
+              width: 50
+          -
+            handle: precio_trimestre
+            field:
+              type: integer
+              display: 'Precio del trimestre por adelantado'
+              instructions: 'Sólo el número, ej: 4000. Vacío = no se ofrece la opción de trimestre.'
+              width: 50
+          -
+            handle: incluye
+            field:
+              type: list
+              display: 'Qué incluye'
+              instructions: 'Ej: Materiales incluidos / Sin inscripción'
+      -
+        display: 'Grupos por edad'
+        fields:
+          -
+            handle: grupos
+            field:
+              type: replicator
+              display: Grupos
+              instructions: 'Una tarjeta por grupo de edad. El orden aquí es el orden en la página.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    grupo:
+                      display: Grupo
+                      fields:
+                        -
+                          handle: edades
+                          field:
+                            type: text
+                            display: Edades
+                            instructions: 'Ej: De 6 a 8 años'
+                        -
+                          handle: lugares_provisional
+                          field:
+                            type: integer
+                            display: 'Lugares (provisional)'
+                            instructions: 'Sólo se muestra mientras el producto no tenga inventario en Snipcart. En cuanto Snipcart responda con stock, manda el inventario y este número se ignora.'
+                            default: 30
+                            width: 50
+                        -
+                          handle: color
+                          field:
+                            type: select
+                            display: Color
+                            width: 50
+                            default: morado
+                            options:
+                              morado: Morado
+                              amarillo: Amarillo
+                              coral: Coral
+                              menta: Menta
+                        -
+                          handle: descripcion_producto
+                          field:
+                            type: text
+                            display: 'Descripción para el carrito'
+                            instructions: 'Texto que Snipcart muestra bajo el nombre del producto. Opcional.'
+                        -
+                          handle: personaje
+                          field:
+                            type: entries
+                            display: Personaje
+                            collections:
+                              - personajes
+                            max_items: 1
+                            mode: default
+      -
+        display: 'Detalle del taller'
+        fields:
+          -
+            handle: descripcion
+            field:
+              type: bard
+              display: Descripción
+              buttons:
+                - bold
+                - italic
+                - underline
+                - strike
+                - unorderedlist
+                - orderedlist
+                - h2
+                - h3
+                - blockquote
+              save_html: true
+          -
+            handle: mensaje_importante
+            field:
+              type: text
+              display: 'Mensaje importante'
+              instructions: 'Píldora destacada arriba de la descripción.'
+          -
+            handle: alerta
+            field:
+              type: bard
+              display: 'Aviso final'
+              instructions: 'Franja destacada al final de la página. Déjalo vacío para ocultarla.'
+              buttons:
+                - bold
+                - italic
+              save_html: true
+          -
+            handle: personaje
+            field:
+              type: entries
+              display: 'Personaje de la tarjeta'
+              instructions: 'El que aparece en la tarjeta de la home y del listado.'
+              collections:
+                - personajes
+              max_items: 1
+              mode: default
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate: 'max:200'
+          -
+            handle: template
+            field:
+              type: hidden
+              default: talleres/taller-sabatino
+  seo:
+    display: SEO
+    sections:
+      -
+        fields:
+          -
+            import: seo

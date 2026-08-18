@@ -121,6 +121,95 @@
   z-index: 99999 !important;
 }
 
+/* ── Snipcart: carrito personalizado ─────────── */
+
+/* Oculta el selector de Cantidad de cada artículo en el carrito (conserva el precio) */
+.snipcart-item-quantity__label,
+.snipcart-item-quantity__quantity {
+  display: none !important;
+}
+
+/* Precio del artículo un poco más grande */
+.snipcart-item-quantity__price,
+.snipcart-cart-summary-item__price,
+.snipcart-cart-summary-expanded-item__price {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+
+/* Bloque "Agregar transporte" inyectado bajo cada taller en el carrito */
+.animondo-transporte-add {
+  width: 100%;
+  clear: both;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e4e4e7;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #3f3f46;
+}
+
+.animondo-transporte-add label.animondo-cp-label {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: #3f3f46;
+}
+
+.animondo-transporte-cp {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c9c9cf;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background-color: #fff;
+  color: #18181b;
+}
+
+.animondo-transporte-cp.animondo-cp-error {
+  border-color: #e02424;
+}
+
+.animondo-transporte-add a {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-weight: 700;
+  color: #323E81;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Desglose de la cuenta antes del botón Pagar (sustituye el total por defecto) */
+.snipcart-summary-fees {
+  display: none !important;
+}
+
+.animondo-desglose {
+  margin: 0.25rem 0 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e4e4e7;
+  font-size: 0.95rem;
+  color: #1f2933;
+}
+
+.animondo-desglose__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.15rem 0;
+}
+
+.animondo-desglose__total {
+  margin-top: 0.35rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid #e4e4e7;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
 /* ── Fonts ───────────────────────────────────── */
 
 @font-face {

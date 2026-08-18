@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1782001198
+updated_at: 1787006923
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>Aquí las niñas, niños y jóvenes <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>Un lugar donde las niñas, niños y jóvenes, <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
     type: slide
     enabled: true
   -
@@ -20,7 +20,7 @@ circle_slides:
       y convertirte en autor.
     type: slide
     enabled: true
-    title: '<p>Para dejar de ser espectadores</p><p>y convertirse en <strong>creadores.</strong></p>'
+    title: '<p>Dan vida a objetos, <strong>animan</strong> dibujos y crean sus propias historias.</p><p>Para dejar de ser espectadores y convertirse en <strong>creadores.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p><p></p>'
   -
     id: 14ZcuabGk6urDHvEuovKA
     type: slide
@@ -102,7 +102,7 @@ circle_slides:
     id: obUJ_0LbA36L1dnSGdgOm
     type: slide
     enabled: true
-    title: '<p>Los alumnos construyen sus propios <strong>artefactos</strong> y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
+    title: '<p><strong>Artefactos</strong> Animondo</p><p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
   -
     id: _TEg250DYsZKcEXW8a6g0
     type: slide

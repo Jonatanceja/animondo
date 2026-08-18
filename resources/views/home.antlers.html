@@ -69,12 +69,27 @@
                 {{ /if }}
                 {{ /pasos_del_creador }}
             </div>
-            {{ if imagen }}
-            <div class="absolute bottom-20 inset-x-0 pointer-events-none">
-                <img src="{{ imagen:url }}" alt="" class="w-full object-contain object-bottom max-h-[55vh]">
+            {{# ── Gorras ──────────────────────────────────────────────────────
+                Vienen de OTRA diapositiva del CMS (siguen separadas en el panel),
+                pero se absorben aquí para que en el slider sean una sola. La
+                identificamos por tener `imagen` y no tener `pasos_del_creador`. #}}
+            {{ circle_slides }}
+            {{ if imagen && !pasos_del_creador }}
+            {{# Media columna izquierda: el mundo ocupa la mitad inferior derecha. #}}
+            <div class="mt-8 w-full sm:w-1/2 text-center">
+                <img src="{{ imagen:url }}" alt="" class="mx-auto w-auto max-w-full max-h-[26vh] object-contain">
+                {{ if title }}
+                <div class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 mt-4 px-4 [&_p]:m-0 [&_p]:leading-tight">{{ title }}</div>
+                {{ /if }}
             </div>
             {{ /if }}
+            {{ /circle_slides }}
         </div>
+
+        {{ elseif imagen }}
+        {{# Absorbida arriba, en el panel de los niveles: no genera panel propio.
+            Ojo: si en el futuro otra diapositiva lleva imagen, también desaparecería
+            del slider. La condición es "tiene imagen y no tiene pasos". #}}
 
         {{ else }}
         {{# ── Compact card layout ── #}}
@@ -97,7 +112,10 @@
                 {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-[32rem] object-contain mt-2">{{ /if }}
             {{ else }}
                 {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-28 object-contain mb-2">{{ /if }}
-                {{ if title }}<h2 class="text-4xl font-bold font-display leading-tight text-zinc-800">{{ title }}</h2>{{ /if }}
+                {{# Preflight quita el margen de los <p>, así que los párrafos del bard se
+                    pegaban. `p+p` separa sólo entre párrafos (sin margen sobrante al final)
+                    y `p:empty` neutraliza los párrafos vacíos que deja el editor. #}}
+                {{ if title }}<h2 class="text-4xl font-bold font-display leading-tight text-zinc-800 [&_p+p]:mt-6 [&_p:empty]:hidden">{{ title }}</h2>{{ /if }}
                 {{ if text }}<p class="text-base mt-1 text-zinc-600">{{ text }}</p>{{ /if }}
             {{ /if }}
         </div>
@@ -143,12 +161,27 @@
         {{ /if }}
         {{ /pasos_del_creador }}
       </div>
+
+      {{# ── Gorras: absorbidas de la diapositiva siguiente (ver versión escritorio) ── #}}
+      {{ circle_slides }}
+      {{ if imagen && !pasos_del_creador }}
+      <div class="mt-4 text-center">
+        <img src="{{ imagen:url }}" alt="" class="mx-auto w-auto max-w-full max-h-[18vh] object-contain">
+        {{ if title }}
+        <div class="font-display font-bold text-lg text-zinc-800 mt-3 px-2 [&_p]:m-0 [&_p]:leading-tight">{{ title }}</div>
+        {{ /if }}
+      </div>
+      {{ /if }}
+      {{ /circle_slides }}
     </div>
+
+    {{ elseif imagen }}
+    {{# Absorbida arriba, en el panel de los niveles: no genera panel propio. #}}
 
     {{ else }}
     <div class="mobile-slide-content" id="mobile-content-{{ count }}">
       {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-14 object-contain mb-1.5">{{ /if }}
-      {{ if title }}<h2 class="font-display font-bold text-2xl leading-tight text-zinc-800">{{ title }}</h2>{{ /if }}
+      {{ if title }}<h2 class="font-display font-bold text-2xl leading-tight text-zinc-800 [&_p+p]:mt-3 [&_p:empty]:hidden">{{ title }}</h2>{{ /if }}
       {{ if text }}<p class="font-sans text-xs mt-1 text-zinc-600 leading-snug">{{ text }}</p>{{ /if }}
     </div>
     {{ /if }}
@@ -323,9 +356,9 @@
                     {{# ── Personajes 2 y 3, hover en móvil, fijos en escritorio ── #}}
                     {{ personajes_en_posicion_absoluta }}
                     {{ if imagen and count == 2 }}
-                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14" }}
+                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14" }}
                     {{ elseif imagen and count == 3 }}
-                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14" }}
+                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14" }}
                     {{ /if }}
                     {{ /personajes_en_posicion_absoluta }}
                 </div>
@@ -333,7 +366,7 @@
                 {{# ── Personaje 1 centrado (solo escritorio) ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 1 }}
-                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24" }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>
@@ -354,7 +387,7 @@
                 {{# ── Personaje 4 sobre esta card ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 4 }}
-                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:top-32 top-14 sm:right-32 right-24 w-[26%]" }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-32 top-14 sm:right-32 right-24 w-[26%]" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>
@@ -375,7 +408,7 @@
                 {{# ── Personaje 5 sobre esta card ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 5 }}
-                {{ partial:_personaje-media class="absolute z-20 pointer-events-none drop-shadow-md sm:bottom-12 bottom-6 sm:left-56 left-24 sm:w-42 w-32 transform -rotate-14" }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:bottom-12 bottom-6 sm:left-56 left-24 sm:w-42 w-32 transform -rotate-14" }}
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>

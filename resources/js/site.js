@@ -230,6 +230,17 @@ function shuffled(arr) {
 function makeAnnoCircle(el, color, delay) {
   // Defer SVG creation to the moment it should start drawing so layout is settled
   gsap.delayedCall(delay, () => {
+    // Un inline-block descarta su espacio final. Si el <strong> termina en espacio
+    // (el editor suele dejarlo dentro de la negrita: "…de cine </strong>y"), al
+    // cambiar el display se pegaría con la palabra siguiente → "ciney".
+    // Lo movemos fuera antes de tocar el display. Es idempotente: en la segunda
+    // pasada ya no hay espacio final que mover.
+    const ultimo = el.lastChild;
+    if (ultimo && ultimo.nodeType === Node.TEXT_NODE && /\s$/.test(ultimo.nodeValue)) {
+      ultimo.nodeValue = ultimo.nodeValue.replace(/\s+$/, '');
+      el.parentNode.insertBefore(document.createTextNode(' '), el.nextSibling);
+    }
+
     el.style.position = 'relative';
     el.style.display  = 'inline-block';
 
@@ -313,11 +324,15 @@ const wrapper = document.getElementById('circle-scroll-wrapper');
 const circle  = document.getElementById('circle');
 
 if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
+  // Una posición por PANEL (no por diapositiva del CMS): las diapositivas de los
+  // niveles y de las gorras se renderizan juntas en un solo panel, así que la
+  // posición que era de las gorras ({ x: '32vw', y: '38vh' }) ya no se usa.
+  // En el panel fusionado el mundo va abajo a la derecha, y las gorras + su texto
+  // ocupan la media columna izquierda (ver home.antlers.html).
   const allFramePositions = [
     { x: '35vw',  y: '-5vh',  scale: 1    },
     { x: '-30vw', y: '25vh',  scale: 1    },
-    { x: '0vw',   y: '60vh',  scale: 1    },
-    { x: '32vw',  y: '38vh',  scale: 1    },
+    { x: '34vw',  y: '62vh',  scale: 1    },
     { x: '-30vw', y: '0vh',   scale: 1    },
     { x: '0vw',   y: '14vh',  scale: 0.83 },
   ];
@@ -550,7 +565,8 @@ const mobileViaje  = document.getElementById('mobile-viaje');
 const mobileCircle = document.getElementById('mobile-circle');
 
 if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matches) {
-  const mScales = [1.0, 1.25, 1.25, 1.25, 1.25, 1.0];
+  // Una escala por PANEL (ver allFramePositions: niveles + gorras van juntas).
+  const mScales = [1.0, 1.25, 1.25, 1.25, 1.0];
 
   const mPanels = Array.from({ length: 6 }, (_, i) =>
     document.getElementById(`mobile-content-${i + 1}`)
@@ -758,6 +774,20 @@ document.querySelectorAll('[data-date]').forEach(el => {
   }
 });
 
+// Separador de miles. Los precios se guardan planos (1500) porque ese mismo número
+// va en data-item-price de Snipcart; aquí sólo se formatea para mostrarlo.
+document.querySelectorAll('[data-precio]').forEach(el => {
+  const n = Number(el.dataset.precio);
+  if (Number.isFinite(n)) el.textContent = n.toLocaleString('es-MX');
+});
+
+// Fecha suelta en español: "19 de septiembre". El formateador de PHP devuelve el
+// mes en inglés, así que la componemos aquí como el resto de fechas del sitio.
+document.querySelectorAll('[data-fecha-larga]').forEach(el => {
+  const [, mes, dia] = el.dataset.fechaLarga.split('-').map(Number);
+  if (MESES[mes - 1]) el.textContent = `${dia} de ${MESES[mes - 1]}`;
+});
+
 document.querySelectorAll('[data-semana-inicio]').forEach(el => {
   const fmt = d => `${d[2]} de ${MESES[d[1] - 1]}`;
   const start = el.dataset.semanaInicio.split('-').map(Number);
@@ -813,9 +843,14 @@ if (staggerGrid) {
   staggerIO.observe(staggerGrid);
 }
 
-// ── Talleres agotados: marca en gris las semanas sin stock en Snipcart ──────
-const tallerBuyBtns = document.querySelectorAll('.snipcart-add-item[data-item-categories="taller"]');
-if (tallerBuyBtns.length) {
+// ── Disponibilidad según el inventario de Snipcart ─────────────────────────
+// Fuente única de verdad para los lugares: se apagan los botones sin stock y se
+// escribe el "Quedan N lugares" de las tarjetas. Si el inventario no responde o
+// el producto no lleva control de stock, no se afirma nada.
+const tallerBuyBtns = document.querySelectorAll('.snipcart-add-item[data-item-categories*="taller"]');
+const lugaresEls    = document.querySelectorAll('[data-lugares]');
+
+if (tallerBuyBtns.length || lugaresEls.length) {
   fetch('/api/snipcart/stock')
     .then((r) => r.json())
     .then((stock) => {
@@ -827,6 +862,17 @@ if (tallerBuyBtns.length) {
           btn.classList.add('animondo-agotado');
           btn.setAttribute('disabled', 'disabled');
           btn.textContent = 'Lugares agotados';
+        }
+      });
+
+      lugaresEls.forEach((el) => {
+        const s = stock[el.dataset.lugares];
+        if (typeof s !== 'number') return;
+        if (s > 0) {
+          el.textContent = `Quedan ${s} ${s === 1 ? 'lugar' : 'lugares'}`;
+        } else {
+          el.textContent = 'Lugares agotados';
+          el.classList.add('opacity-60');
         }
       });
     })
@@ -846,37 +892,157 @@ if (viajeBtns.length) {
   setViajeTab(0);
 }
 
-// ── Snipcart: Spanish translations ────────────────────────────────────────
+// ── Snipcart: idioma español ──────────────────────────────────────────────
+// Fuente única: public/snipcart-es.json (antes había además un objeto inline
+// aquí, desactualizado, que competía con el JSON en el mismo evento).
 document.addEventListener('snipcart.ready', () => {
-  Snipcart.api.session.setLanguage('es', {
-    default: { loading: 'Cargando...', error: 'Se ha producido un error.', success: '¡Éxito!' },
-    actions: { edit: 'Editar', cancel: 'Cancelar', continue_shopping: 'Seguir comprando', back_to_checkout: 'Volver a pago', checkout: 'Pagar', apply: 'Aplicar', dismiss: 'Descartar', type_address: 'Escribe tu dirección', use_this_address: 'Usar esta dirección', back_to_store: 'Volver a la tienda', close_cart: 'Cerrar carrito', show: 'Mostrar', hide: 'Ocultar', apply_changes: 'Aplicar cambios', yes_use_it: 'Sí, úsalo', save_changes: 'Guardar cambios', back_to_orders: 'Volver a pedidos', change_password: 'Cambiar contraseña', clear_cart: 'Vaciar carrito', add: 'Añadir' },
-    header: { title_cart_summary: 'Resumen carrito', loading: 'Cargando...' },
-    item: { quantity: 'Cantidad', quantity_short: 'Cant.', decrement_quantity: 'Reducir cantidad', increment_quantity: 'Aumentar cantidad', remove_item: 'Quitar artículo' },
-    cart: { subtotal: 'Subtotal', shipping_taxes_calculated_at_checkout: '', loading: 'Estamos preparando tu carrito...', secured_by: 'Asegurado por Snipcart', summary: 'Resumen del pedido', empty: 'Tu carrito está vacío.', invoice_number: 'Factura número', view_detailed_cart: 'Ver detalle del carrito' },
-    order: { loading: 'Estamos recuperando los detalles de tu pedido...', title: 'Pedido' },
-    discount_box: { promo_code: '¿Código promocional?', promo_code_placeholder: 'Código promocional', promocode_applied: 'Promoción aplicada' },
-    address_form: { name: 'Nombre completo', email: 'Email', firstName: 'Nombre', lastName: 'Apellido', address1: 'Dirección', address2: 'Número/Piso', city: 'Ciudad', country: 'País', phone: 'Teléfono', postalCode: 'Código Postal', province: 'Estado / Provincia', dont_see_address: 'No encuentro mi dirección' },
-    billing: { title: 'Facturación', address: 'Dirección de Facturación', continue_to_shipping: 'Seguir a envío', use_different_shipping_address: 'Usar una dirección de envío diferente' },
-    shipping: { title: 'Envío', shipping_to: 'Enviar a:', address: 'Dirección de envío', method: 'Método de envío' },
-    payment: { title: 'Pago', continue_to_payment: 'Continuar a pago', credit_card: 'Tarjeta de Crédito', place_order: 'Confirmar Pedido', preparing_payment_session: 'Preparando pago...', processing_payment: 'Procesando pago...', checkout_with: 'Pagar mediante', no_payment: 'Este pedido no requiere ningún pago.', form: { card_label: 'Tarjeta de Crédito', card_number: 'Número de Tarjeta', card_expiration: 'MM/AA', card_cvv: 'CVV', card_postal_code: 'Código Postal', invalid_number: 'El número de tarjeta no es válido.', invalid_expiration: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', invalid_postal_code: 'Código postal no válido' } },
-    cart_summary: { taxes: 'Impuestos', total: 'Total', subtotal: 'Subtotal', shipping: 'Envío', discount: 'Descuentos', quantity: 'x', calculated_at_checkout: 'Calculado antes del pago' },
-    discounts: { title: 'Descuentos' },
-    guest_checkout: { or: 'O', continue_as_a_guest: 'Continuar como invitado' },
-    signin_form: { signin: 'Identificarte', dont_have_an_account: '¿No tienes una cuenta?', email: 'Email', password: 'Contraseña', forgot_your_password: '¿Olvidaste tu contraseña?', close_form: 'Volver' },
-    register_form: { register: 'Registrarse', already_have_an_account: '¿Ya tienes una cuenta?', email: 'Email', password: 'Contraseña', confirm_password: 'Confirmar contraseña' },
-    customer: { information: 'Información de cliente' },
-    customer_dashboard: { my_account: 'Mi cuenta', ordered_on: 'Comprado el', price: 'Precio', total: 'Total', status: 'Estado', order_details: 'Detalles del Pedido', loading: 'Cargando...', no_orders: 'No se encontraron pedidos.', view_invoice: 'Ver factura', sign_out: 'Salir', orders: 'Pedidos' },
-    confirmation: { thank_you_for_your_order: 'Gracias por tu pedido', async_confirmation_notice: 'Hemos recibido tu pedido y actualmente se está preparando. Recibirás una confirmación en breve.' },
-    checkout: { shipping_taxes_calculated_when_address_provided: 'Los gastos de envío e impuestos se calcularán cuando se indique una dirección.' },
-    errors: { default: 'Ocurrió un error, inténtelo de nuevo o contáctenos.', required: 'Este campo es obligatorio', email: 'Por favor indique una dirección de correo válida', stringEmpty: 'Este campo es obligatorio', emailEmpty: 'El correo electrónico es obligatorio', promo_code_is_invalid: 'Este código promocional no es válido', promo_code_is_expired: 'Esta promoción ha expirado', card: { invalid_number: 'El número de tarjeta no es válido.', invalid_date: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', expired: 'La tarjeta está caducada.', declined: 'La tarjeta ha sido rechazada.' } },
-    digital_goods: { download: 'Descargar' },
-    shippingRates: { loading: 'Cargando...' },
-  });
+  fetch('/snipcart-es.json')
+    .then(r => r.json())
+    .then(es => Snipcart.api.session.setLanguage('es', es))
+    .catch(() => {});
 });
 
-// ── Snipcart: 10% discount when 2+ talleres in cart ───────────────────────
+// ── Snipcart: transporte como producto aparte + desglose de la cuenta ─────
+document.addEventListener('snipcart.ready', () => {
+  const TRANSPORTE_INFO = '<strong>Paquete Animondo Express</strong><br>Transporte seguro. Los puntos de encuentro y horarios serán definidos antes del sábado previo a tu taller y confirmados por WhatsApp.';
+
+  function cartItems() {
+    try { return Snipcart.store.getState().cart.items.items || []; }
+    catch (e) { return []; }
+  }
+
+  // Enlace "+ Agregar transporte" bajo cada taller que lo tenga disponible.
+  function renderTransporteLinks() {
+    const items = cartItems();
+
+    document.querySelectorAll('.snipcart-item-line__title').forEach(titleEl => {
+      // Apila el bloque a lo ancho dentro de la columna del producto (no en el flex del container)
+      const line = titleEl.closest('.snipcart-item-line__product')
+        || titleEl.closest('.snipcart-item-line__container')
+        || titleEl.parentElement;
+      if (!line) return;
+
+      const title = (titleEl.textContent || '').trim();
+
+      // Empareja la fila del carrito con su item del store (por nombre)
+      const item  = items.find(i => (i.name || '').trim() === title) || null;
+      const price = item && item.metadata ? item.metadata.transportePrice : null;
+
+      const existing = line.querySelector('.animondo-transporte-add');
+
+      // No es un taller con transporte disponible → nada
+      if (!item || !price) { if (existing) existing.remove(); return; }
+
+      // ¿el transporte de este taller ya está en el carrito?
+      const transId = 'transporte-' + item.id;
+      if (items.some(it => it.id === transId)) { if (existing) existing.remove(); return; }
+
+      if (existing) return; // ya inyectado
+
+      const box = document.createElement('div');
+      box.className = 'animondo-transporte-add';
+      box.innerHTML = TRANSPORTE_INFO
+        + '<label class="animondo-cp-label">Colonia o Código Postal</label>'
+        + '<input type="text" class="animondo-transporte-cp" placeholder="Colonia o Código Postal">'
+        + '<a role="button">+ Agregar transporte (+$' + price + ' MXN)</a>';
+
+      const cpInput = box.querySelector('.animondo-transporte-cp');
+
+      box.querySelector('a').addEventListener('click', () => {
+        const cp = (cpInput.value || '').trim();
+        if (!cp) {
+          cpInput.classList.add('animondo-cp-error');
+          cpInput.focus();
+          return;
+        }
+        Snipcart.api.cart.items.add({
+          id:       transId,
+          name:     'Transporte Animondo Express — ' + item.name,
+          price:    price,
+          url:      item.url,
+          quantity: 1,
+          customFields: [
+            { name: 'Colonia o Código Postal', value: cp }
+          ],
+        });
+      });
+
+      cpInput.addEventListener('input', () => cpInput.classList.remove('animondo-cp-error'));
+
+      line.appendChild(box);
+    });
+  }
+
+  // ── Desglose de la cuenta antes del botón Pagar ──
+  function money(n) {
+    return '$' + (n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+  }
+
+  function desgloseRow(label, amount, extraClass) {
+    return '<div class="animondo-desglose__row ' + (extraClass || '') + '"><span>' + label + '</span><span>' + money(amount) + '</span></div>';
+  }
+
+  function snipcartTotal() {
+    try {
+      const c = Snipcart.store.getState().cart;
+      return [c.total, c.grandTotal, c.finalTotal].find(v => typeof v === 'number' && isFinite(v)) ?? null;
+    } catch (e) { return null; }
+  }
+
+  function renderDesglose() {
+    const footerBtns = document.querySelector('.snipcart-cart__footer-buttons');
+    const existing   = document.querySelector('.animondo-desglose');
+    const items      = cartItems();
+    if (!footerBtns || !items.length) { if (existing) existing.remove(); return; }
+
+    let tallerSum = 0, transporteSum = 0;
+    items.forEach(it => {
+      const line = (it.price || 0) * (it.quantity || 1);
+      if (String(it.id).indexOf('transporte-') === 0) transporteSum += line;
+      else tallerSum += line;
+    });
+
+    const itemsSum  = tallerSum + transporteSum;
+    let   total     = snipcartTotal();
+    if (!(total > 0)) total = itemsSum;
+    const descuento = Math.max(0, Math.round((itemsSum - total) * 100) / 100);
+
+    let box = existing;
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'animondo-desglose';
+      footerBtns.parentNode.insertBefore(box, footerBtns);
+    }
+
+    let rows = desgloseRow('Talleres', tallerSum);
+    if (descuento > 0)     rows += desgloseRow('Descuento', -descuento);
+    if (transporteSum > 0) rows += desgloseRow('Transporte', transporteSum);
+    rows += desgloseRow('Total', total, 'animondo-desglose__total');
+    box.innerHTML = rows;
+  }
+
+  function renderAll() { renderTransporteLinks(); renderDesglose(); }
+
+  if (Snipcart.store && Snipcart.store.subscribe) {
+    Snipcart.store.subscribe(renderAll);
+  }
+
+  let raf = null;
+  new MutationObserver(() => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = null; renderAll(); });
+  }).observe(document.body, { childList: true, subtree: true });
+
+  renderAll();
+});
+
+// ── Snipcart: 10% al llevar 2+ talleres de verano ─────────────────────────
+// Sólo cuenta artículos de categoría `taller` (el taller de verano). Antes contaba
+// cualquier artículo, así que un taller + su transporte ya disparaban el descuento,
+// y al volver los sabatinos productos también lo habrían disparado. Los sabatinos
+// usan la categoría `taller-sabatino` y su ahorro va en el precio del trimestre.
 const DISCOUNT_ID = 'descuento-verano-10pct';
+const CATEGORIA_DESCUENTO = 'taller';
 let syncingDiscount = false;
 
 function onCartItemChange() {
@@ -889,7 +1055,7 @@ async function syncDiscount() {
   try {
     const state     = Snipcart.store.getState();
     const all       = state.cart.items.items ?? [];
-    const real      = all.filter(i => i.id !== DISCOUNT_ID);
+    const real      = all.filter(i => i.id !== DISCOUNT_ID && (i.categories || []).includes(CATEGORIA_DESCUENTO));
     const existing  = all.find(i => i.id === DISCOUNT_ID);
     const count     = real.length;
     const subtotal  = real.reduce((s, i) => s + i.price * i.quantity, 0);
