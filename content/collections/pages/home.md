@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1787006923
+updated_at: 1787099579
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -130,14 +130,43 @@ marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
 hero_video_file: video/hero-video-2.mp4
 talleres_entries:
-  - dd00debb-9588-4144-aa71-14f8effb67f5
-  - 6382ddc6-e313-4ca9-9c53-00bedb84097e
   - fc361f30-59ac-434a-ac78-dafd900c3887
+  - 6382ddc6-e313-4ca9-9c53-00bedb84097e
+  - dd00debb-9588-4144-aa71-14f8effb67f5
 hero_headline: '<p></p>'
 entradas:
   - 965f7a89-25ba-4d8e-95ea-40bc42966d5a
   - 8d954090-121a-44a1-8ec6-1842f2c8c67d
-  - b1a17a5e-bf7b-4502-accf-feccbe4521d0
+zonas_titulo: 'Un espacio con tres zonas'
+zonas:
+  -
+    id: zonaConstruccion0001
+    type: zona
+    enabled: true
+    titulo: Construcción
+    descripcion: |-
+      Aquí nacen sus personajes
+      y sus mundos.
+    imagen: construccion.jpg
+  -
+    id: zonaMesasDeLuz00002
+    type: zona
+    enabled: true
+    titulo: 'Mesas de Luz'
+    descripcion: |-
+      Aquí dibujan y animan
+      con arena y luz.
+    imagen: stop-motion-lab.jpg
+  -
+    id: zonaStopMotion000003
+    type: zona
+    enabled: true
+    titulo: 'Stop Motion'
+    descripcion: |-
+      Aquí los objetos cobran
+      vida en sus manos
+    imagen: mesas-2d.jpg
+galeria_animautas_titulo: 'Esto lo hicieron animautas en Animondo'
 instructores_titulo: Instructores
 personajes_en_posicion_absoluta:
   - 475d4e9f-948e-4a62-8cb1-5bd643118b6a

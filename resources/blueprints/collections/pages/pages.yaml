@@ -185,6 +185,68 @@ tabs:
               display: Talleres
               collections:
                 - talleres
+  zonas:
+    display: Zonas
+    sections:
+      -
+        fields:
+          -
+            handle: zonas_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Un espacio con tres zonas'
+          -
+            handle: zonas
+            field:
+              type: replicator
+              display: Zonas
+              instructions: 'Una tarjeta por zona. El orden aquí es el orden en la página.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    zona:
+                      display: Zona
+                      fields:
+                        -
+                          handle: titulo
+                          field:
+                            type: text
+                            display: Título
+                        -
+                          handle: descripcion
+                          field:
+                            type: textarea
+                            display: Descripción
+                            instructions: 'Una o dos líneas.'
+                        -
+                          handle: imagen
+                          field:
+                            type: assets
+                            display: Imagen
+                            instructions: 'Si la dejas vacía se muestra un recuadro en blanco.'
+                            max_files: 1
+                            container: assets
+  galeria_animautas:
+    display: 'Galería animautas'
+    sections:
+      -
+        fields:
+          -
+            handle: galeria_animautas_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Esto lo hicieron animautas en Animondo'
+          -
+            handle: galeria_animautas
+            field:
+              type: assets
+              display: Imágenes
+              instructions: 'Una tarjeta por imagen. El orden aquí es el orden en la página.'
+              container: assets
+              mode: grid
   instructores:
     display: Instructores
     sections:

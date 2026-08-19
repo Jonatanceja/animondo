@@ -235,8 +235,17 @@
         {{ personaje }}
         <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
-        <div class="absolute left-[8%] right-[8%] -top-24 h-56 pointer-events-none z-10 sm:left-[22%] sm:right-auto sm:w-[38%] sm:-top-36 sm:bottom-0 sm:h-auto">
-            <img src="{{ imagen:url }}" alt="Personaje de animondo" class="w-full h-full object-contain object-bottom">
+        {{# Va por el partial y no por un <img> suelto, para que reproduzca el Lottie
+            si el personaje lo tiene y sirva WebP si no. El tamaño se da por ANCHO en
+            el contenedor: en la rama Lottie el partial aplica la clase a un <span>
+            que saca su alto del <img> interior, así que un alto fijo lo dejaría sin
+            ancho. El `relative` es el contexto del <dotlottie-player> absoluto.
+            El scale es sólo para la versión animada: el .lottie viene en un lienzo
+            16:9 con mucho margen, así que el personaje se ve más chico que su PNG
+            al mismo ancho de caja. `origin-bottom` para que crezca hacia arriba y
+            no se despegue del borde de la tarjeta. Un personaje en PNG no lo toca. #}}
+        <div class="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-16 sm:left-[24%] sm:translate-x-0 sm:w-[22%] sm:top-auto sm:-bottom-[228px] [&_dotlottie-player]:scale-[3.2] [&_dotlottie-player]:origin-bottom">
+            {{ partial:_personaje-media class="relative block w-full h-auto object-contain" alt="Personaje de animondo" }}
         </div>
         {{ /if }}
         {{ /personaje }}
@@ -255,7 +264,7 @@
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if hora_inicio }}
             <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}<br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
+                <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span><br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
             <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
             {{ else }}
             <p class="font-display font-light text-2xl text-[#323E81] mt-2">Próximamente</p>
@@ -278,7 +287,7 @@
             {{ personaje }}
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
             {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
             </div>
             {{ /if }}
@@ -287,7 +296,7 @@
             {{ collection:personajes limit="1" }}
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
             {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
             </div>
             {{ /if }}
@@ -296,18 +305,21 @@
             {{ collection:personajes limit="1" offset="1" }}
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
             {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
                 <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
             </div>
             {{ /if }}
             {{ /collection:personajes }}
             {{ /if }}
 
-            <div class="absolute bottom-0 inset-x-0 px-6 pb-8 text-center z-20">
+            {{# Sin horario el bloque es mucho más corto (sólo título y "Próximamente"),
+                    así que el título caía más abajo que en las tarjetas con horario.
+                    Más padding inferior lo sube a la misma altura. #}}
+                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if hora_inicio }}pb-8{{ else }}pb-24{{ /if }}">
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
                 {{ if hora_inicio }}
                 <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                    {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a Viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}
+                    <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span>
                     de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
                 </p>
                 <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
@@ -327,12 +339,77 @@
 </section>
 {{ /if }}
 
+{{# ── Zonas ───────────────────────────────────────────────────────────────
+    Galería repetible: una tarjeta por zona capturada en el CMS. Con 3 zonas da
+    la retícula de la referencia; con más, bajan de tres en tres. #}}
+{{ if zonas }}
+<section class="px-4 sm:px-6 py-16 sm:py-24">
+
+    {{ if zonas_titulo }}
+    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-16 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+        {{ zonas_titulo }}
+    </h2>
+    {{ /if }}
+
+    <div class="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto" data-stagger-cards>
+        {{ zonas }}
+        {{ if type == 'zona' }}
+        <div class="group" data-stagger-child>
+            {{ if titulo }}
+            <h3 class="font-display font-bold text-zinc-900 text-2xl sm:text-3xl text-center leading-tight">{{ titulo }}</h3>
+            {{ /if }}
+            {{ if descripcion }}
+            <p class="font-display font-bold text-zinc-900 text-lg sm:text-xl text-center leading-snug mt-2">{{ descripcion | nl2br }}</p>
+            {{ /if }}
+
+            {{# Sin imagen queda el recuadro en blanco, como en la referencia.
+                El `overflow-hidden` es lo que recorta el zoom al pasar el cursor. #}}
+            <div class="mt-6 aspect-[4/3] rounded-[1.5rem] bg-white overflow-hidden">
+                {{ if imagen }}
+                <img src="{{ imagen:url }}" alt="{{ titulo }}"
+                     class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+                {{ /if }}
+            </div>
+        </div>
+        {{ /if }}
+        {{ /zonas }}
+    </div>
+
+</section>
+{{ /if }}
+
+{{# ── Galería de animautas ─────────────────────────────────────────────────
+    Misma retícula que Zonas, pero sólo imágenes: el campo es un `assets`
+    múltiple, no un replicator, porque no hay texto por tarjeta. #}}
+{{ if galeria_animautas }}
+<section class="px-4 sm:px-6 py-16 sm:py-24">
+
+    {{ if galeria_animautas_titulo }}
+    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-16 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+        {{ galeria_animautas_titulo }}
+    </h2>
+    {{ /if }}
+
+    <div class="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto" data-stagger-cards>
+        {{ galeria_animautas }}
+        <div class="group aspect-[4/3] rounded-[1.5rem] bg-white overflow-hidden" data-stagger-child>
+            <img src="{{ url }}" alt="{{ alt }}"
+                 class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+        </div>
+        {{ /galeria_animautas }}
+    </div>
+
+</section>
+{{ /if }}
+
 {{# ── Instructores section ────────────────────────────────────────────────── #}}
 {{ if entradas }}
 <section class="px-4 sm:px-6 pt-16 pb-0 sm:pt-24 sm:pb-0 overflow-hidden">
 
     {{ if instructores_titulo }}
-    <h2 class="font-display font-bold text-center mb-8 sm:mb-10 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    {{# Margen amplio a propósito: la foto de René sobresale por encima de su
+        tarjeta, así que el aire real con el título es bastante menor que este valor. #}}
+    <h2 class="font-display font-bold text-center mb-12 sm:mb-24 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ instructores_titulo }}
     </h2>
     {{ /if }}
@@ -343,41 +420,47 @@
             {{ entradas }}
 
             {{ if count == 1 }}
-            {{# ── Tarjeta grande ── #}}
-            <div class="group relative w-full rounded-[2rem] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center min-h-[18rem] sm:min-h-[24rem]"
+            {{# ── Tarjeta: foto arriba, nombre abajo (misma forma que en móvil) ──
+                Antes era una tarjeta ancha con el nombre a la izquierda y la foto a la
+                derecha. Ahora usa la forma de móvil a media columna, como la siguiente.
+                Sus personajes usan los valores de móvil en todos los tamaños: las
+                variantes `sm:` estaban calculadas para la tarjeta ancha que ya no existe.
+                Van a nivel de tarjeta y no dentro de la foto porque ésta recorta. #}}
+            <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem] flex flex-col"
                  style="background: linear-gradient(to right, #AFFFEC, #0A6DB4);">
                 {{ if url }}<a href="{{ url }}" class="absolute inset-0 z-30" aria-label="Ver biografía de {{ title }}"></a>{{ /if }}
-                <div class="w-full sm:w-1/2 relative z-10 sm:pr-2 flex flex-col">
-                    <h3 class="font-display font-bold text-[#323E81] text-3xl sm:text-6xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
-                </div>
                 {{ if foto_de_instructor }}
-                <div class="relative w-full mt-6 sm:mt-0 sm:absolute sm:right-0 sm:-top-16 sm:bottom-0 sm:w-[52%]">
-                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-auto sm:h-full object-cover grayscale rounded-[1.5rem]">
-                    {{# ── Personajes 2 y 3, hover en móvil, fijos en escritorio ── #}}
-                    {{ personajes_en_posicion_absoluta }}
-                    {{ if imagen and count == 2 }}
-                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-20 top-10 sm:left-34 left-16 sm:w-34 w-16 transform -rotate-14" }}
-                    {{ elseif imagen and count == 3 }}
-                    {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-20 top-10 sm:right-24 right-12 sm:w-34 w-16 transform rotate-14" }}
-                    {{ /if }}
-                    {{ /personajes_en_posicion_absoluta }}
+                {{# Sin recorte: la foto se muestra completa, con su proporción real. El
+                    contenedor conserva el mismo alto 2:1 que la tarjeta de al lado, y la
+                    imagen se ancla a su borde inferior, así las dos fotos terminan a la
+                    misma altura y lo que sobra de ésta sobresale por arriba. Sin
+                    `overflow-hidden` para que ese sobrante se vea. #}}
+                <div class="relative w-full aspect-[2/1] mb-4">
+                    <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="absolute bottom-0 inset-x-0 w-full h-auto grayscale rounded-[1.25rem]">
                 </div>
                 {{ /if }}
-                {{# ── Personaje 1 centrado (solo escritorio) ── #}}
+                <div class="mt-auto flex items-center justify-center gap-4">
+                    <h3 class="font-display font-bold text-[#323E81] text-2xl sm:text-5xl leading-[0.95] text-center">{{ title | replace:' ':'<br>' }}</h3>
+                </div>
+                {{# ── Personajes 1 (casa), 2 (esqueleto) y 3 (Cornelio) sobre esta tarjeta ── #}}
                 {{ personajes_en_posicion_absoluta }}
                 {{ if imagen and count == 1 }}
-                {{ partial:_personaje-media class="absolute z-20 pointer-events-none sm:top-1/2 bottom-3 sm:left-1/2 left-3 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[15%] w-24" }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none bottom-24 left-3 w-24" }}
+                {{ elseif imagen and count == 2 }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none top-6 left-24 w-32 transform -rotate-14" }}
+                {{ elseif imagen and count == 3 }}
+                <div class="absolute z-20 pointer-events-none top-0 right-16 w-40 [&_dotlottie-player]:scale-[2.6]">{{ partial:_personaje-media class="relative block w-full h-auto object-contain" }}</div>
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>
 
             {{ elseif count == 2 }}
             {{# ── Tarjeta pequeña: foto arriba, nombre abajo ── #}}
-            <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem] flex flex-col gap-4"
+            <div class="relative w-full sm:w-[calc(50%-0.75rem)] rounded-[2rem] p-5 min-h-[16rem] sm:min-h-[18rem] flex flex-col"
                  style="background: linear-gradient(135deg, #F5E554, #F57F20);">
                 {{ if url }}<a href="{{ url }}" class="absolute inset-0 z-30" aria-label="Ver biografía de {{ title }}"></a>{{ /if }}
                 {{ if foto_de_instructor }}
-                <div class="w-full aspect-[2/1] rounded-[1.25rem] overflow-hidden">
+                <div class="w-full aspect-[2/1] rounded-[1.25rem] overflow-hidden mb-4">
                     <img src="{{ foto_de_instructor:url }}" alt="{{ title }}" class="w-full h-full object-cover grayscale">
                 </div>
                 {{ /if }}

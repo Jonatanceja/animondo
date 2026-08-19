@@ -745,7 +745,9 @@ const MESES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agos
 document.querySelectorAll('.taller-dias[data-dias]').forEach(el => {
   const dias = el.dataset.dias ? el.dataset.dias.split(',').map(s => s.trim()) : [];
   const isWeekdays = WEEKDAYS.every(d => dias.includes(d)) && !dias.includes('sabado') && !dias.includes('domingo');
-  if (isWeekdays) el.textContent = 'De lunes a viernes';
+  // Las tarjetas de la home lo usan en medio de una frase, así que pueden pedir
+  // su propia redacción con data-dias-texto.
+  if (isWeekdays) el.textContent = el.dataset.diasTexto || 'De lunes a viernes';
 });
 
 document.querySelectorAll('[data-time]').forEach(el => {

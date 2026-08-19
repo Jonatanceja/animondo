@@ -39,7 +39,7 @@
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if hora_inicio }}
             <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}<br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
+                <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span><br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
             </p>
             <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
             {{ else }}
@@ -88,11 +88,14 @@
             {{ /collection:personajes }}
             {{ /if }}
 
-            <div class="absolute bottom-0 inset-x-0 px-6 pb-8 text-center z-20">
+            {{# Sin horario el bloque es mucho más corto (sólo título y "Próximamente"),
+                    así que el título caía más abajo que en las tarjetas con horario.
+                    Más padding inferior lo sube a la misma altura. #}}
+                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if hora_inicio }}pb-8{{ else }}pb-24{{ /if }}">
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
                 {{ if hora_inicio }}
                 <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                    {{ if (dias contains 'lunes') && (dias contains 'martes') && (dias contains 'miercoles') && (dias contains 'jueves') && (dias contains 'viernes') }}de lunes a Viernes{{ else }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}{{ /if }}
+                    <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span>
                     de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}                </p>
                 <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
                 {{ else }}
