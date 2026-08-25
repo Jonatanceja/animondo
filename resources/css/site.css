@@ -589,10 +589,329 @@ html, body {
 
 
 
+/* ── Acordeón de preguntas frecuentes ──
+   Se anima el ::details-content del <details> nativo, que es lo único que
+   permite abrir con transición sin reimplementar el acordeón en JS. Necesita
+   interpolate-size para poder animar HACIA una altura auto, y el
+   allow-discrete para que el contenido siga visible mientras se cierra.
+   Donde no exista ::details-content el acordeón abre de golpe, que es
+   exactamente el comportamiento nativo. */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.35s ease, content-visibility 0.35s allow-discrete;
+}
+
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+
+/* Safari pinta su propio marcador aunque el summary sea list-none. */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
 /* ── Taller agotado (botón "Reservar lugar" sin stock) ── */
 .animondo-agotado {
   background-color: #d4d4d8 !important;
   color: #71717a !important;
   cursor: not-allowed !important;
   pointer-events: none;
+}
+
+/* ── Galerías con carrusel + lightbox (Espacios y Trabajos) ──
+   Un solo componente para las dos galerías de la home. El carrusel es un
+   scroller con scroll-snap, así que el swipe en táctil es nativo y el JS sólo
+   pone flechas, puntos y el lightbox. Cuántas tarjetas caben por fila lo
+   decide cada plantilla con sus clases de Tailwind; aquí sólo se define que
+   cada diapositiva ocupa el ancho completo. */
+.galeria {
+  position: relative;
+}
+
+.galeria-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.galeria-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* El arrastre nativo de una imagen o un video secuestra el gesto y lo
+   convierte en un drag-and-drop del navegador. */
+.galeria-track img,
+.galeria-track video {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.galeria-track.es-arrastrable {
+  cursor: grab;
+}
+
+.galeria-track.esta-arrastrando {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.galeria-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  /* Sin esto el `align-items: stretch` del flex estira la retícula y las
+     tarjetas de la última diapositiva (que va incompleta) crecen de más. */
+  align-content: start;
+}
+
+.galeria-item {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+/* ── Botón de reproducir ──
+   Sólo aparece al pasar el cursor. En táctil no existe el hover, así que ahí
+   se queda visible: si no, nada distinguiría un video de una foto. */
+.galeria-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Un velo detrás del botón: el triángulo blanco tiene que leerse igual sobre
+   un fotograma claro que sobre uno oscuro. */
+.galeria-play::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center,
+                              rgba(9, 9, 11, 0.45) 0%,
+                              rgba(9, 9, 11, 0.12) 60%,
+                              transparent 100%);
+}
+
+.galeria-play svg {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  transform: scale(0.82);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 12px rgba(9, 9, 11, 0.35));
+}
+
+.galeria-item:hover .galeria-play,
+.galeria-item:focus-visible .galeria-play {
+  opacity: 1;
+}
+
+.galeria-item:hover .galeria-play svg,
+.galeria-item:focus-visible .galeria-play svg {
+  transform: scale(1);
+}
+
+@media (hover: none) {
+  .galeria-play {
+    opacity: 1;
+  }
+
+  .galeria-play svg {
+    transform: scale(1);
+  }
+}
+
+/* ── Portada de una zona ──
+   Se revela igual que el botón de reproducir: sólo en hover, y siempre visible
+   en táctil, donde no hay hover que revele nada. El velo va en el contenedor y
+   la pastilla dentro, para no depender de `::after` ni pelear por el z-index. */
+.galeria-vermas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(9, 9, 11, 0.3);
+  transition: opacity 0.3s ease;
+}
+
+.galeria-vermas-pastilla {
+  padding: 0.65rem 1.35rem;
+  border-radius: 9999px;
+  background: #323E81;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(9, 9, 11, 0.35);
+  transform: scale(0.88);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.galeria-item:hover .galeria-vermas,
+.galeria-item:focus-visible .galeria-vermas {
+  opacity: 1;
+}
+
+.galeria-item:hover .galeria-vermas-pastilla,
+.galeria-item:focus-visible .galeria-vermas-pastilla {
+  transform: scale(1);
+}
+
+@media (hover: none) {
+  .galeria-vermas {
+    opacity: 1;
+  }
+
+  .galeria-vermas-pastilla {
+    transform: scale(1);
+  }
+}
+
+/* ── Puntos ── */
+.galeria-puntos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.galeria-punto {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  background: #d4d4d8;
+  transition: background 0.25s ease, width 0.25s ease;
+}
+
+.galeria-punto[aria-current='true'] {
+  width: 1.75rem;
+  background: #323E81;
+}
+
+/* ── Lightbox ──
+   Lo construye site.js una sola vez y lo comparten las dos galerías. */
+.galeria-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 1rem 5.5rem;
+  background: rgba(9, 9, 11, 0.94);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.galeria-lightbox[hidden] {
+  display: none;
+}
+
+.galeria-lightbox.is-open {
+  opacity: 1;
+}
+
+.galeria-lb-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.galeria-lb-stage img,
+.galeria-lb-stage video {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: 1rem;
+  background: #000;
+}
+
+.galeria-lb-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding-bottom: 0.25rem;
+  transition: background 0.2s ease;
+}
+
+.galeria-lb-nav {
+  position: absolute;
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding-bottom: 0.2rem;
+  transform: translateY(-50%);
+  transition: background 0.2s ease;
+}
+
+.galeria-lb-cerrar:hover,
+.galeria-lb-nav:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.galeria-lb-prev { left: 0.75rem; }
+.galeria-lb-next { right: 0.75rem; }
+
+@media (min-width: 1024px) {
+  .galeria-lb-prev { left: 2rem; }
+  .galeria-lb-next { right: 2rem; }
+}
+
+.galeria-lb-pie {
+  position: absolute;
+  left: 50%;
+  bottom: 2.75rem;
+  transform: translateX(-50%);
+  width: min(90%, 44rem);
+  text-align: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+}
+
+.galeria-lb-pie[hidden] {
+  display: none;
+}
+
+.galeria-lb-cuenta {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
 }

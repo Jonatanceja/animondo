@@ -201,7 +201,7 @@ tabs:
             field:
               type: replicator
               display: Zonas
-              instructions: 'Una tarjeta por zona. El orden aquí es el orden en la página.'
+              instructions: 'Una tarjeta por zona, de seis en seis. El orden aquí es el orden en la página y también el del lightbox.'
               sets:
                 main:
                   display: Principal
@@ -224,10 +224,18 @@ tabs:
                           handle: imagen
                           field:
                             type: assets
-                            display: Imagen
-                            instructions: 'Si la dejas vacía se muestra un recuadro en blanco.'
+                            display: Portada
+                            instructions: 'La foto que se ve en la página. Si la dejas vacía se muestra un recuadro en blanco.'
                             max_files: 1
                             container: assets
+                        -
+                          handle: fotos
+                          field:
+                            type: assets
+                            display: 'Fotos de la zona'
+                            instructions: 'Las que se abren al hacer clic en la portada. La portada va primero sola, no hace falta repetirla aquí.'
+                            container: assets
+                            mode: grid
   galeria_animautas:
     display: 'Galería animautas'
     sections:
@@ -243,10 +251,45 @@ tabs:
             handle: galeria_animautas
             field:
               type: assets
-              display: Imágenes
-              instructions: 'Una tarjeta por imagen. El orden aquí es el orden en la página.'
+              display: 'Videos e imágenes'
+              instructions: 'Una tarjeta por archivo, de seis en seis. El orden aquí es el orden en la página y también el del lightbox.'
               container: assets
               mode: grid
+  faq:
+    display: 'Preguntas frecuentes'
+    sections:
+      -
+        fields:
+          -
+            handle: faq_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Preguntas frecuentes'
+          -
+            handle: faq
+            field:
+              type: replicator
+              display: Preguntas
+              instructions: 'Una tarjeta por pregunta. El orden aquí es el orden en la página.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    pregunta:
+                      display: Pregunta
+                      fields:
+                        -
+                          handle: pregunta
+                          field:
+                            type: text
+                            display: Pregunta
+                        -
+                          handle: respuesta
+                          field:
+                            type: textarea
+                            display: Respuesta
+                            instructions: 'Los saltos de línea se respetan.'
   instructores:
     display: Instructores
     sections:

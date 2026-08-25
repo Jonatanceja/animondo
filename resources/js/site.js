@@ -833,9 +833,12 @@ if (tallerChar) {
   charIO.observe(tallerChar);
 }
 
-const staggerGrid = document.querySelector('[data-stagger-cards]');
-if (staggerGrid) {
+// Cada retícula lleva su propio observador: la home ya tiene varias (zonas,
+// galería de animautas, preguntas frecuentes) y con un solo querySelector las
+// demás se quedaban sin entrada.
+document.querySelectorAll('[data-stagger-cards]').forEach((staggerGrid) => {
   const staggerCards = staggerGrid.querySelectorAll('[data-stagger-child]');
+  if (!staggerCards.length) return;
   gsap.set(staggerCards, { opacity: 0, y: 36 });
   const staggerIO = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting) return;
@@ -843,7 +846,7 @@ if (staggerGrid) {
     staggerIO.disconnect();
   }, { threshold: 0.1 });
   staggerIO.observe(staggerGrid);
-}
+});
 
 // ── Disponibilidad según el inventario de Snipcart ─────────────────────────
 // Fuente única de verdad para los lugares: se apagan los botones sin stock y se
@@ -1085,3 +1088,314 @@ document.addEventListener('snipcart.ready', () => {
   Snipcart.events.on('item.updated', onCartItemChange);
 });
 
+
+// ── Galerías con carrusel y lightbox ───────────────────────────────────────
+// Un solo componente para las dos galerías de la home: Espacios (fotos) y
+// Trabajos (videos). El carrusel se apoya en scroll-snap, así que el swipe en
+// táctil ya lo resuelve el navegador; aquí sólo van las flechas, los puntos y
+// el lightbox. El lightbox recorre TODOS los elementos de su galería, no sólo
+// los de la diapositiva visible.
+const galerias = Array.from(document.querySelectorAll('[data-galeria]'));
+
+if (galerias.length) {
+  // Las vistas previas nacen con preload="none" (son varios MB por video) y
+  // sólo piden metadata cuando la tarjeta se acerca a la pantalla. Como el
+  // track recorta horizontalmente, las diapositivas siguientes no intersectan
+  // hasta que el usuario navega hacia ellas.
+  //
+  // Esto sólo ahorra algo si el MP4 lleva su átomo `moov` al principio
+  // (`ffmpeg -movflags +faststart`). Si va al final, que es como salen de casi
+  // cualquier editor, el navegador tiene que descargar el archivo ENTERO para
+  // leer la metadata, y pedir el primer fotograma acaba costando lo mismo que
+  // reproducir el video. Los diez de la home ya vienen convertidos; los que se
+  // suban después desde el CP hay que pasarlos por lo mismo.
+  const previewIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(({ isIntersecting, target }) => {
+      if (!isIntersecting) return;
+      target.preload = 'metadata';
+      target.load();
+      obs.unobserve(target);
+    });
+  }, { rootMargin: '200px' });
+
+  // ── Lightbox compartido ──
+  // Trabaja con descriptores planos ({ tipo, src, alt, pie }) y no con nodos,
+  // porque el conjunto que abre una tarjeta no siempre son sus hermanas: en
+  // Trabajos es la galería entera, y en Espacios cada zona trae la suya.
+  let lb = null;          // el nodo, construido la primera vez que se abre
+  let lbItems = [];       // los descriptores del conjunto en curso
+  let lbIndex = 0;
+  let lbFocoPrevio = null;
+  let lbOverflow = '';
+
+  function construirLightbox() {
+    const el = document.createElement('div');
+    el.className = 'galeria-lightbox';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Galería');
+    el.hidden = true;
+    el.innerHTML = `
+      <button type="button" class="galeria-lb-cerrar" data-lb-cerrar aria-label="Cerrar">&times;</button>
+      <button type="button" class="galeria-lb-nav galeria-lb-prev" data-lb-prev aria-label="Anterior">&#8249;</button>
+      <div class="galeria-lb-stage" data-lb-stage></div>
+      <button type="button" class="galeria-lb-nav galeria-lb-next" data-lb-next aria-label="Siguiente">&#8250;</button>
+      <p class="galeria-lb-pie" data-lb-pie hidden></p>
+      <p class="galeria-lb-cuenta" data-lb-cuenta></p>`;
+    document.body.appendChild(el);
+
+    el.querySelector('[data-lb-cerrar]').addEventListener('click', cerrarLightbox);
+    el.querySelector('[data-lb-prev]').addEventListener('click', () => mover(-1));
+    el.querySelector('[data-lb-next]').addEventListener('click', () => mover(1));
+
+    // Clic en el fondo cierra; clic en la imagen o el video, no.
+    el.addEventListener('click', (e) => {
+      if (e.target === el || e.target === el.querySelector('[data-lb-stage]')) cerrarLightbox();
+    });
+
+    // Con el foco dentro del <video>, las flechas son para buscar en la pista:
+    // ahí no se navega la galería. Escape siempre cierra.
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { cerrarLightbox(); return; }
+      if (e.target.tagName === 'VIDEO') return;
+      if (e.key === 'ArrowLeft')  mover(-1);
+      if (e.key === 'ArrowRight') mover(1);
+    });
+
+    // Swipe, salvo sobre el video (ahí el gesto es para sus controles).
+    let x0 = null;
+    el.addEventListener('touchstart', (e) => {
+      x0 = e.target.closest('video') ? null : e.touches[0].clientX;
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) mover(dx < 0 ? 1 : -1);
+      x0 = null;
+    }, { passive: true });
+
+    return el;
+  }
+
+  function limpiarEscenario(stage) {
+    // Quitar el <video> del DOM no siempre corta la descarga: hay que pausarlo
+    // y vaciarle el src antes de tirarlo.
+    const previo = stage.querySelector('video');
+    if (previo) {
+      previo.pause();
+      previo.removeAttribute('src');
+      previo.load();
+    }
+    stage.replaceChildren();
+  }
+
+  function pintarLightbox() {
+    const item  = lbItems[lbIndex];
+    const stage = lb.querySelector('[data-lb-stage]');
+    limpiarEscenario(stage);
+
+    if (item.tipo === 'video') {
+      const video = document.createElement('video');
+      video.src         = item.src;
+      video.controls    = true;
+      video.playsInline = true;
+      video.preload     = 'auto';
+      stage.appendChild(video);
+      // Se abrió por un clic, así que normalmente el navegador deja arrancar
+      // con sonido. Si lo bloquea, quedan los controles.
+      video.play().catch(() => {});
+    } else {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt || '';
+      stage.appendChild(img);
+    }
+
+    const pie = lb.querySelector('[data-lb-pie]');
+    pie.textContent = item.pie || '';
+    pie.hidden = !item.pie;
+
+    lb.querySelector('[data-lb-cuenta]').textContent = `${lbIndex + 1} / ${lbItems.length}`;
+
+    const solaUna = lbItems.length < 2;
+    lb.querySelector('[data-lb-prev]').hidden = solaUna;
+    lb.querySelector('[data-lb-next]').hidden = solaUna;
+  }
+
+  function mover(paso) {
+    lbIndex = (lbIndex + paso + lbItems.length) % lbItems.length;
+    pintarLightbox();
+  }
+
+  function abrirLightbox(items, indice) {
+    lb = lb || construirLightbox();
+    lbItems = items;
+    lbIndex = indice;
+    lbFocoPrevio = document.activeElement;
+
+    lb.hidden = false;
+    pintarLightbox();
+    // Un frame para que la transición de opacidad tenga de dónde salir.
+    requestAnimationFrame(() => lb.classList.add('is-open'));
+
+    lbOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('[data-lb-cerrar]').focus();
+  }
+
+  function cerrarLightbox() {
+    if (!lb || lb.hidden) return;
+    limpiarEscenario(lb.querySelector('[data-lb-stage]'));
+    lb.classList.remove('is-open');
+    lb.hidden = true;
+    document.body.style.overflow = lbOverflow;
+    if (lbFocoPrevio) lbFocoPrevio.focus();
+  }
+
+  // ── Carrusel ──
+  // Sin flechas: se cambia de diapositiva con el dedo (el scroll-snap del
+  // navegador), arrastrando con el mouse, o con los puntos.
+  galerias.forEach((galeria) => {
+    const track  = galeria.querySelector('[data-galeria-track]');
+    const slides = Array.from(track.querySelectorAll('.galeria-slide'));
+    const items  = Array.from(galeria.querySelectorAll('[data-galeria-item]'));
+    const puntos = galeria.querySelector('[data-galeria-puntos]');
+
+    track.querySelectorAll('[data-galeria-preview]').forEach((v) => previewIO.observe(v));
+
+    const descriptor = (el) => ({
+      tipo: el.dataset.tipo,
+      src:  el.dataset.src,
+      alt:  el.dataset.alt,
+      pie:  el.dataset.pie,
+    });
+
+    // Qué se abre al hacer clic en una tarjeta. Si la tarjeta trae fotos
+    // propias escondidas es una portada: abre SU galería, con la portada al
+    // frente. Si no, abre la galería entera empezando por ella misma.
+    function conjuntoDe(item) {
+      const propias = item.querySelectorAll('[data-galeria-foto]');
+      if (!propias.length) return null;
+
+      const portada = descriptor(item);
+      const lista   = [portada];
+      propias.forEach((f) => {
+        // Repetir la portada dentro del campo es el error fácil de cometer
+        // desde el CP, y saldría dos veces seguidas.
+        if (f.dataset.src === portada.src) return;
+        lista.push({ tipo: 'imagen', src: f.dataset.src, alt: f.dataset.alt, pie: portada.pie });
+      });
+      return lista;
+    }
+
+    // El contador de la portada: `| count` no funciona sobre el query builder
+    // de un campo `assets`, así que se cuenta aquí, ya deduplicado.
+    items.forEach((item) => {
+      const insignia = item.querySelector('[data-galeria-vermas]');
+      if (!insignia) return;
+      const propio = conjuntoDe(item);
+      if (!propio) { insignia.closest('.galeria-vermas').remove(); return; }
+      insignia.textContent = propio.length === 1 ? 'Ver la foto' : `Ver las ${propio.length} fotos`;
+    });
+
+    // Firefox ignora `-webkit-user-drag`, así que las imágenes se desactivan
+    // también por atributo: si no, arrastrar una arranca un drag-and-drop del
+    // navegador y se pierde el gesto.
+    track.querySelectorAll('img').forEach((img) => { img.draggable = false; });
+
+    // Un arrastre que recorrió medio carrusel termina en un `click` sobre la
+    // tarjeta que quedó bajo el cursor. Ese no debe abrir el lightbox.
+    let recorrido = 0;
+    const galeriaEntera = items.map(descriptor);
+
+    items.forEach((item, i) => item.addEventListener('click', () => {
+      // La marca se consume aquí: así el siguiente clic (o un Enter desde el
+      // teclado, que no pasa por pointerdown) no se queda bloqueado.
+      if (recorrido > 8) { recorrido = 0; return; }
+      const propio = conjuntoDe(item);
+      if (propio) abrirLightbox(propio, 0);
+      else abrirLightbox(galeriaEntera, i);
+    }));
+
+    // Con una sola diapositiva no hay nada que navegar.
+    if (slides.length < 2) {
+      if (puntos) puntos.setAttribute('hidden', '');
+      return;
+    }
+
+    let actual = 0;
+
+    function irA(i) {
+      track.scrollTo({ left: track.clientWidth * i, behavior: 'smooth' });
+    }
+
+    const bolitas = slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'galeria-punto';
+      b.setAttribute('aria-label', `Ir al grupo ${i + 1} de ${slides.length}`);
+      b.addEventListener('click', () => irA(i));
+      puntos.appendChild(b);
+      return b;
+    });
+
+    function sincronizar() {
+      // La diapositiva activa es la que quedó más cerca del borde izquierdo.
+      actual = Math.min(Math.max(Math.round(track.scrollLeft / track.clientWidth), 0), slides.length - 1);
+      bolitas.forEach((b, i) => b.setAttribute('aria-current', String(i === actual)));
+    }
+
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sincronizar);
+    }, { passive: true });
+    window.addEventListener('resize', sincronizar);
+
+    // ── Arrastre con el mouse ──
+    // En táctil no se toca nada: el scroll-snap ya da el swipe, y meterse ahí
+    // sólo rompería el desplazamiento vertical de la página.
+    track.classList.add('es-arrastrable');
+
+    let arrastrando = false;
+    let xInicio     = 0;
+    let scrollIni   = 0;
+
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch' || e.button !== 0) return;
+      arrastrando = true;
+      recorrido   = 0;
+      xInicio     = e.clientX;
+      scrollIni   = track.scrollLeft;
+      // El snap y el scroll suave pelean con mover `scrollLeft` a mano: se
+      // apagan mientras dura el gesto y vuelven al soltar.
+      track.style.scrollSnapType = 'none';
+      track.style.scrollBehavior = 'auto';
+      track.classList.add('esta-arrastrando');
+    });
+
+    // En window y no en el track: si el cursor se sale del carrusel a media
+    // pasada, el gesto tiene que seguir vivo.
+    window.addEventListener('pointermove', (e) => {
+      if (!arrastrando) return;
+      const dx  = e.clientX - xInicio;
+      recorrido = Math.max(recorrido, Math.abs(dx));
+      track.scrollLeft = scrollIni - dx;
+    });
+
+    function soltar() {
+      if (!arrastrando) return;
+      arrastrando = false;
+      track.classList.remove('esta-arrastrando');
+      track.style.scrollBehavior = '';
+      track.style.scrollSnapType = '';
+      // Devolver el snap no siempre re-encaja solo, así que se encaja a mano.
+      irA(Math.round(track.scrollLeft / track.clientWidth));
+    }
+
+    window.addEventListener('pointerup', soltar);
+    window.addEventListener('pointercancel', soltar);
+
+    sincronizar();
+  });
+}

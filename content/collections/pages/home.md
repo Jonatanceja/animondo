@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1787099579
+updated_at: 1787688089
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -147,7 +147,12 @@ zonas:
     descripcion: |-
       Aquí nacen sus personajes
       y sus mundos.
-    imagen: construccion.jpg
+    imagen: construccion-5.jpg
+    fotos:
+      - construccion-7.jpg
+      - construccion-8.jpg
+      - construccion-1.jpg
+      - mesas-de-trabajo-2.jpg
   -
     id: zonaMesasDeLuz00002
     type: zona
@@ -156,7 +161,12 @@ zonas:
     descripcion: |-
       Aquí dibujan y animan
       con arena y luz.
-    imagen: stop-motion-lab.jpg
+    imagen: mesa-de-luz-3.jpg
+    fotos:
+      - mesa-de-luz-5.jpg
+      - mesa-de-luz-2.jpg
+      - opt-copia-de-20.jpg
+      - opt-copia-de-30.jpg
   -
     id: zonaStopMotion000003
     type: zona
@@ -165,8 +175,59 @@ zonas:
     descripcion: |-
       Aquí los objetos cobran
       vida en sus manos
-    imagen: mesas-2d.jpg
+    imagen: stop-motion-3.jpg
+    fotos:
+      - stop-mption-10.jpg
+      - stop-motion-11.jpg
+      - stop-motion-9.jpg
+      - stop-motion-8.jpg
 galeria_animautas_titulo: 'Esto lo hicieron animautas en Animondo'
+faq_titulo: 'Preguntas frecuentes'
+faq:
+  -
+    id: faqGruposPorEdad001
+    type: pregunta
+    enabled: true
+    pregunta: '¿Mi hijo pequeño va a estar con los grandes?'
+    respuesta: 'No. Cada edad tiene su propio horario y su propio programa. Los de 6 a 8 años entran a las 9:30, los de 9 a 12 a las 11, y los de 13 a 16 a las 12:30. Tu hijo trabaja solo con animautas de su edad.'
+  -
+    id: faqSaberDibujar002
+    type: pregunta
+    enabled: true
+    pregunta: '¿Mi hijo necesita saber dibujar?'
+    respuesta: 'No. Aquí se empieza desde cero. Lo único que hace falta son ganas de crear.'
+  -
+    id: faqFaltaUnSabado003
+    type: pregunta
+    enabled: true
+    pregunta: '¿Qué pasa si falta un sábado?'
+    respuesta: 'No pasa nada. El viaje avanza al ritmo de cada animauta, no contra el calendario. Retoma donde se quedó el sábado siguiente.'
+  -
+    id: faqEntrarEmpezado004
+    type: pregunta
+    enabled: true
+    pregunta: '¿Puede entrar aunque el grupo ya haya empezado?'
+    respuesta: 'Sí. Llega a una sesión de bienvenida, conoce las zonas y se integra al grupo el mismo sábado.'
+  -
+    id: faqSeLlevaACasa005
+    type: pregunta
+    enabled: true
+    pregunta: '¿Qué se lleva a casa?'
+    respuesta: |-
+      Sus artefactos y sus animaciones.
+      Las animaciones se envían por WhatsApp.
+  -
+    id: faqMateriales00006
+    type: pregunta
+    enabled: true
+    pregunta: '¿Los materiales están incluidos?'
+    respuesta: 'Sí, todos. Plastilina, papel, iPads, mesas de luz. Tu hijo solo trae su creatividad; nosotros ponemos lo demás.'
+  -
+    id: faqDuracionTaller007
+    type: pregunta
+    enabled: true
+    pregunta: '¿Cuánto dura el taller?'
+    respuesta: 'Hora y media cada sábado. Y no hay fecha de fin: el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
 instructores_titulo: Instructores
 personajes_en_posicion_absoluta:
   - 475d4e9f-948e-4a62-8cb1-5bd643118b6a
@@ -174,6 +235,17 @@ personajes_en_posicion_absoluta:
   - 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
   - da9a7ff6-2bc2-4288-8752-21c4ce137b79
   - 854caaf0-b67c-4131-a189-3fa047126aa6
+galeria_animautas:
+  - video-animauta-06-logo.mp4
+  - video-animauta-04-logo.mp4
+  - video-animauta-09-logo.mp4
+  - video-animauta-08-logo.mp4
+  - video-animauta-07-logo.mp4
+  - video-animauta-05-logo.mp4
+  - video-animauta-03-logo.mp4
+  - video-animauta-02-logo.mp4
+  - video-animauta-01-logo.mp4
+  - video-animauta-10-logo.mp4
 ---
 ## Welcome to your brand new Statamic site!
 

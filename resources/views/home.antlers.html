@@ -339,9 +339,11 @@
 </section>
 {{ /if }}
 
-{{# ── Zonas ───────────────────────────────────────────────────────────────
-    Galería repetible: una tarjeta por zona capturada en el CMS. Con 3 zonas da
-    la retícula de la referencia; con más, bajan de tres en tres. #}}
+{{# ── Espacios ─────────────────────────────────────────────────────────────
+    Cada zona es una galería aparte: la portada con su texto es lo que se ve en
+    la página, y al hacer clic se abre el lightbox con las fotos de ESA zona.
+    Comparte el componente `.galeria` con la galería de trabajos (ver site.css y
+    site.js), pero ahí el clic abre la galería entera y aquí sólo la de la zona. #}}
 {{ if zonas }}
 <section class="px-4 sm:px-6 py-16 sm:py-24">
 
@@ -351,36 +353,82 @@
     </h2>
     {{ /if }}
 
-    <div class="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto" data-stagger-cards>
-        {{ zonas }}
-        {{ if type == 'zona' }}
-        <div class="group" data-stagger-child>
-            {{ if titulo }}
-            <h3 class="font-display font-bold text-zinc-900 text-2xl sm:text-3xl text-center leading-tight">{{ titulo }}</h3>
-            {{ /if }}
-            {{ if descripcion }}
-            <p class="font-display font-bold text-zinc-900 text-lg sm:text-xl text-center leading-snug mt-2">{{ descripcion | nl2br }}</p>
-            {{ /if }}
+    <div class="galeria max-w-7xl mx-auto" data-galeria>
 
-            {{# Sin imagen queda el recuadro en blanco, como en la referencia.
-                El `overflow-hidden` es lo que recorta el zoom al pasar el cursor. #}}
-            <div class="mt-6 aspect-[4/3] rounded-[1.5rem] bg-white overflow-hidden">
-                {{ if imagen }}
-                <img src="{{ imagen:url }}" alt="{{ titulo }}"
-                     class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+        {{# El track es un scroller con scroll-snap: en táctil el swipe sale
+            gratis y el JS sólo cablea flechas, puntos y el lightbox. #}}
+        <div class="galeria-track" data-galeria-track data-stagger-cards>
+            {{# La diapositiva se abre y se cierra con el contador del bucle.
+                El modificador `chunk` haría lo mismo en una línea, pero Antlers
+                lo ignora sobre el query builder del campo `assets` de la otra
+                galería, y las dos van con el mismo patrón. #}}
+            {{ zonas }}
+            {{ if (count - 1) % 6 == 0 }}<div class="galeria-slide grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">{{ /if }}
+
+                {{ if type == 'zona' }}
+                <div class="group" data-stagger-child>
+                    {{ if titulo }}
+                    <h3 class="font-display font-bold text-zinc-900 text-2xl sm:text-3xl text-center leading-tight">{{ titulo }}</h3>
+                    {{ /if }}
+                    {{ if descripcion }}
+                    <p class="font-display font-bold text-zinc-900 text-lg sm:text-xl text-center leading-snug mt-2">{{ descripcion | nl2br }}</p>
+                    {{ /if }}
+
+                    {{# Sin portada queda el recuadro en blanco, como en la referencia,
+                        y sin botón: no hay nada que abrir. #}}
+                    <div class="mt-6 aspect-[4/3] rounded-[1.5rem] bg-white overflow-hidden">
+                        {{ if imagen }}
+                        <button type="button" class="galeria-item" data-galeria-item
+                                data-tipo="imagen"
+                                data-src="{{ imagen:url }}"
+                                data-alt="{{ imagen:alt ?? titulo | sanitize }}"
+                                data-pie="{{ titulo | sanitize }}"
+                                aria-label="Ver las fotos de {{ titulo ?? 'esta zona' | sanitize }}">
+                            <img src="{{ imagen:url }}" alt="{{ imagen:alt ?? titulo }}" loading="lazy"
+                                 class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+
+                            {{# Las fotos de la zona viajan como una lista escondida y el
+                                JS las lee del DOM. Un JSON en un atributo sería más corto,
+                                pero Antlers no escapa nada por defecto y una comilla en un
+                                alt rompería el marcado. #}}
+                            {{ if fotos }}
+                            <span hidden>
+                                {{ fotos }}
+                                <span data-galeria-foto
+                                      data-src="{{ url }}"
+                                      data-alt="{{ alt | sanitize }}"></span>
+                                {{ /fotos }}
+                            </span>
+                            {{ /if }}
+
+                            {{# El contador lo rellena site.js: `| count` no funciona
+                                sobre el query builder de un campo `assets`. #}}
+                            <span class="galeria-vermas" aria-hidden="true">
+                                <span class="galeria-vermas-pastilla" data-galeria-vermas></span>
+                            </span>
+                        </button>
+                        {{ /if }}
+                    </div>
+                </div>
                 {{ /if }}
-            </div>
+
+            {{ if count % 6 == 0 || last }}</div>{{ /if }}
+            {{ /zonas }}
         </div>
-        {{ /if }}
-        {{ /zonas }}
+
+        {{# Se navega con el dedo, arrastrando con el mouse, o por los puntos.
+            El JS los esconde cuando todo cabe en una sola diapositiva. #}}
+        <div class="galeria-puntos" data-galeria-puntos></div>
+
     </div>
 
 </section>
 {{ /if }}
 
-{{# ── Galería de animautas ─────────────────────────────────────────────────
-    Misma retícula que Zonas, pero sólo imágenes: el campo es un `assets`
-    múltiple, no un replicator, porque no hay texto por tarjeta. #}}
+{{# ── Galería de trabajos ──────────────────────────────────────────────────
+    Mismo carrusel que Espacios, pero el campo es un `assets` múltiple y lo que
+    trae son videos. En la retícula sólo se pinta el primer fotograma; el video
+    completo se carga hasta que se abre el lightbox. #}}
 {{ if galeria_animautas }}
 <section class="px-4 sm:px-6 py-16 sm:py-24">
 
@@ -390,13 +438,50 @@
     </h2>
     {{ /if }}
 
-    <div class="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto" data-stagger-cards>
-        {{ galeria_animautas }}
-        <div class="group aspect-[4/3] rounded-[1.5rem] bg-white overflow-hidden" data-stagger-child>
-            <img src="{{ url }}" alt="{{ alt }}"
-                 class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+    <div class="galeria max-w-7xl mx-auto" data-galeria>
+
+        <div class="galeria-track" data-galeria-track data-stagger-cards>
+            {{ galeria_animautas }}
+            {{ if (count - 1) % 6 == 0 }}<div class="galeria-slide grid gap-8 sm:gap-10 grid-cols-2 lg:grid-cols-3">{{ /if }}
+
+                <button type="button" class="galeria-item group aspect-video rounded-[1.5rem] bg-white overflow-hidden"
+                        data-galeria-item data-stagger-child
+                        data-tipo="{{ if is_video }}video{{ else }}imagen{{ /if }}"
+                        data-src="{{ url }}"
+                        data-alt="{{ alt ?? basename }}"
+                        aria-label="{{ if is_video }}Reproducir{{ else }}Ampliar{{ /if }} {{ alt ?? basename }}">
+                    {{ if is_video }}
+                    {{# `preload="none"` a propósito: son diez archivos de varios MB.
+                        El primer fotograma (`#t=0.1`) se pide sólo cuando la tarjeta
+                        se acerca a la pantalla — de eso se encarga site.js. #}}
+                    <video class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                           data-galeria-preview src="{{ url }}#t=0.1"
+                           preload="none" muted playsinline tabindex="-1"></video>
+                    <span class="galeria-play" aria-hidden="true">
+                        {{# El círculo va dentro del SVG y no como fondo del elemento:
+                            así el triángulo se coloca contra el mismo sistema de
+                            coordenadas y no depende del padding. El triángulo va
+                            apoyado a la izquierda del centro: su centroide cae en
+                            x=31.5 y el del círculo en 32. Para moverlo, se corren
+                            los tres puntos del path a la vez. #}}
+                        <svg viewBox="0 0 64 64" width="64" height="64">
+                            <circle cx="32" cy="32" r="32" fill="#323E81"/>
+                            <path d="M26 22.5 L42.5 32 L26 41.5 Z" fill="#fff" stroke="#fff"
+                                  stroke-width="4" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    {{ else }}
+                    <img src="{{ url }}" alt="{{ alt }}" loading="lazy"
+                         class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110">
+                    {{ /if }}
+                </button>
+
+            {{ if count % 6 == 0 || last }}</div>{{ /if }}
+            {{ /galeria_animautas }}
         </div>
-        {{ /galeria_animautas }}
+
+        <div class="galeria-puntos" data-galeria-puntos></div>
+
     </div>
 
 </section>
@@ -500,6 +585,45 @@
             {{ /entradas }}
         </div>
 
+    </div>
+
+</section>
+{{ /if }}
+
+{{# ── Preguntas frecuentes ─────────────────────────────────────────────────
+    Acordeón con <details> nativo: cerrado por defecto sin JS, y navegable con
+    teclado y lectores de pantalla sin tener que cablear aria. El `name` común
+    los hace excluyentes — abrir uno cierra el anterior. La animación de
+    apertura vive en site.css (`.faq-item`). #}}
+{{ if faq }}
+<section class="px-4 sm:px-6 py-16 sm:py-24">
+
+    {{ if faq_titulo }}
+    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-14 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+        {{ faq_titulo }}
+    </h2>
+    {{ /if }}
+
+    {{# Angosta a propósito: es una sección de lectura, no una retícula. #}}
+    <div class="max-w-3xl mx-auto flex flex-col gap-3 sm:gap-4" data-stagger-cards>
+        {{ faq }}
+        {{ if type == 'pregunta' }}
+        <details class="faq-item group bg-white rounded-[1.75rem] overflow-hidden" name="faq-home" data-stagger-child>
+            {{# `list-none` mata el triangulito del navegador; el + de la derecha lo
+                sustituye y gira 45° para volverse una ×. #}}
+            <summary class="list-none cursor-pointer flex items-start gap-4 px-6 py-5 sm:px-8 sm:py-6">
+                <h3 class="flex-1 font-display font-bold text-[#323E81] text-lg sm:text-2xl leading-snug">{{ pregunta }}</h3>
+                <span aria-hidden="true"
+                      class="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#323E81] text-white flex items-center justify-center text-2xl leading-none font-display transition-transform duration-300 group-open:rotate-45">+</span>
+            </summary>
+            {{ if respuesta }}
+            <div class="px-6 pb-6 sm:px-8 sm:pb-7 font-sans text-base sm:text-lg text-[#323E81] leading-relaxed">
+                {{ respuesta | nl2br }}
+            </div>
+            {{ /if }}
+        </details>
+        {{ /if }}
+        {{ /faq }}
     </div>
 
 </section>
