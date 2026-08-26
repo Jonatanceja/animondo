@@ -149,6 +149,142 @@ tabs:
                                             naranja: Naranja
                                             rojo: Rojo
                                             negro: Negro
+  viaje_lotties:
+    display: 'El Viaje (lotties)'
+    sections:
+      -
+        fields:
+          -
+            handle: viaje_lotties_slides
+            field:
+              type: replicator
+              display: Escenas
+              instructions: 'Versión del viaje en la que cada scroll reproduce una animación en vez de mover el mundo. Los textos son los mismos que en "El Viaje"; lo que cambia es que cada escena trae la suya.'
+              max_sets: 10
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    escena:
+                      display: Escena
+                      fields:
+                        -
+                          handle: lottie
+                          field:
+                            type: assets
+                            display: Animación
+                            instructions: 'La que se reproduce al llegar a esta escena. Si es de secuencia de imágenes, pásala antes por bin/lottie-a-webp.sh y sube el .webp.'
+                            max_files: 1
+                            container: assets
+                            allowed_extensions:
+                              - webp
+                              - gif
+                              - json
+                              - lottie
+                        -
+                          handle: posicion_animacion
+                          field:
+                            type: select
+                            display: 'Posición de la animación'
+                            instructions: 'Dónde se coloca la animación. A media pantalla el dibujo se ve más grande y deja el otro lado libre para el texto.'
+                            default: completa
+                            options:
+                              completa: 'Pantalla completa'
+                              izquierda: 'Mitad izquierda'
+                              derecha: 'Mitad derecha'
+                        -
+                          handle: zoom
+                          field:
+                            type: float
+                            display: Acercamiento
+                            instructions: '1 muestra la animación entera. 2 se acerca al doble. Por encima de 2 se ve blando: amplía más de lo que da el archivo.'
+                            default: 1
+                        -
+                          handle: foco_x
+                          field:
+                            type: integer
+                            display: 'Foco horizontal (%)'
+                            instructions: 'Qué punto queda centrado al acercarse. 0 es el borde izquierdo, 50 el centro, 100 el derecho. Sólo cuenta si el acercamiento es mayor que 1.'
+                            default: 50
+                        -
+                          handle: foco_y
+                          field:
+                            type: integer
+                            display: 'Foco vertical (%)'
+                            instructions: '0 es arriba del todo, 50 el centro, 100 abajo.'
+                            default: 50
+                        -
+                          handle: rotacion
+                          field:
+                            type: integer
+                            display: 'Giro (grados)'
+                            instructions: 'Los personajes van colocados en corro alrededor del mundo, así que los de los lados salen tumbados. Gira el mundo para enderezar al que enfocas: 90 lo levanta hacia la derecha, -90 hacia la izquierda. Gira sobre el punto de foco, así que el encuadre no se mueve.'
+                            default: 0
+                        -
+                          handle: title
+                          field:
+                            type: bard
+                            display: Título
+                            buttons:
+                              - bold
+                              - italic
+                              - underline
+                            save_html: true
+                        -
+                          handle: text
+                          field:
+                            type: textarea
+                            display: Texto
+                            instructions: 'Opcional, debajo del título. Los saltos de línea se respetan.'
+                        -
+                          handle: posicion
+                          field:
+                            type: select
+                            display: 'Posición del texto'
+                            instructions: 'Dónde se coloca el texto respecto a la animación. En "El Viaje" esto iba fijado en la plantilla; aquí se elige por escena porque cada animación ocupa un sitio distinto.'
+                            default: izquierda
+                            options:
+                              izquierda: Izquierda
+                              derecha: Derecha
+                              centro: Centro
+                              arriba: Arriba
+                              abajo: Abajo
+                        -
+                          handle: pasos_del_creador
+                          field:
+                            type: replicator
+                            display: 'Pasos del creador'
+                            instructions: 'Sólo en la escena de los niveles.'
+                            sets:
+                              nuevo_grupo_de_conjuntos:
+                                display: 'Nuevo grupo de conjuntos'
+                                sets:
+                                  pasos:
+                                    display: Pasos
+                                    fields:
+                                      -
+                                        handle: titulo
+                                        field:
+                                          type: text
+                                          display: Titulo
+                                      -
+                                        handle: descripcion
+                                        field:
+                                          container: assets
+                                          remove_empty_nodes: false
+                                          type: bard
+                                          display: Descripción
+                                      -
+                                        handle: color
+                                        field:
+                                          type: select
+                                          display: Color
+                                          options:
+                                            verde: Verde
+                                            azul: Azul
+                                            naranja: Naranja
+                                            rojo: Rojo
+                                            negro: Negro
   image_section:
     display: 'Sección de descanso'
     sections:

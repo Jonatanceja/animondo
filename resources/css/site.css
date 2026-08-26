@@ -915,3 +915,185 @@ html, body {
   font-size: 0.875rem;
   letter-spacing: 0.05em;
 }
+
+/* ── El Viaje (lotties) ──
+   La sección mide una pantalla por escena y dentro lleva un contenedor sticky
+   que se queda quieto mientras se la recorre. Ese alto es lo que le da recorrido
+   al scroll: sin él no habría nada que recorrer y las escenas se atropellarían.
+   El número de escenas lo pone la plantilla en --viaje-l-escenas. */
+.viaje-l {
+  position: relative;
+  height: calc(var(--viaje-l-escenas, 6) * 100vh);
+}
+
+.viaje-l-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* El recuadro donde vive todo: el rosa del que salen las animaciones, con las
+   esquinas y el aire que llevaba el viaje anterior. El `overflow` va aquí y no
+   en el sticky, que si no las esquinas no recortarían nada. */
+.viaje-l-marco {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background: #F1D5E5;
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  .viaje-l-sticky { padding: .75rem; }
+  .viaje-l-marco  { border-radius: 1rem; }
+}
+
+/* Las escenas van una encima de otra y sólo se ve la activa. `visibility` además
+   de la opacidad: si no, la escena apagada sigue capturando el cursor. */
+.viaje-l-escena {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease;
+  /* Arriba, hueco para el nav fijo; abajo, aire para que el texto más largo no
+     llegue a tocar el borde. */
+  padding: clamp(5rem, 11vh, 7.5rem) 0 clamp(1.5rem, 5vh, 3rem);
+}
+
+.viaje-l-escena.esta-activa {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* La caja reserva el sitio y recorta; la animación de dentro la coloca el JS.
+   Hace falta el recorte porque las escenas que se acercan a una zona sacan el
+   resto del dibujo fuera de plano, y sin él se derramaría sobre el texto. */
+.viaje-l-anim-caja {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Sin `object-fit`: el tamaño se lo da el JS en píxeles, que es la única forma
+   de llevar un punto cualquiera del dibujo al centro sabiendo cuánto mide de
+   verdad una vez ajustado a la caja. Arranca oculta para que no se vea el
+   fotograma sin encuadrar antes del primer cálculo. */
+.viaje-l-anim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  visibility: hidden;
+}
+
+/* A media pantalla el dibujo se ve bastante más grande que repartido por todo
+   el ancho, y deja el otro lado libre para que el texto no se le encime. Pide
+   su animación recortada al dibujo (bin/lottie-a-webp.sh --recortar): con el
+   lienzo 16:9 entero, la mitad de ese hueco se iría en aire. */
+/* El margen exterior se descuenta del ancho, no se pone con `right`: en un
+   <img>, que es un elemento reemplazado, `width: auto` entre `left` y `right`
+   no estira la caja sino que toma el tamaño intrínseco, y la animación se salía
+   de la pantalla. Los archivos recortados traen el dibujo a ras del lienzo, así
+   que sin este margen quedan pegados al canto. */
+/* Muerde algo más de la mitad y empieza antes: el texto acaba bastante antes
+   del centro y ese hueco estaba desaprovechado, con la animación limitada por
+   el ancho mientras le sobraba alto. --viaje-l-anim-borde es dónde empieza. */
+.viaje-l-anim-derecha,
+.viaje-l-anim-izquierda { --viaje-l-anim-borde: 40%; }
+
+/* Llegan hasta el canto del recuadro, sin margen lateral: al recortar, dejar
+   aire ahí se lee como si la animación estuviera cortada a media pantalla. El
+   redondeo de las esquinas lo pone el marco. */
+.viaje-l-anim-derecha {
+  left: var(--viaje-l-anim-borde);
+  width: calc(100% - var(--viaje-l-anim-borde));
+}
+
+.viaje-l-anim-izquierda {
+  left: 0;
+  width: calc(100% - var(--viaje-l-anim-borde));
+}
+
+
+@media (max-width: 639px) {
+  /* En móvil la animación es el fondo del texto: ocupa todo y da igual el lado. */
+  .viaje-l-anim-derecha,
+  .viaje-l-anim-izquierda { left: 0; width: 100%; }
+}
+
+/* El texto va por encima de la animación. */
+.viaje-l-texto {
+  position: relative;
+  z-index: 1;
+  max-width: min(34rem, 42vw);
+  padding: 0 clamp(1.5rem, 5vw, 5rem);
+  /* Sin recortar: el círculo que rodea las negritas se dibuja fuera del renglón
+     —el SVG se sale 8px por arriba y por abajo— y cualquier overflow distinto
+     de `visible` se lo come por el lado de abajo cuando la negrita cae en la
+     última línea. El desborde del texto ya lo controla la tipografía: el bloque
+     más largo son tres párrafos y ocupa 530px de los 645 disponibles.
+     El padding vertical es para que ese círculo tenga sitio. */
+  padding-block: 1rem;
+}
+
+.viaje-l-izquierda { margin-right: auto; }
+.viaje-l-derecha   { margin-left: auto; }
+.viaje-l-centro    { margin-inline: auto; max-width: min(46rem, 80vw); text-align: center; }
+
+/* Arriba y abajo se despegan del centro vertical: el contenedor es flex, así que
+   basta con alinearse uno mismo. */
+.viaje-l-arriba { align-self: flex-start; margin-inline: auto; padding-top: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
+.viaje-l-abajo  { align-self: flex-end;  margin-inline: auto; padding-bottom: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
+
+/* ── Los cinco niveles ── */
+.viaje-l-pasos {
+  display: flex;
+  gap: clamp(.75rem, 2vw, 2rem);
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.viaje-l-paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  max-width: 10rem;
+}
+
+.viaje-l-punto {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  margin-bottom: .75rem;
+  flex-shrink: 0;
+}
+
+/* En móvil no hay sitio para texto al lado del dibujo: la animación pasa a ser
+   un fondo tenue y el texto se lee encima, centrado. */
+@media (max-width: 639px) {
+  .viaje-l-texto,
+  .viaje-l-izquierda,
+  .viaje-l-derecha,
+  .viaje-l-centro {
+    max-width: none;
+    margin: 0;
+    text-align: center;
+  }
+  .viaje-l-anim { opacity: .35; }
+  .viaje-l-pasos { flex-wrap: wrap; gap: 1rem 1.25rem; }
+  .viaje-l-paso { flex: 0 0 40%; }
+}
+
+/* Quien haya pedido menos movimiento no tiene por qué tragarse los fundidos. */
+@media (prefers-reduced-motion: reduce) {
+  .viaje-l-escena { transition: none; }
+}

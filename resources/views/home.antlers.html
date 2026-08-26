@@ -34,163 +34,79 @@
 </section>
 {{ /if }}
 
-<div id="circle-scroll-wrapper" class="hidden sm:block">
-    <div id="circle-inner">
+{{# ── El Viaje (lotties) ───────────────────────────────────────────────────
+    Misma idea que "El Viaje" de arriba, pero en vez de mover un mundo por la
+    pantalla, cada escena trae su propia animación y el scroll va pasando de una
+    a la siguiente.
 
-        <div id="circle">
-            {{ if circle_image }}
-            <img src="{{ circle_image:url }}" alt="" class="w-full h-full object-cover">
+    El scroll NO se intercepta. La sección mide una pantalla por escena y dentro
+    lleva un contenedor `sticky` que se queda quieto mientras se la recorre; el
+    JS sólo mira por dónde va y enciende la escena que toca. Aquel otro viaje sí
+    secuestra la rueda del ratón, y dos manejadores peleándose por el mismo
+    gesto es justo lo que hay que evitar teniendo las dos secciones en la misma
+    página. De paso esto funciona igual con el dedo y con la barra de scroll. #}}
+{{ if viaje_lotties_slides }}
+<section class="viaje-l" data-viaje-lotties style="--viaje-l-escenas: {{ viaje_lotties_slides | count }}">
+
+    <div class="viaje-l-sticky">
+      {{# El marco: mismo tratamiento que llevaba el viaje anterior, un recuadro
+          redondeado con aire alrededor en vez de sangrar hasta el borde. #}}
+      <div class="viaje-l-marco">
+        {{ viaje_lotties_slides }}
+        {{ if type == 'escena' }}
+        {{# Todas las escenas van superpuestas y sólo se ve la activa. #}}
+        <div class="viaje-l-escena{{ if count == 1 }} esta-activa{{ /if }}" data-viaje-l-escena
+             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}">
+
+            {{ if lottie }}
+            {{# La caja recorta; la animación de dentro la coloca el JS, que es
+                quien sabe el tamaño real con el que se pinta y puede llevar el
+                punto de foco al centro. `loading="lazy"` de verdad importa: son
+                varios MB por escena y así sólo se piden las que se llegan a ver. #}}
+            <div class="viaje-l-anim-caja viaje-l-anim-{{ posicion_animacion ?? 'completa' }}">
+                <img class="viaje-l-anim" src="{{ lottie:url }}" alt="" loading="lazy" decoding="async">
+            </div>
             {{ /if }}
-        </div>
 
-        {{ circle_slides }}
-        {{ if type == 'slide' }}
+            <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}">
+                {{ if title }}
+                <h2 class="font-display font-bold text-zinc-800 text-[clamp(1.4rem,2.6vw,2.35rem)] leading-[1.15] [&_p+p]:mt-4 [&_p:empty]:hidden">{{ title }}</h2>
+                {{ /if }}
+                {{ if text }}
+                <p class="font-sans text-base sm:text-lg text-zinc-600 mt-3 whitespace-pre-line">{{ text }}</p>
+                {{ /if }}
 
-        {{ if pasos_del_creador }}
-        {{# ── Wide layout: title + colored-dot columns + bottom image ── #}}
-        <div class="frame-content inset-x-6 max-w-none top-28 bottom-0" id="content-{{ count }}">
-            {{ if title }}
-            <h2 class="font-display font-bold text-4xl sm:text-5xl text-zinc-800 text-center mb-8 px-4">{{ title }}</h2>
-            {{ /if }}
-            <div class="flex gap-4 sm:gap-8 justify-center px-6">
-                {{ pasos_del_creador }}
-                {{ if type == 'pasos' }}
-                <div class="flex flex-col items-center text-center flex-1 max-w-[160px]">
-                    <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full mb-3 shrink-0
-                        {{ if color == 'verde' }}bg-[#36BA9B]
-                        {{ elseif color == 'azul' }}bg-[#323E81]
-                        {{ elseif color == 'naranja' }}bg-[#F57F20]
-                        {{ elseif color == 'rojo' }}bg-[#F04040]
-                        {{ elseif color == 'negro' }}bg-zinc-900
-                        {{ else }}bg-[#36BA9B]{{ /if }}"></div>
-                    {{ if titulo }}<p class="font-display font-bold text-xl sm:text-2xl text-zinc-800 leading-tight mb-1">{{ titulo }}</p>{{ /if }}
-                    {{ if descripcion }}<div class="font-sans text-xs sm:text-sm text-zinc-600 [&_p]:m-0 [&_p]:leading-snug">{{ descripcion }}</div>{{ /if }}
+                {{# Los cinco niveles, con el mismo punto de color que en la otra sección. #}}
+                {{ if pasos_del_creador }}
+                <div class="viaje-l-pasos">
+                    {{ pasos_del_creador }}
+                    {{ if type == 'pasos' }}
+                    <div class="viaje-l-paso">
+                        <span class="viaje-l-punto
+                            {{ if color == 'verde' }}bg-[#36BA9B]
+                            {{ elseif color == 'azul' }}bg-[#323E81]
+                            {{ elseif color == 'naranja' }}bg-[#F57F20]
+                            {{ elseif color == 'rojo' }}bg-[#F04040]
+                            {{ elseif color == 'negro' }}bg-zinc-900
+                            {{ else }}bg-[#36BA9B]{{ /if }}"></span>
+                        {{ if titulo }}<p class="font-display font-bold text-zinc-800 text-lg sm:text-xl leading-tight">{{ titulo }}</p>{{ /if }}
+                        {{ if descripcion }}<div class="font-sans text-xs sm:text-sm text-zinc-600 [&_p]:m-0 [&_p]:leading-snug">{{ descripcion }}</div>{{ /if }}
+                    </div>
+                    {{ /if }}
+                    {{ /pasos_del_creador }}
                 </div>
                 {{ /if }}
-                {{ /pasos_del_creador }}
+
             </div>
-            {{# ── Gorras ──────────────────────────────────────────────────────
-                Vienen de OTRA diapositiva del CMS (siguen separadas en el panel),
-                pero se absorben aquí para que en el slider sean una sola. La
-                identificamos por tener `imagen` y no tener `pasos_del_creador`. #}}
-            {{ circle_slides }}
-            {{ if imagen && !pasos_del_creador }}
-            {{# Media columna izquierda: el mundo ocupa la mitad inferior derecha. #}}
-            <div class="mt-8 w-full sm:w-1/2 text-center">
-                <img src="{{ imagen:url }}" alt="" class="mx-auto w-auto max-w-full max-h-[26vh] object-contain">
-                {{ if title }}
-                <div class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 mt-4 px-4 [&_p]:m-0 [&_p]:leading-tight">{{ title }}</div>
-                {{ /if }}
-            </div>
-            {{ /if }}
-            {{ /circle_slides }}
-        </div>
 
-        {{ elseif imagen }}
-        {{# Absorbida arriba, en el panel de los niveles: no genera panel propio.
-            Ojo: si en el futuro otra diapositiva lleva imagen, también desaparecería
-            del slider. La condición es "tiene imagen y no tiene pasos". #}}
-
-        {{ else }}
-        {{# ── Compact card layout ── #}}
-        {{ if count == 1 }}
-        <div class="frame-content space-y-4 left-[5%] top-1/2 -translate-y-1/2" id="content-{{ count }}">
-        {{ elseif count == 2 }}
-        <div class="frame-content space-y-4 right-[5%] top-1/2 -translate-y-1/2" id="content-{{ count }}">
-        {{ elseif count == 3 }}
-        <div class="frame-content space-y-4 top-[30%] left-1/2 -translate-x-1/2 text-center" id="content-{{ count }}">
-        {{ elseif count == 4 }}
-        <div class="frame-content space-y-4 left-[5%] top-1/2 -translate-y-1/2" id="content-{{ count }}">
-        {{ elseif count == 5 }}
-        <div class="frame-content space-y-4 right-[5%] top-1/2 -translate-y-1/2" id="content-{{ count }}">
-        {{ else }}
-        <div class="frame-content space-y-4 top-10 left-[5%]" id="content-{{ count }}">
-        {{ /if }}
-            {{ if count == 4 }}
-                {{ if title }}<h2 class="text-4xl font-bold font-display leading-tight text-zinc-800">{{ title }}</h2>{{ /if }}
-                {{ if text }}<p class="text-base mt-1 text-zinc-600">{{ text }}</p>{{ /if }}
-                {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-[32rem] object-contain mt-2">{{ /if }}
-            {{ else }}
-                {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-28 object-contain mb-2">{{ /if }}
-                {{# Preflight quita el margen de los <p>, así que los párrafos del bard se
-                    pegaban. `p+p` separa sólo entre párrafos (sin margen sobrante al final)
-                    y `p:empty` neutraliza los párrafos vacíos que deja el editor. #}}
-                {{ if title }}<h2 class="text-4xl font-bold font-display leading-tight text-zinc-800 [&_p+p]:mt-6 [&_p:empty]:hidden">{{ title }}</h2>{{ /if }}
-                {{ if text }}<p class="text-base mt-1 text-zinc-600">{{ text }}</p>{{ /if }}
-            {{ /if }}
         </div>
         {{ /if }}
-
-        {{ /if }}
-        {{ /circle_slides }}
-
-    </div>
-</div>
-
-{{# ── Mobile El Viaje slider ─────────────────────────────────────────────── #}}
-<div id="mobile-viaje" class="sm:hidden">
-  <div id="mobile-viaje-inner">
-
-    <div id="mobile-circle">
-      {{ if circle_image }}
-      <img src="{{ circle_image:url }}" alt="" class="w-full h-full object-cover">
-      {{ /if }}
-    </div>
-
-    {{ circle_slides }}
-    {{ if type == 'slide' }}
-
-    {{ if pasos_del_creador }}
-    <div class="mobile-slide-content" id="mobile-content-{{ count }}">
-      {{ if title }}
-      <h2 class="font-display font-bold text-xl text-zinc-800 text-center mb-3">{{ title }}</h2>
-      {{ /if }}
-      <div class="flex gap-x-3 gap-y-4 justify-center flex-wrap">
-        {{ pasos_del_creador }}
-        {{ if type == 'pasos' }}
-        <div class="flex flex-col items-center text-center w-[28%]">
-          <div class="w-3 h-3 rounded-full mb-1.5 shrink-0
-            {{ if color == 'verde' }}bg-[#36BA9B]
-            {{ elseif color == 'azul' }}bg-[#323E81]
-            {{ elseif color == 'naranja' }}bg-[#F57F20]
-            {{ elseif color == 'rojo' }}bg-[#F04040]
-            {{ elseif color == 'negro' }}bg-zinc-900
-            {{ else }}bg-[#36BA9B]{{ /if }}"></div>
-          {{ if titulo }}<p class="font-display font-bold text-sm text-zinc-800 leading-tight">{{ titulo }}</p>{{ /if }}
-        </div>
-        {{ /if }}
-        {{ /pasos_del_creador }}
+        {{ /viaje_lotties_slides }}
       </div>
-
-      {{# ── Gorras: absorbidas de la diapositiva siguiente (ver versión escritorio) ── #}}
-      {{ circle_slides }}
-      {{ if imagen && !pasos_del_creador }}
-      <div class="mt-4 text-center">
-        <img src="{{ imagen:url }}" alt="" class="mx-auto w-auto max-w-full max-h-[18vh] object-contain">
-        {{ if title }}
-        <div class="font-display font-bold text-lg text-zinc-800 mt-3 px-2 [&_p]:m-0 [&_p]:leading-tight">{{ title }}</div>
-        {{ /if }}
-      </div>
-      {{ /if }}
-      {{ /circle_slides }}
     </div>
 
-    {{ elseif imagen }}
-    {{# Absorbida arriba, en el panel de los niveles: no genera panel propio. #}}
-
-    {{ else }}
-    <div class="mobile-slide-content" id="mobile-content-{{ count }}">
-      {{ if imagen }}<img src="{{ imagen:url }}" alt="" class="w-14 object-contain mb-1.5">{{ /if }}
-      {{ if title }}<h2 class="font-display font-bold text-2xl leading-tight text-zinc-800 [&_p+p]:mt-3 [&_p:empty]:hidden">{{ title }}</h2>{{ /if }}
-      {{ if text }}<p class="font-sans text-xs mt-1 text-zinc-600 leading-snug">{{ text }}</p>{{ /if }}
-    </div>
-    {{ /if }}
-
-    {{ /if }}
-    {{ /circle_slides }}
-
-  </div>
-</div>
+</section>
+{{ /if }}
 
 {{ if image_section_image }}
 <section class="flex justify-center py-16">

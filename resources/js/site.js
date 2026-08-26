@@ -1399,3 +1399,102 @@ if (galerias.length) {
     sincronizar();
   });
 }
+
+// ── El Viaje (lotties) ─────────────────────────────────────────────────────
+// Enciende una escena u otra según por dónde va el scroll dentro de la sección.
+// A propósito no se toca el evento `wheel`: el otro viaje (#circle-scroll-wrapper)
+// sí lo secuestra, y dos manejadores peleándose por el mismo gesto es justo lo
+// que hay que evitar teniendo las dos secciones en la misma página. Aquí el
+// scroll es el del navegador y esto sólo lo observa.
+const viajeL = document.querySelector('[data-viaje-lotties]');
+
+if (viajeL) {
+  const escenas = Array.from(viajeL.querySelectorAll('[data-viaje-l-escena]'));
+
+  if (escenas.length) {
+    let actual = 0;
+    let primeraPintada = false;
+
+    // Coloca la animación dentro de su caja: la ajusta como haría `contain`,
+    // le aplica el acercamiento de la escena y desplaza el punto de foco hasta
+    // el centro. Va en JS y no en CSS porque hace falta el tamaño real con el
+    // que se pinta —que depende de la caja— para saber cuánto desplazar.
+    function encuadrar(escena, animado) {
+      const img = escena.querySelector('.viaje-l-anim');
+      if (!img || !img.naturalWidth) return;
+      const caja = img.parentElement;
+      const cw = caja.clientWidth, ch = caja.clientHeight;
+      if (!cw || !ch) return;
+
+      const zoom = parseFloat(escena.dataset.zoom) || 1;
+      const fx = (parseFloat(escena.dataset.focoX) || 50) / 100;
+      const fy = (parseFloat(escena.dataset.focoY) || 50) / 100;
+      const giro = parseFloat(escena.dataset.rotacion) || 0;
+
+      const escala = Math.min(cw / img.naturalWidth, ch / img.naturalHeight) * zoom;
+      const w = img.naturalWidth * escala;
+      const h = img.naturalHeight * escala;
+      const x = cw / 2 - fx * w;
+      const y = ch / 2 - fy * h;
+
+      img.style.visibility = 'visible';
+      // El giro va sobre el punto de foco, no sobre el centro de la imagen: así
+      // enderezar al personaje no lo saca del encuadre.
+      const destino = {
+        width: w, height: h, x, y,
+        rotation: giro,
+        transformOrigin: `${fx * 100}% ${fy * 100}%`,
+      };
+      if (animado) gsap.to(img, { ...destino, duration: 0.9, ease: 'power2.inOut' });
+      else gsap.set(img, destino);
+    }
+
+    // Las animaciones entran con lazy-load, así que la primera medida puede
+    // pillarlas sin cargar todavía; se reencuadra en cuanto llegan.
+    escenas.forEach((e) => {
+      const img = e.querySelector('.viaje-l-anim');
+      if (img) img.addEventListener('load', () => encuadrar(e, false));
+    });
+
+    // Las negritas del título llevan el mismo adorno que en el viaje anterior:
+    // a una la rodea un círculo dibujándose y a la siguiente la subraya un
+    // trazo de marcador, alternando. El retardo es más corto que el de allí
+    // (1.1 s) porque aquí el texto no entra con su propia animación: sólo se
+    // espera a que termine el fundido de la escena.
+    function pintarEscena(i) {
+      if (i === actual && primeraPintada) return;
+      if (escenas[actual] && i !== actual) {
+        escenas[actual].classList.remove('esta-activa');
+        animateAnnotations(escenas[actual], false);
+      }
+      escenas[i]?.classList.add('esta-activa');
+      if (escenas[i]) { encuadrar(escenas[i], false); animateAnnotations(escenas[i], true, 0.5); }
+      actual = i;
+      primeraPintada = true;
+    }
+
+    function alScroll() {
+      const r = viajeL.getBoundingClientRect();
+      // La primera escena ya viene marcada como activa desde la plantilla, así
+      // que su adorno hay que dispararlo a mano —y sólo cuando la sección
+      // asoma, no al cargar la página, o se lo pierde quien aún no ha bajado.
+      if (!primeraPintada && r.top < window.innerHeight && r.bottom > 0) pintarEscena(0);
+      // Cuánto se lleva recorrido de la sección, de 0 a 1. El recorrido útil es
+      // su alto menos una pantalla, que es lo que el sticky se queda quieto.
+      const recorrido = viajeL.offsetHeight - window.innerHeight;
+      if (recorrido <= 0) return;
+      const avance = Math.min(Math.max(-r.top / recorrido, 0), 1);
+      // El 0.999 evita que al tocar el final justo se salga del array.
+      pintarEscena(Math.floor(avance * escenas.length * 0.999));
+    }
+
+    let pendiente = 0;
+    window.addEventListener('scroll', () => {
+      cancelAnimationFrame(pendiente);
+      pendiente = requestAnimationFrame(alScroll);
+    }, { passive: true });
+    window.addEventListener('resize', () => { alScroll(); escenas.forEach((e) => encuadrar(e, false)); });
+
+    alScroll();
+  }
+}
