@@ -244,7 +244,7 @@
             16:9 con mucho margen, así que el personaje se ve más chico que su PNG
             al mismo ancho de caja. `origin-bottom` para que crezca hacia arriba y
             no se despegue del borde de la tarjeta. Un personaje en PNG no lo toca. #}}
-        <div class="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-16 sm:left-[24%] sm:translate-x-0 sm:w-[22%] sm:top-auto sm:-bottom-[228px] [&_dotlottie-player]:scale-[3.2] [&_dotlottie-player]:origin-bottom">
+        <div class="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-16 sm:left-[24%] sm:translate-x-0 sm:w-[22%] sm:top-auto sm:-bottom-[228px] [&_.personaje-anim]:scale-[3.2] [&_.personaje-anim]:origin-bottom">
             {{ partial:_personaje-media class="relative block w-full h-auto object-contain" alt="Personaje de animondo" }}
         </div>
         {{ /if }}
@@ -534,7 +534,7 @@
                 {{ elseif imagen and count == 2 }}
                 {{ partial:_personaje-media class="absolute z-20 pointer-events-none top-6 left-24 w-32 transform -rotate-14" }}
                 {{ elseif imagen and count == 3 }}
-                <div class="absolute z-20 pointer-events-none top-0 right-16 w-40 [&_dotlottie-player]:scale-[2.6]">{{ partial:_personaje-media class="relative block w-full h-auto object-contain" }}</div>
+                <div class="absolute z-20 pointer-events-none top-0 right-16 w-40 [&_.personaje-anim]:scale-[2.6]">{{ partial:_personaje-media class="relative block w-full h-auto object-contain" }}</div>
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>

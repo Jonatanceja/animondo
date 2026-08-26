@@ -43,9 +43,11 @@ tabs:
               container: assets
               max_files: 1
               type: assets
-              display: 'Animación Lottie'
-              instructions: 'Opcional. Sube el archivo .json o .lottie de la animación (además de la imagen).'
+              display: Animación
+              instructions: 'Opcional, además de la imagen. Si la animación está dibujada a mano (no vectorial), conviértela antes con bin/lottie-a-webp.sh y sube el .webp: pesa unas diez veces menos que el .lottie.'
               allowed_extensions:
+                - webp
+                - gif
                 - json
                 - lottie
           -
