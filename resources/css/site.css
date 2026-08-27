@@ -1022,6 +1022,22 @@ html, body {
 .viaje-l-arriba { align-self: flex-start; margin-inline: auto; padding-top: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
 .viaje-l-abajo  { align-self: flex-end;  margin-inline: auto; padding-bottom: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
 
+/* Coloca el CENTRO del bloque en el porcentaje pedido: el margen lo lleva al
+   punto y el translate descuenta media caja, que es la única forma de dejarlo
+   centrado ahí sin conocer su ancho. Va después de las posiciones a propósito:
+   todas traen `margin-inline: auto` y, por delante, ganaban ellas. */
+.viaje-l-texto-movido {
+  margin-left: calc(var(--texto-x, 50) * 1%);
+  margin-right: 0;
+  transform: translateX(-50%);
+  /* En vertical no sirve el mismo truco: un margen en porcentaje se calcula
+     sobre el ANCHO del contenedor, no sobre su alto. `top` sí va sobre el alto,
+     y al ser relativo mueve el bloque sin tocar el hueco que ocupa. Se cuenta
+     desde el centro, que es donde lo deja el flex. */
+  position: relative;
+  top: calc((var(--texto-y, 50) - 50) * 1%);
+}
+
 /* ── Los cinco niveles ── */
 .viaje-l-pasos {
   display: flex;

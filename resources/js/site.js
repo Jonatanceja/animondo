@@ -1435,20 +1435,35 @@ if (viajeL) {
       const fy = (parseFloat(escena.dataset.focoY) || 50) / 100;
       const giro = parseFloat(escena.dataset.rotacion) || 0;
       const cx = (parseFloat(escena.dataset.centroX) || 50) / 100;
+      const cy = (parseFloat(escena.dataset.centroY) || 50) / 100;
 
       const escala = Math.min(cw / mundo.naturalWidth, ch / mundo.naturalHeight) * zoom;
       const w = mundo.naturalWidth * escala;
       const h = mundo.naturalHeight * escala;
-      const x = cw * cx - fx * w;
-      const y = ch / 2 - fy * h;
+
+      // El giro va siempre sobre el centro de la imagen, y es el desplazamiento
+      // el que compensa para dejar la zona enfocada donde toca. Girar sobre el
+      // propio punto de foco sería más directo de escribir, pero obliga a mover
+      // el `transform-origin` en cada escena, y eso no se interpola: cambia de
+      // golpe, y con una rotación ya aplicada el mundo pega un salto al empezar
+      // la transición. Se notaba al volver de una escena girada a otra que no
+      // lo estaba.
+      //
+      // Dónde cae el foco respecto al centro, una vez girado:
+      const rad = giro * Math.PI / 180;
+      const dx = fx * w - w / 2;
+      const dy = fy * h - h / 2;
+      const gx = dx * Math.cos(rad) - dy * Math.sin(rad);
+      const gy = dx * Math.sin(rad) + dy * Math.cos(rad);
+      // Se coloca el centro de modo que el foco caiga en el punto pedido.
+      const x = cw * cx - gx - w / 2;
+      const y = ch * cy - gy - h / 2;
 
       mundo.style.visibility = 'visible';
-      // El giro va sobre el punto de foco, no sobre el centro de la imagen: así
-      // enderezar al personaje no lo saca del encuadre.
       const destino = {
         width: w, height: h, x, y,
         rotation: giro,
-        transformOrigin: `${fx * 100}% ${fy * 100}%`,
+        transformOrigin: '50% 50%',
       };
       if (animado) gsap.to(mundo, { ...destino, duration: 1.1, ease: 'power2.inOut' });
       else gsap.set(mundo, destino);

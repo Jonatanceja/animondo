@@ -68,10 +68,10 @@
         {{ if type == 'escena' }}
         {{# Todas las escenas van superpuestas y sólo se ve la activa. #}}
         <div class="viaje-l-escena{{ if count == 1 }} esta-activa{{ /if }}" data-viaje-l-escena
-             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}">
+             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}" data-centro-y="{{ centro_y ?? 50 }}">
 
 
-            <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}">
+            <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}{{ if texto_x || texto_y }} viaje-l-texto-movido{{ /if }}"{{ if texto_x || texto_y }} style="{{ if texto_x }}--texto-x: {{ texto_x }};{{ /if }}{{ if texto_y }}--texto-y: {{ texto_y }}{{ /if }}"{{ /if }}>
                 {{ if title }}
                 <h2 class="font-display font-bold text-zinc-800 text-[clamp(1.4rem,2.6vw,2.35rem)] leading-[1.15] [&_p+p]:mt-4 [&_p:empty]:hidden">{{ title }}</h2>
                 {{ /if }}

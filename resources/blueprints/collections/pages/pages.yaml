@@ -184,8 +184,15 @@ tabs:
                           handle: centro_x
                           field:
                             type: integer
-                            display: 'Dónde cae en pantalla (%)'
+                            display: 'Dónde cae en pantalla — horizontal (%)'
                             instructions: 'En qué punto del ancho se planta la zona enfocada. 50 la deja centrada; 70 la echa a la derecha y libera la izquierda para el texto.'
+                            default: 50
+                        -
+                          handle: centro_y
+                          field:
+                            type: integer
+                            display: 'Dónde cae en pantalla — vertical (%)'
+                            instructions: '50 la deja centrada; 30 la sube y empuja el resto del mundo hacia abajo.'
                             default: 50
                         -
                           handle: zoom
@@ -231,6 +238,18 @@ tabs:
                             type: textarea
                             display: Texto
                             instructions: 'Opcional, debajo del título. Los saltos de línea se respetan.'
+                        -
+                          handle: texto_x
+                          field:
+                            type: integer
+                            display: 'Desplazar el texto — horizontal (%)'
+                            instructions: 'Opcional. Dónde cae el centro del bloque de texto a lo ancho de la pantalla: 50 lo deja en medio, 65 lo corre a la derecha. Si lo dejas vacío manda la posición de abajo.'
+                        -
+                          handle: texto_y
+                          field:
+                            type: integer
+                            display: 'Desplazar el texto — vertical (%)'
+                            instructions: 'Opcional. 50 lo deja centrado a lo alto, 40 lo sube. No cambia el hueco que ocupa: sólo lo mueve.'
                         -
                           handle: posicion
                           field:

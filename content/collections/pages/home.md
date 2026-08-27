@@ -133,6 +133,13 @@ viaje_lotties_slides:
     enabled: true
     title: '<p>El viaje completo tiene 5 niveles.</p>'
     posicion: centro
+    texto_x: 68
+    texto_y: 41
+    zoom: 2
+    foco_x: 68
+    foco_y: 12
+    centro_x: 20
+    centro_y: 52
     pasos_del_creador:
       -
         id: viajeLottiePaso0001
