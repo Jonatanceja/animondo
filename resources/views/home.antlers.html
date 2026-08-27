@@ -52,21 +52,24 @@
       {{# El marco: mismo tratamiento que llevaba el viaje anterior, un recuadro
           redondeado con aire alrededor en vez de sangrar hasta el borde. #}}
       <div class="viaje-l-marco">
+
+        {{# Un solo mundo para todo el viaje. No hay uno por escena a propósito:
+            así la transición puede ser el mundo desplazándose y girando de un
+            encuadre al siguiente, como en el viaje anterior, en vez de un
+            fundido entre dos copias. La caja recorta; al mundo de dentro lo
+            mueve el JS, que es quien sabe el tamaño real con el que se pinta. #}}
+        {{ if viaje_lotties_mundo }}
+        <div class="viaje-l-anim-caja">
+            <img class="viaje-l-anim" src="{{ viaje_lotties_mundo:url }}" alt="" decoding="async">
+        </div>
+        {{ /if }}
+
         {{ viaje_lotties_slides }}
         {{ if type == 'escena' }}
         {{# Todas las escenas van superpuestas y sólo se ve la activa. #}}
         <div class="viaje-l-escena{{ if count == 1 }} esta-activa{{ /if }}" data-viaje-l-escena
-             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}">
+             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}">
 
-            {{ if lottie }}
-            {{# La caja recorta; la animación de dentro la coloca el JS, que es
-                quien sabe el tamaño real con el que se pinta y puede llevar el
-                punto de foco al centro. `loading="lazy"` de verdad importa: son
-                varios MB por escena y así sólo se piden las que se llegan a ver. #}}
-            <div class="viaje-l-anim-caja viaje-l-anim-{{ posicion_animacion ?? 'completa' }}">
-                <img class="viaje-l-anim" src="{{ lottie:url }}" alt="" loading="lazy" decoding="async">
-            </div>
-            {{ /if }}
 
             <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}">
                 {{ if title }}

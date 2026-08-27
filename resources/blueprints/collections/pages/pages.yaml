@@ -155,11 +155,23 @@ tabs:
       -
         fields:
           -
+            handle: viaje_lotties_mundo
+            field:
+              type: assets
+              display: Mundo
+              instructions: 'La animación sobre la que ocurre todo el viaje. No hay una por escena: es siempre la misma, y cada escena la encuadra a su manera con el acercamiento, el foco y el giro.'
+              max_files: 1
+              container: assets
+              allowed_extensions:
+                - webp
+                - gif
+                - png
+          -
             handle: viaje_lotties_slides
             field:
               type: replicator
               display: Escenas
-              instructions: 'Versión del viaje en la que cada scroll reproduce una animación en vez de mover el mundo. Los textos son los mismos que en "El Viaje"; lo que cambia es que cada escena trae la suya.'
+              instructions: 'Cada scroll pasa a la escena siguiente y encuadra el mundo de otra manera: se acerca a una zona, la endereza y muestra su texto.'
               max_sets: 10
               sets:
                 main:
@@ -169,29 +181,12 @@ tabs:
                       display: Escena
                       fields:
                         -
-                          handle: lottie
+                          handle: centro_x
                           field:
-                            type: assets
-                            display: Animación
-                            instructions: 'La que se reproduce al llegar a esta escena. Si es de secuencia de imágenes, pásala antes por bin/lottie-a-webp.sh y sube el .webp.'
-                            max_files: 1
-                            container: assets
-                            allowed_extensions:
-                              - webp
-                              - gif
-                              - json
-                              - lottie
-                        -
-                          handle: posicion_animacion
-                          field:
-                            type: select
-                            display: 'Posición de la animación'
-                            instructions: 'Dónde se coloca la animación. A media pantalla el dibujo se ve más grande y deja el otro lado libre para el texto.'
-                            default: completa
-                            options:
-                              completa: 'Pantalla completa'
-                              izquierda: 'Mitad izquierda'
-                              derecha: 'Mitad derecha'
+                            type: integer
+                            display: 'Dónde cae en pantalla (%)'
+                            instructions: 'En qué punto del ancho se planta la zona enfocada. 50 la deja centrada; 70 la echa a la derecha y libera la izquierda para el texto.'
+                            default: 50
                         -
                           handle: zoom
                           field:

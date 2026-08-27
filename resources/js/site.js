@@ -1415,14 +1415,18 @@ if (viajeL) {
     let actual = 0;
     let primeraPintada = false;
 
-    // Coloca la animación dentro de su caja: la ajusta como haría `contain`,
-    // le aplica el acercamiento de la escena y desplaza el punto de foco hasta
-    // el centro. Va en JS y no en CSS porque hace falta el tamaño real con el
-    // que se pinta —que depende de la caja— para saber cuánto desplazar.
+    // El mundo es uno solo para todas las escenas: cambiar de escena no cambia
+    // de imagen, mueve ésta. De ahí que la transición sea un desplazamiento y
+    // no un fundido.
+    const mundo = viajeL.querySelector('.viaje-l-anim');
+
+    // Lo coloca dentro de su caja: lo ajusta como haría `contain`, le aplica el
+    // acercamiento de la escena, lo endereza y planta el punto de foco donde
+    // diga la escena. Va en JS y no en CSS porque hace falta el tamaño real con
+    // el que se pinta —que depende de la caja— para saber cuánto desplazar.
     function encuadrar(escena, animado) {
-      const img = escena.querySelector('.viaje-l-anim');
-      if (!img || !img.naturalWidth) return;
-      const caja = img.parentElement;
+      if (!mundo || !mundo.naturalWidth || !escena) return;
+      const caja = mundo.parentElement;
       const cw = caja.clientWidth, ch = caja.clientHeight;
       if (!cw || !ch) return;
 
@@ -1430,14 +1434,15 @@ if (viajeL) {
       const fx = (parseFloat(escena.dataset.focoX) || 50) / 100;
       const fy = (parseFloat(escena.dataset.focoY) || 50) / 100;
       const giro = parseFloat(escena.dataset.rotacion) || 0;
+      const cx = (parseFloat(escena.dataset.centroX) || 50) / 100;
 
-      const escala = Math.min(cw / img.naturalWidth, ch / img.naturalHeight) * zoom;
-      const w = img.naturalWidth * escala;
-      const h = img.naturalHeight * escala;
-      const x = cw / 2 - fx * w;
+      const escala = Math.min(cw / mundo.naturalWidth, ch / mundo.naturalHeight) * zoom;
+      const w = mundo.naturalWidth * escala;
+      const h = mundo.naturalHeight * escala;
+      const x = cw * cx - fx * w;
       const y = ch / 2 - fy * h;
 
-      img.style.visibility = 'visible';
+      mundo.style.visibility = 'visible';
       // El giro va sobre el punto de foco, no sobre el centro de la imagen: así
       // enderezar al personaje no lo saca del encuadre.
       const destino = {
@@ -1445,16 +1450,12 @@ if (viajeL) {
         rotation: giro,
         transformOrigin: `${fx * 100}% ${fy * 100}%`,
       };
-      if (animado) gsap.to(img, { ...destino, duration: 0.9, ease: 'power2.inOut' });
-      else gsap.set(img, destino);
+      if (animado) gsap.to(mundo, { ...destino, duration: 1.1, ease: 'power2.inOut' });
+      else gsap.set(mundo, destino);
     }
 
-    // Las animaciones entran con lazy-load, así que la primera medida puede
-    // pillarlas sin cargar todavía; se reencuadra en cuanto llegan.
-    escenas.forEach((e) => {
-      const img = e.querySelector('.viaje-l-anim');
-      if (img) img.addEventListener('load', () => encuadrar(e, false));
-    });
+    // La primera medida puede pillar el mundo sin cargar; se reencuadra al llegar.
+    if (mundo) mundo.addEventListener('load', () => encuadrar(escenas[actual], false));
 
     // Las negritas del título llevan el mismo adorno que en el viaje anterior:
     // a una la rodea un círculo dibujándose y a la siguiente la subraya un
@@ -1468,7 +1469,9 @@ if (viajeL) {
         animateAnnotations(escenas[actual], false);
       }
       escenas[i]?.classList.add('esta-activa');
-      if (escenas[i]) { encuadrar(escenas[i], false); animateAnnotations(escenas[i], true, 0.5); }
+      // `primeraPintada` distingue el arranque —donde el mundo se coloca de
+      // golpe— de un cambio de escena, que sí se recorre.
+      if (escenas[i]) { encuadrar(escenas[i], primeraPintada); animateAnnotations(escenas[i], true, 0.5); }
       actual = i;
       primeraPintada = true;
     }
@@ -1493,7 +1496,7 @@ if (viajeL) {
       cancelAnimationFrame(pendiente);
       pendiente = requestAnimationFrame(alScroll);
     }, { passive: true });
-    window.addEventListener('resize', () => { alScroll(); escenas.forEach((e) => encuadrar(e, false)); });
+    window.addEventListener('resize', () => { alScroll(); encuadrar(escenas[actual], false); });
 
     alScroll();
   }

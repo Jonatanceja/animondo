@@ -107,31 +107,29 @@ circle_slides:
     type: slide
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
+viaje_lotties_mundo: viaje/viaje-1-mundo.webp
 viaje_lotties_slides:
   -
     id: viajeLottieMundo0001
     type: escena
-    lottie: viaje/viaje-1-mundo.webp
-    posicion_animacion: derecha
+    centro_x: 70
     enabled: true
     title: '<p>Un lugar donde las niñas, niños y jóvenes, <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
     posicion: izquierda
   -
     id: viajeLottieAniman002
     type: escena
-    lottie: viaje/viaje-1-mundo.webp
-    posicion_animacion: derecha
     zoom: 2
     foco_x: 18
     foco_y: 66
     rotacion: 90
+    centro_x: 70
     enabled: true
     title: '<p>Dan vida a objetos, <strong>animan</strong> dibujos y crean sus propias historias.</p><p>Para dejar de ser espectadores y convertirse en <strong>creadores.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     posicion: izquierda
   -
     id: viajeLottieNiveles03
     type: escena
-    lottie: viaje/viaje-3-abeja.webp
     enabled: true
     title: '<p>El viaje completo tiene 5 niveles.</p>'
     posicion: centro
@@ -201,38 +199,29 @@ viaje_lotties_slides:
                 type: text
                 text: 'Encuentra tu propia voz'
         color: negro
-    posicion_animacion: completa
   -
     id: viajeLottieUnicorn07
     type: escena
     enabled: true
-    lottie: viaje/viaje-4-unicornio.webp
     posicion: centro
-    posicion_animacion: completa
   -
     id: viajeLottieGorras004
     type: escena
-    lottie: viaje/viaje-5-gorra.webp
     enabled: true
     title: '<p>El progreso tiene color. Y viene en <strong>gorra</strong>.</p>'
     posicion: izquierda
-    posicion_animacion: completa
   -
     id: viajeLottieArtefac05
     type: escena
-    lottie: viaje/viaje-6-zootropo.webp
     enabled: true
     title: '<p><strong>Artefactos</strong> Animondo</p><p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
     posicion: derecha
-    posicion_animacion: completa
   -
     id: viajeLottieCierre006
     type: escena
-    lottie: viaje/viaje-7-mundo-final.webp
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
     posicion: izquierda
-    posicion_animacion: completa
 image_section_image: animondo-color.svg
 personajes_cards:
   - f0d00257-e86d-459a-b298-51afb33a6d13

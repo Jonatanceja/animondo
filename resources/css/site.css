@@ -997,36 +997,6 @@ html, body {
    el ancho, y deja el otro lado libre para que el texto no se le encime. Pide
    su animación recortada al dibujo (bin/lottie-a-webp.sh --recortar): con el
    lienzo 16:9 entero, la mitad de ese hueco se iría en aire. */
-/* El margen exterior se descuenta del ancho, no se pone con `right`: en un
-   <img>, que es un elemento reemplazado, `width: auto` entre `left` y `right`
-   no estira la caja sino que toma el tamaño intrínseco, y la animación se salía
-   de la pantalla. Los archivos recortados traen el dibujo a ras del lienzo, así
-   que sin este margen quedan pegados al canto. */
-/* Muerde algo más de la mitad y empieza antes: el texto acaba bastante antes
-   del centro y ese hueco estaba desaprovechado, con la animación limitada por
-   el ancho mientras le sobraba alto. --viaje-l-anim-borde es dónde empieza. */
-.viaje-l-anim-derecha,
-.viaje-l-anim-izquierda { --viaje-l-anim-borde: 40%; }
-
-/* Llegan hasta el canto del recuadro, sin margen lateral: al recortar, dejar
-   aire ahí se lee como si la animación estuviera cortada a media pantalla. El
-   redondeo de las esquinas lo pone el marco. */
-.viaje-l-anim-derecha {
-  left: var(--viaje-l-anim-borde);
-  width: calc(100% - var(--viaje-l-anim-borde));
-}
-
-.viaje-l-anim-izquierda {
-  left: 0;
-  width: calc(100% - var(--viaje-l-anim-borde));
-}
-
-
-@media (max-width: 639px) {
-  /* En móvil la animación es el fondo del texto: ocupa todo y da igual el lado. */
-  .viaje-l-anim-derecha,
-  .viaje-l-anim-izquierda { left: 0; width: 100%; }
-}
 
 /* El texto va por encima de la animación. */
 .viaje-l-texto {
