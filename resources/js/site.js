@@ -3,6 +3,18 @@ import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
+// ── Reproductor de animaciones dotLottie ───────────────────────────────────
+// Define <dotlottie-wc>, que es lo que usa el mundo de El Viaje. No sirve el
+// <dotlottie-player> de antes: aquel sólo lee archivos .lottie de la versión 1
+// y falla con un "no animation selected" ante los de la versión 2, que es lo
+// que exportan las herramientas actuales. Éste lee .json y .lottie v1 y v2.
+import { setWasmUrl } from '@lottiefiles/dotlottie-wc';
+// El runtime va en WebAssembly y por defecto se lo pide a jsdelivr. Lo servimos
+// nosotros: `?url` hace que Vite lo copie al build con su hash y devuelva la
+// ruta buena, así el sitio no depende de un CDN ajeno.
+import wasmUrl from '@lottiefiles/dotlottie-web/dotlottie-player.wasm?url';
+setWasmUrl(wasmUrl);
+
 // ── Mobile nav toggle ─────────────────────────────────────────────────────
 const hamburger   = document.getElementById('nav-hamburger');
 const mobileMenu  = document.getElementById('nav-mobile-menu');
@@ -1424,8 +1436,14 @@ if (viajeL) {
     // acercamiento de la escena, lo endereza y planta el punto de foco donde
     // diga la escena. Va en JS y no en CSS porque hace falta el tamaño real con
     // el que se pinta —que depende de la caja— para saber cuánto desplazar.
+    // El lienzo de la animación. Un <img> lo diría con `naturalWidth`, pero el
+    // reproductor de dotLottie no expone nada parecido, así que viene en
+    // atributos desde la plantilla.
+    const anchoMundo = parseFloat(mundo?.dataset.ancho) || 1920;
+    const altoMundo  = parseFloat(mundo?.dataset.alto) || 1080;
+
     function encuadrar(escena, animado) {
-      if (!mundo || !mundo.naturalWidth || !escena) return;
+      if (!mundo || !escena) return;
       const caja = mundo.parentElement;
       const cw = caja.clientWidth, ch = caja.clientHeight;
       if (!cw || !ch) return;
@@ -1437,9 +1455,9 @@ if (viajeL) {
       const cx = (parseFloat(escena.dataset.centroX) || 50) / 100;
       const cy = (parseFloat(escena.dataset.centroY) || 50) / 100;
 
-      const escala = Math.min(cw / mundo.naturalWidth, ch / mundo.naturalHeight) * zoom;
-      const w = mundo.naturalWidth * escala;
-      const h = mundo.naturalHeight * escala;
+      const escala = Math.min(cw / anchoMundo, ch / altoMundo) * zoom;
+      const w = anchoMundo * escala;
+      const h = altoMundo * escala;
 
       // El giro va siempre sobre el centro de la imagen, y es el desplazamiento
       // el que compensa para dejar la zona enfocada donde toca. Girar sobre el
@@ -1469,8 +1487,13 @@ if (viajeL) {
       else gsap.set(mundo, destino);
     }
 
-    // La primera medida puede pillar el mundo sin cargar; se reencuadra al llegar.
-    if (mundo) mundo.addEventListener('load', () => encuadrar(escenas[actual], false));
+    // El reproductor tarda en arrancar (baja su runtime en WebAssembly), así que
+    // se reencuadra cuando avisa de que está listo. El evento no está garantizado
+    // en todas las versiones, de ahí el reintento por si acaso.
+    if (mundo) {
+      mundo.addEventListener('dotlottie-load', () => encuadrar(escenas[actual], false));
+      setTimeout(() => encuadrar(escenas[actual], false), 1200);
+    }
 
     // Las negritas del título llevan el mismo adorno que en el viaje anterior:
     // a una la rodea un círculo dibujándose y a la siguiente la subraya un

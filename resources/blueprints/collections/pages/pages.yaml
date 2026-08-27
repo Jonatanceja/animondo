@@ -163,6 +163,8 @@ tabs:
               max_files: 1
               container: assets
               allowed_extensions:
+                - lottie
+                - json
                 - webp
                 - gif
                 - png
@@ -263,6 +265,14 @@ tabs:
                               centro: Centro
                               arriba: Arriba
                               abajo: Abajo
+                        -
+                          handle: gorras
+                          field:
+                            type: assets
+                            display: Gorras
+                            instructions: 'Sólo en la escena de las gorras. Van apareciendo una a una, en el orden de aquí, y la del medio se planta delante de las demás.'
+                            container: assets
+                            mode: grid
                         -
                           handle: pasos_del_creador
                           field:

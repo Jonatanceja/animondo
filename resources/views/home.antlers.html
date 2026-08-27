@@ -59,8 +59,14 @@
             fundido entre dos copias. La caja recorta; al mundo de dentro lo
             mueve el JS, que es quien sabe el tamaño real con el que se pinta. #}}
         {{ if viaje_lotties_mundo }}
+        {{# Las medidas del lienzo van en atributos porque el reproductor no
+            expone nada equivalente a `naturalWidth`, y el encuadre las necesita
+            para calcular a qué tamaño se pinta. Son las de la composición de
+            After Effects, no las del dibujo: dentro sobra bastante aire. #}}
         <div class="viaje-l-anim-caja">
-            <img class="viaje-l-anim" src="{{ viaje_lotties_mundo:url }}" alt="" decoding="async">
+            <dotlottie-wc class="viaje-l-anim" src="{{ viaje_lotties_mundo:url }}"
+                          autoplay="true" loop="true"
+                          data-ancho="1920" data-alto="1080"></dotlottie-wc>
         </div>
         {{ /if }}
 
@@ -77,6 +83,17 @@
                 {{ /if }}
                 {{ if text }}
                 <p class="font-sans text-base sm:text-lg text-zinc-600 mt-3 whitespace-pre-line">{{ text }}</p>
+                {{ /if }}
+
+                {{# Las gorras entran una a una cuando se enciende la escena. El índice
+                    va al CSS como `--i` y de ahí sale el retardo de cada una, así que
+                    añadir o quitar gorras desde el panel no obliga a tocar nada. #}}
+                {{ if gorras }}
+                <div class="viaje-l-gorras">
+                    {{ gorras }}
+                    <img class="viaje-l-gorra" src="{{ url }}" alt="{{ alt }}" loading="lazy" style="--i: {{ index }}">
+                    {{ /gorras }}
+                </div>
                 {{ /if }}
 
                 {{# Los cinco niveles, con el mismo punto de color que en la otra sección. #}}
