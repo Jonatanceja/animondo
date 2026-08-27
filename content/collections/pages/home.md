@@ -112,9 +112,9 @@ viaje_lotties_slides:
   -
     id: viajeLottieMundo0001
     type: escena
-    zoom: 1.06
-    foco_x: 45
-    foco_y: 48
+    zoom: 1.0
+    foco_x: 50
+    foco_y: 50
     centro_x: 70
     enabled: true
     title: '<p>Un lugar donde las niñas, niños y jóvenes, <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
@@ -122,9 +122,9 @@ viaje_lotties_slides:
   -
     id: viajeLottieAniman002
     type: escena
-    zoom: 2.12
-    foco_x: 24
-    foco_y: 63
+    zoom: 2.0
+    foco_x: 18
+    foco_y: 66
     rotacion: 90
     centro_x: 70
     enabled: true
@@ -138,8 +138,8 @@ viaje_lotties_slides:
     posicion: centro
     texto_x: 68
     texto_y: 41
-    zoom: 2.12
-    foco_x: 57
+    zoom: 2.0
+    foco_x: 68
     foco_y: 12
     centro_x: 20
     centro_y: 52
@@ -221,9 +221,9 @@ viaje_lotties_slides:
       - viaje/gorras/gorra-3-naranja.webp
       - viaje/gorras/gorra-4-roja.webp
       - viaje/gorras/gorra-5-negra.webp
-    zoom: 2.55
-    foco_x: 71
-    foco_y: 37
+    zoom: 2.4
+    foco_x: 89
+    foco_y: 38
     rotacion: -90
     centro_x: 78
     centro_y: 45
@@ -233,9 +233,9 @@ viaje_lotties_slides:
     enabled: true
     title: '<p><strong>Artefactos</strong> Animondo</p><p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
     posicion: izquierda
-    zoom: 2.33
-    foco_x: 30
-    foco_y: 33
+    zoom: 2.2
+    foco_x: 27
+    foco_y: 34
     rotacion: 52
     centro_x: 76
     centro_y: 60
@@ -245,9 +245,9 @@ viaje_lotties_slides:
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
     posicion: izquierda
-    zoom: 1.06
-    foco_x: 45
-    foco_y: 48
+    zoom: 1.0
+    foco_x: 50
+    foco_y: 50
     rotacion: 0
     centro_x: 62
     centro_y: 50
