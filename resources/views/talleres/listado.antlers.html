@@ -2,113 +2,16 @@
 
     {{# 1. Headline #}}
     {{ if talleres_titulo }}
-    <h2 id="talleres-headline" class="font-display font-bold text-center mb-2 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 id="talleres-headline" class="font-display font-bold text-center mb-4 sm:-mb-16 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ talleres_titulo }}
     </h2>
     {{ /if }}
 
-    {{ if talleres_entries }}
-
-    {{# 2. First entry — full-width banner card #}}
-    {{ talleres_entries }}
-    {{ if first }}
-    <div class="relative pt-44 sm:pt-40 mb-0 sm:mb-0" data-taller-card>
-    {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
-
-        {{ if personaje }}
-        {{ personaje }}
-        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
-        {{ if imagen }}
-        <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
-        </div>
-        {{ /if }}
-        {{ /personaje }}
-        {{ else }}
-        {{ collection:personajes limit="1" }}
-        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
-        {{ if imagen }}
-        <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
-        </div>
-        {{ /if }}
-        {{ /collection:personajes }}
-        {{ /if }}
-
-        <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10">
-            <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
-            {{ if hora_inicio }}
-            <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span><br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
-            </p>
-            <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
-            {{ else }}
-            <p class="font-display font-light text-2xl text-[#323E81] mt-2">Próximamente</p>
-            {{ /if }}
-        </div>
-
-    {{ if hora_inicio }}</a>{{ else }}</div>{{ /if }}
-    </div>
-    {{ /if }}
-    {{ /talleres_entries }}
-
-    {{# 3. Remaining entries — 2-column grid #}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {{ talleres_entries }}
-        {{ unless first }}
-        <div class="relative pt-6 sm:pt-6" data-taller-card>
-        {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
-
-            {{ if personaje }}
-            {{ personaje }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
-            {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
-            </div>
-            {{ /if }}
-            {{ /personaje }}
-            {{ elseif count == 2 }}
-            {{ collection:personajes limit="1" }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
-            {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
-            </div>
-            {{ /if }}
-            {{ /collection:personajes }}
-            {{ else }}
-            {{ collection:personajes limit="1" offset="1" }}
-            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
-            {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
-            </div>
-            {{ /if }}
-            {{ /collection:personajes }}
-            {{ /if }}
-
-            {{# Sin horario el bloque es mucho más corto (sólo título y "Próximamente"),
-                    así que el título caía más abajo que en las tarjetas con horario.
-                    Más padding inferior lo sube a la misma altura. #}}
-                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if hora_inicio }}pb-8{{ else }}pb-24{{ /if }}">
-                <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
-                {{ if hora_inicio }}
-                <p class="font-display font-light text-2xl text-[#323E81] mb-3">
-                    <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span>
-                    de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}                </p>
-                <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
-                {{ else }}
-                <p class="font-display font-light text-2xl text-[#323E81] mt-1">Próximamente</p>
-                {{ /if }}
-            </div>
-
-        {{ if hora_inicio }}</a>{{ else }}</div>{{ /if }}
-        </div>
-        {{ /unless }}
-        {{ /talleres_entries }}
-    </div>
-
-    {{ /if }}
+    {{# Misma colocación del personaje que en la home: ahora las dos abren con
+        sabatinos, así que en la tarjeta ancha va el mismo unicornio y le sirve
+        la misma calibración. #}}
+    {{ partial:_talleres-tarjetas
+        clase_personaje="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-4 sm:-top-32 sm:left-[32%] sm:translate-x-0 sm:w-[21%] sm:top-auto sm:bottom-0 [&_.personaje-anim]:scale-[2] sm:[&_.personaje-anim]:scale-[3.1] [&_.personaje-anim]:origin-bottom"
+        clase_media="relative block w-full h-auto object-contain" }}
 
 </section>
