@@ -20,7 +20,7 @@
         <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
         <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
         {{ /personaje }}
@@ -29,7 +29,7 @@
         <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
         <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
         {{ /collection:personajes }}
@@ -64,7 +64,7 @@
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
             {{ if imagen }}
             <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /personaje }}
@@ -73,7 +73,7 @@
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
             {{ if imagen }}
             <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /collection:personajes }}
@@ -82,7 +82,7 @@
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
             {{ if imagen }}
             <div class="absolute pointer-events-none z-10 left-[22%] right-[22%] -top-16 h-56 sm:left-[8%] sm:right-[8%] sm:-top-32 sm:h-80">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /collection:personajes }}

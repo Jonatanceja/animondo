@@ -6,5 +6,6 @@ cargo: Escenografo
 color: '#F289B8'
 imagen: pez-v002.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781566203
+updated_at: 1788287155
+lottie: lotties/pez.webp
 ---

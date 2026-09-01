@@ -140,7 +140,7 @@
         {{ personajes_cards }}
         <div class="personaje-card">
             <div class="personaje-card-inner" style="background-color: {{ color }}">
-                {{ if imagen }}<img src="{{ imagen:url }}" alt="{{ title }}">{{ /if }}
+                {{ partial:_personaje-media }}
             </div>
         </div>
         {{ /personajes_cards }}
@@ -154,7 +154,7 @@
 
     {{# 1. Headline #}}
     {{ if talleres_titulo }}
-    <h2 id="talleres-headline" class="font-display font-bold text-center -mb-16 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
+    <h2 id="talleres-headline" class="font-display font-bold text-center mb-4 sm:-mb-16 text-[clamp(3.5rem,9vw,8rem)] leading-none text-[#323E81]">
         {{ talleres_titulo }}
     </h2>
     {{ /if }}
@@ -164,7 +164,7 @@
     {{# 2. First entry — full-width banner card #}}
     {{ talleres_entries }}
     {{ if first }}
-    <div class="relative pt-44 sm:pt-40 mb-0 sm:mb-0" data-taller-card>
+    <div class="relative pt-28 sm:pt-40 mb-6 sm:mb-0" data-taller-card>
     {{ if hora_inicio }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
 
         {{ if personaje }}
@@ -180,7 +180,7 @@
             16:9 con mucho margen, así que el personaje se ve más chico que su PNG
             al mismo ancho de caja. `origin-bottom` para que crezca hacia arriba y
             no se despegue del borde de la tarjeta. Un personaje en PNG no lo toca. #}}
-        <div class="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-16 sm:left-[24%] sm:translate-x-0 sm:w-[22%] sm:top-auto sm:-bottom-[228px] [&_.personaje-anim]:scale-[3.2] [&_.personaje-anim]:origin-bottom">
+        <div class="absolute pointer-events-none z-10 left-1/2 -translate-x-1/2 w-44 -top-4 sm:-top-32 sm:left-[32%] sm:translate-x-0 sm:w-[21%] sm:top-auto sm:bottom-0 [&_.personaje-anim]:scale-[2] sm:[&_.personaje-anim]:scale-[3.1] [&_.personaje-anim]:origin-bottom">
             {{ partial:_personaje-media class="relative block w-full h-auto object-contain" alt="Personaje de animondo" }}
         </div>
         {{ /if }}
@@ -190,7 +190,7 @@
         <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
         {{ if imagen }}
         <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
-            <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
         {{ /collection:personajes }}
@@ -224,7 +224,7 @@
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
             {{ if imagen }}
             <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /personaje }}
@@ -232,8 +232,8 @@
             {{ collection:personajes limit="1" }}
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
             {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[24%] sm:right-[24%] sm:-top-24 sm:h-52">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /collection:personajes }}
@@ -241,8 +241,8 @@
             {{ collection:personajes limit="1" offset="1" }}
             <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
             {{ if imagen }}
-            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
-                <img src="{{ imagen:url }}" alt="" class="w-full h-full object-contain object-bottom">
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[12%] sm:right-[12%] sm:-top-44 sm:h-72">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /collection:personajes }}
@@ -284,7 +284,7 @@
 <section class="px-4 sm:px-6 py-16 sm:py-24">
 
     {{ if zonas_titulo }}
-    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-16 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+    <h2 class="font-display font-bold text-center text-[#323E81] mb-10 sm:mb-16 text-[clamp(1.6rem,3.6vw,2.6rem)] leading-none">
         {{ zonas_titulo }}
     </h2>
     {{ /if }}
@@ -369,7 +369,7 @@
 <section class="px-4 sm:px-6 py-16 sm:py-24">
 
     {{ if galeria_animautas_titulo }}
-    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-16 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+    <h2 class="font-display font-bold text-center text-[#323E81] mb-10 sm:mb-16 text-[clamp(1.6rem,3.6vw,2.6rem)] leading-none">
         {{ galeria_animautas_titulo }}
     </h2>
     {{ /if }}
@@ -535,7 +535,7 @@
 <section class="px-4 sm:px-6 py-16 sm:py-24">
 
     {{ if faq_titulo }}
-    <h2 class="font-display font-bold text-center text-zinc-900 mb-10 sm:mb-14 text-[clamp(2rem,5vw,3.5rem)] leading-none">
+    <h2 class="font-display font-bold text-center text-[#323E81] mb-10 sm:mb-14 text-[clamp(1.6rem,3.6vw,2.6rem)] leading-none">
         {{ faq_titulo }}
     </h2>
     {{ /if }}
@@ -548,7 +548,7 @@
             {{# `list-none` mata el triangulito del navegador; el + de la derecha lo
                 sustituye y gira 45° para volverse una ×. #}}
             <summary class="list-none cursor-pointer flex items-start gap-4 px-6 py-5 sm:px-8 sm:py-6">
-                <h3 class="flex-1 font-display font-bold text-[#323E81] text-lg sm:text-2xl leading-snug">{{ pregunta }}</h3>
+                <h3 class="flex-1 font-display font-bold text-zinc-900 text-lg sm:text-2xl leading-snug">{{ pregunta }}</h3>
                 <span aria-hidden="true"
                       class="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#323E81] text-white flex items-center justify-center text-2xl leading-none font-display transition-transform duration-300 group-open:rotate-45">+</span>
             </summary>

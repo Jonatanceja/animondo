@@ -117,7 +117,7 @@ viaje_lotties_slides:
     foco_y: 50
     centro_x: 70
     enabled: true
-    title: '<p>Un lugar donde las niñas, niños y jóvenes, <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
+    title: '<p>Un lugar donde las niñas, niños y jóvenes <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
     posicion: izquierda
   -
     id: viajeLottieAniman002
@@ -231,7 +231,7 @@ viaje_lotties_slides:
     id: viajeLottieArtefac05
     type: escena
     enabled: true
-    title: '<p><strong>Artefactos</strong> Animondo</p><p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
+    title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
     posicion: izquierda
     zoom: 2.2
     foco_x: 27
@@ -300,10 +300,11 @@ zonas:
     id: zonaMesasDeLuz00002
     type: zona
     enabled: true
-    titulo: 'Mesas de Luz'
+    titulo: 'Mesas de luz'
     descripcion: |-
       Aquí dibujan y animan
-      con arena y luz.
+      con arena, papel, plastilina,
+      sopas de pasta y luz.
     imagen: mesa-de-luz-3.jpg
     fotos:
       - mesa-de-luz-5.jpg
@@ -314,10 +315,10 @@ zonas:
     id: zonaStopMotion000003
     type: zona
     enabled: true
-    titulo: 'Stop Motion'
+    titulo: 'Stop motion'
     descripcion: |-
       Aquí los objetos cobran
-      vida en sus manos
+      vida en sus manos.
     imagen: stop-motion-3.jpg
     fotos:
       - stop-mption-10.jpg

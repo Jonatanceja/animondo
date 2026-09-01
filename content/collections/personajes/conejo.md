@@ -4,7 +4,8 @@ blueprint: personaje
 title: Chucha
 imagen: conejo.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1779836073
+updated_at: 1788287228
 cargo: Animadora
 color: '#F5E554'
+lottie: lotties/nina-robot.webp
 ---

@@ -7,20 +7,18 @@ updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
 updated_at: 1787016763
 titulo_portada: |-
   Talleres
-  Sabados Animondo
+  Sábados Animondo
 dias:
   - sabado
 hora_inicio: '09:00'
 hora_fin: '13:00'
-notas:
-  - 'Grupos pequeños'
-  - 'Cupos limitados'
+notas: {  }
 fecha_inicio: '2026-09-19 00:00'
 precio_mensual: 1500
 precio_trimestre: 4000
 incluye:
   - 'Materiales incluidos'
-  - 'Sin inscripción'
+  - 'De 6 a 16 años'
 grupos:
   -
     id: sab6a8grupo000000001
@@ -46,8 +44,8 @@ grupos:
     color: coral
     lugares_provisional: 30
     personaje: 854caaf0-b67c-4131-a189-3fa047126aa6
-descripcion: '<p>Cada sábado tu hijo entra a un estudio de animación real, construye sus personajes, cuenta sus historias y aprende algo que le va a servir toda la vida: confiar en sus ideas y llevarlas hasta el final.</p><p>De 6 a 16 años. Materiales incluidos.</p>'
-alerta: '<p>¿Prefieres pagar por trimestre? <strong>$4,000</strong> si pagas por adelantado</p>'
+descripcion: '<p>Cada sábado tu hijo entra a un estudio de animación real, construye sus personajes, cuenta sus historias y aprende algo que le va a servir toda la vida: confiar en sus ideas y llevarlas hasta el final.</p>'
+alerta: '<p>¿Prefieres pagar por trimestre? <strong>$4,000</strong> si pagas por adelantado.</p>'
 personaje: 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
 personajes_portada:
   - 18dd69a2-0a69-4897-a816-f5fae4b7b6c4

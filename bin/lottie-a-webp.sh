@@ -2,7 +2,7 @@
 #
 # Convierte un .lottie hecho de secuencia de imágenes en un WebP animado.
 #
-#   bin/lottie-a-webp.sh unicornio.lottie          [alto] [colores] [--recortar]
+#   bin/lottie-a-webp.sh unicornio.lottie          [alto|nativo] [colores|bn] [--recortar]
 #   bin/lottie-a-webp.sh "PARTE UNO/"               [alto] [colores] [--recortar]
 #
 # Acepta un .lottie o la carpeta que escupe Bodymovin (data.json + images/).
@@ -106,7 +106,13 @@ if [ "$RECORTAR" = "--recortar" ]; then
     RECORTE="crop=${CROP},"
 fi
 
-ESCALA="scale=-2:${ALTO}:flags=lanczos"
+# Con `nativo` no se toca el tamaño. Sirve para material que ya viene pequeño:
+# pedirle una altura mayor que la suya sólo lo ampliaría sin añadir detalle.
+if [ "$ALTO" = "nativo" ]; then
+    ESCALA="null"
+else
+    ESCALA="scale=-2:${ALTO}:flags=lanczos"
+fi
 
 # Paleta única para toda la secuencia: si se calcula por fotograma, los colores
 # bailan entre uno y otro. Sin dithering, que en dibujo de línea sólo es ruido
