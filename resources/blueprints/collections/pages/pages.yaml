@@ -183,6 +183,18 @@ tabs:
                       display: Escena
                       fields:
                         -
+                          handle: video
+                          field:
+                            type: assets
+                            display: Video
+                            instructions: 'La toma de esta escena. Si pones una, manda ella: se ve el video a pantalla completa dentro del marco y el mundo de arriba se queda fuera, junto con el acercamiento, el foco y el giro, que ya vienen resueltos dentro de la propia toma. Si la dejas vacía, la escena vuelve a encuadrar el mundo con esos ajustes. Va sin sonido y en bucle.'
+                            max_files: 1
+                            container: assets
+                            allowed_extensions:
+                              - webm
+                              - mp4
+                              - mov
+                        -
                           handle: centro_x
                           field:
                             type: integer
@@ -252,6 +264,32 @@ tabs:
                             type: integer
                             display: 'Desplazar el texto — vertical (%)'
                             instructions: 'Opcional. 50 lo deja centrado a lo alto, 40 lo sube. No cambia el hueco que ocupa: sólo lo mueve.'
+                        -
+                          handle: texto_ancho
+                          field:
+                            type: integer
+                            display: 'Ancho del texto (px)'
+                            instructions: 'Opcional. Para cuando el corte de línea que sale solo parte mal la frase y deja una palabra suelta abajo. Vacío usa el ancho de siempre. En pantallas estrechas se ajusta solo, aunque pongas un número grande.'
+                        -
+                          handle: texto_margen
+                          field:
+                            type: integer
+                            display: 'Margen del texto al borde (px)'
+                            instructions: 'Opcional. Lo que separa el texto del borde del marco, por el lado al que esté pegado. Vacío usa el de siempre, que va entre 24 y 80px según el ancho de la pantalla.'
+                        -
+                          handle: texto_arriba
+                          field:
+                            type: toggle
+                            display: 'Pegar el texto arriba'
+                            instructions: 'Lo sube al borde de arriba del marco, a 50px, sin mover dónde cae a lo ancho: la posición de abajo sigue mandando en eso. Sirve cuando la toma llena el centro y el texto estorba ahí.'
+                            default: false
+                        -
+                          handle: texto_derecha
+                          field:
+                            type: toggle
+                            display: 'Pegar el texto a la derecha'
+                            instructions: 'Lo lleva al borde derecho del marco sin cambiar la alineación ni el ancho que tenga por su posición. Queda separado del borde lo mismo que los textos de la izquierda lo están del suyo. Si además tiene un desplazamiento horizontal, manda esto.'
+                            default: false
                         -
                           handle: posicion
                           field:

@@ -1426,6 +1426,40 @@ if (viajeL) {
   if (escenas.length) {
     let actual = 0;
     let primeraPintada = false;
+    let enPantalla = false;
+
+    // ── Las tomas ──────────────────────────────────────────────────────────
+    // Cuando la escena trae video manda él y el mundo de abajo sobra: el
+    // acercamiento, el giro y el recorrido desde la escena anterior vienen ya
+    // dentro de la propia toma. Aquí sólo hay que arrancarla y pararla.
+    const videos = escenas.map((e) => e.querySelector('[data-viaje-l-video]'));
+
+    // Se pide la toma de la escena siguiente en cuanto se enciende la actual,
+    // para que esté lista cuando el scroll llegue. Todas de golpe al cargar la
+    // página son quince megas ocupando la conexión sin que nadie las esté
+    // mirando todavía.
+    function precargar(i) {
+      const v = videos[i];
+      if (!v || v.preload === 'auto') return;
+      v.preload = 'auto';
+      v.load();
+    }
+
+    function reproducir(i) {
+      videos.forEach((v, j) => {
+        if (!v) return;
+        if (j !== i) { v.pause(); return; }
+        // Desde el principio: la toma abre con el movimiento de cámara que
+        // viene de la escena anterior, y entrar a mitad se salta justo eso.
+        v.currentTime = 0;
+        // Sin esto el navegador rechaza el arranque automático. Y `play()`
+        // devuelve una promesa que se rompe sola si la escena cambia antes de
+        // que llegue a sonar: no es un error que haya que atender.
+        v.muted = true;
+        v.play().catch(() => {});
+      });
+      precargar(i + 1);
+    }
 
     // El mundo es uno solo para todas las escenas: cambiar de escena no cambia
     // de imagen, mueve ésta. De ahí que la transición sea un desplazamiento y
@@ -1510,16 +1544,29 @@ if (viajeL) {
       // `primeraPintada` distingue el arranque —donde el mundo se coloca de
       // golpe— de un cambio de escena, que sí se recorre.
       if (escenas[i]) { encuadrar(escenas[i], primeraPintada); animateAnnotations(escenas[i], true, 0.5); }
+      reproducir(i);
       actual = i;
       primeraPintada = true;
     }
 
     function alScroll() {
       const r = viajeL.getBoundingClientRect();
+      const seVe = r.top < window.innerHeight && r.bottom > 0;
+
+      // Fuera de pantalla las tomas se paran: van en bucle, y si no seguirían
+      // gastando en decodificar algo que nadie está viendo.
+      if (!seVe) {
+        if (enPantalla) { videos.forEach((v) => v && v.pause()); enPantalla = false; }
+        return;
+      }
+      // Al volver a asomar hay que rearrancar la de la escena en curso, que
+      // `pintarEscena` no lo hará: para él la escena no ha cambiado.
+      if (!enPantalla) { enPantalla = true; if (primeraPintada) reproducir(actual); }
+
       // La primera escena ya viene marcada como activa desde la plantilla, así
       // que su adorno hay que dispararlo a mano —y sólo cuando la sección
       // asoma, no al cargar la página, o se lo pierde quien aún no ha bajado.
-      if (!primeraPintada && r.top < window.innerHeight && r.bottom > 0) pintarEscena(0);
+      if (!primeraPintada) pintarEscena(0);
       // Cuánto se lleva recorrido de la sección, de 0 a 1. El recorrido útil es
       // su alto menos una pantalla, que es lo que el sticky se queda quieto.
       const recorrido = viajeL.offsetHeight - window.innerHeight;

@@ -107,11 +107,12 @@ circle_slides:
     type: slide
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
-viaje_lotties_mundo: viaje/mundo.lottie
 viaje_lotties_slides:
   -
     id: viajeLottieMundo0001
     type: escena
+    texto_arriba: true
+    video: viaje/videos/viaje-01-mundo.webm
     zoom: 1.0
     foco_x: 50
     foco_y: 50
@@ -122,6 +123,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieAniman002
     type: escena
+    video: viaje/videos/viaje-02-malabarista.webm
     zoom: 2.0
     foco_x: 18
     foco_y: 66
@@ -133,10 +135,11 @@ viaje_lotties_slides:
   -
     id: viajeLottieNiveles03
     type: escena
+    video: viaje/videos/viaje-03-abeja.webm
     enabled: true
     title: '<p>El viaje completo tiene 5 niveles.</p>'
     posicion: centro
-    texto_x: 68
+    texto_derecha: true
     texto_y: 41
     zoom: 2.0
     foco_x: 68
@@ -212,15 +215,12 @@ viaje_lotties_slides:
   -
     id: viajeLottieGorras004
     type: escena
+    video: viaje/videos/viaje-05-gorras.webm
     enabled: true
-    title: '<p>El progreso tiene color. Y viene en <strong>gorra</strong>.</p>'
+    title: '<p>El progreso tiene color.<br>Y viene en <strong>gorra</strong>.</p>'
     posicion: izquierda
-    gorras:
-      - viaje/gorras/gorra-1-verde.webp
-      - viaje/gorras/gorra-2-azul.webp
-      - viaje/gorras/gorra-3-naranja.webp
-      - viaje/gorras/gorra-4-roja.webp
-      - viaje/gorras/gorra-5-negra.webp
+    texto_ancho: 620
+    texto_y: 24
     zoom: 2.4
     foco_x: 89
     foco_y: 38
@@ -230,9 +230,12 @@ viaje_lotties_slides:
   -
     id: viajeLottieArtefac05
     type: escena
+    video: viaje/videos/viaje-06-maquinas.webm
     enabled: true
     title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
-    posicion: izquierda
+    posicion: derecha
+    texto_margen: 50
+    texto_ancho: 460
     zoom: 2.2
     foco_x: 27
     foco_y: 34
@@ -242,6 +245,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieCierre006
     type: escena
+    video: viaje/videos/viaje-08-cierre.webm
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
     posicion: izquierda

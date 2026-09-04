@@ -76,8 +76,26 @@
         <div class="viaje-l-escena{{ if count == 1 }} esta-activa{{ /if }}" data-viaje-l-escena
              data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}" data-centro-y="{{ centro_y ?? 50 }}">
 
+            {{# La toma de la escena, cuando la hay. Manda sobre el mundo de
+                arriba: el acercamiento y el giro vienen ya resueltos dentro del
+                propio video —cada toma arranca en el encuadre de la escena
+                anterior y viaja hasta el suyo—, así que aquí no hay nada que
+                calcular. Va muda porque los navegadores no dejan arrancar solo
+                nada con sonido, y en bucle para que la escena siga viva
+                mientras se lee el texto.
 
-            <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}{{ if texto_x || texto_y }} viaje-l-texto-movido{{ /if }}"{{ if texto_x || texto_y }} style="{{ if texto_x }}--texto-x: {{ texto_x }};{{ /if }}{{ if texto_y }}--texto-y: {{ texto_y }}{{ /if }}"{{ /if }}>
+                `preload` sólo en la primera. Son ocho tomas y quince megas:
+                pedirlas todas al abrir la página ocuparía la conexión mucho
+                antes de que nadie llegue hasta aquí. Del resto se ocupa el JS,
+                que va pidiendo la siguiente en cuanto se enciende la actual. #}}
+            {{ if video }}
+            <video class="viaje-l-video" data-viaje-l-video
+                   src="{{ video:url }}"
+                   muted loop playsinline disablepictureinpicture aria-hidden="true"
+                   preload="{{ if count == 1 }}auto{{ else }}none{{ /if }}"></video>
+            {{ /if }}
+
+            <div class="viaje-l-texto viaje-l-{{ posicion ?? 'izquierda' }}{{ if texto_arriba }} viaje-l-texto-arriba{{ /if }}{{ if texto_derecha }} viaje-l-texto-derecha{{ /if }}{{ if texto_x }} viaje-l-texto-movido-x{{ /if }}{{ if texto_y }} viaje-l-texto-movido-y{{ /if }}{{ if texto_ancho }} viaje-l-texto-ancho{{ /if }}{{ if texto_margen }} viaje-l-texto-margen{{ /if }}"{{ if texto_x || texto_y || texto_ancho || texto_margen }} style="{{ if texto_x }}--texto-x: {{ texto_x }};{{ /if }}{{ if texto_y }}--texto-y: {{ texto_y }};{{ /if }}{{ if texto_ancho }}--texto-ancho: {{ texto_ancho }};{{ /if }}{{ if texto_margen }}--texto-margen: {{ texto_margen }};{{ /if }}"{{ /if }}>
                 {{ if title }}
                 <h2 class="font-display font-bold text-zinc-800 text-[clamp(1.4rem,2.6vw,2.35rem)] leading-[1.15] [&_p+p]:mt-4 [&_p:empty]:hidden">{{ title }}</h2>
                 {{ /if }}

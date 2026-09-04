@@ -936,13 +936,24 @@ html, body {
 
 /* El recuadro donde vive todo: el rosa del que salen las animaciones, con las
    esquinas y el aire que llevaba el viaje anterior. El `overflow` va aquí y no
-   en el sticky, que si no las esquinas no recortarían nada. */
+   en el sticky, que si no las esquinas no recortarían nada.
+
+   El rosa NO es el #F1D5E5 de la marca, y no es un descuido. Las tomas traen
+   ese mismo rosa pintado de fondo, pero el video pasa por una codificación con
+   submuestreo de color y el navegador lo devuelve en #F5D9E6: cuatro niveles
+   más arriba en rojo y verde. Con el rosa exacto de la marca aquí, la frontera
+   entre el marco y el video se ve como una raya, sobre todo en móvil, donde el
+   video ocupa la mitad de abajo y los dos rosas se tocan a lo ancho de toda la
+   pantalla. Así que este toma el valor que sale del video, no el de origen.
+
+   Si algún día cambian las tomas o el códec, hay que volver a medirlo: pintar
+   un fotograma en un canvas y leer el color de una esquina vacía. */
 .viaje-l-marco {
   position: relative;
   width: 100%;
   height: 100%;
   border-radius: 1.5rem;
-  background: #F1D5E5;
+  background: #F5D9E6;
   overflow: hidden;
 }
 
@@ -962,8 +973,10 @@ html, body {
   visibility: hidden;
   transition: opacity .45s ease;
   /* Arriba, hueco para el nav fijo; abajo, aire para que el texto más largo no
-     llegue a tocar el borde. */
-  padding: clamp(5rem, 11vh, 7.5rem) 0 clamp(1.5rem, 5vh, 3rem);
+     llegue a tocar el borde. El de arriba va en variable porque hay que poder
+     descontarlo desde dentro, al pegar un texto al borde. */
+  --viaje-l-aire-arriba: clamp(5rem, 11vh, 7.5rem);
+  padding: var(--viaje-l-aire-arriba) 0 clamp(1.5rem, 5vh, 3rem);
 }
 
 .viaje-l-escena.esta-activa {
@@ -998,12 +1011,30 @@ html, body {
    su animación recortada al dibujo (bin/lottie-a-webp.sh --recortar): con el
    lienzo 16:9 entero, la mitad de ese hueco se iría en aire. */
 
+/* La toma de la escena, cuando la hay: ocupa el marco entero y queda por debajo
+   del texto. `cover` y no `contain` porque el video es opaco y trae su propio
+   fondo pintado; ajustado con `contain` asomaría el rosa del marco por los lados
+   en cuanto la pantalla no fuera 16:9, que es casi siempre, y el corte entre los
+   dos fondos se vería como una franja. Recorta algo por los lados, y las tomas
+   vienen holgadas de sobra para aguantarlo. */
+.viaje-l-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
 /* El texto va por encima de la animación. */
 .viaje-l-texto {
   position: relative;
   z-index: 1;
   max-width: min(34rem, 42vw);
-  padding: 0 clamp(1.5rem, 5vw, 5rem);
+  /* La separación de los lados. Es lo que se ve como margen del texto al borde
+     del marco: los bloques se pegan al suyo, y este relleno es lo que los
+     despega. En variable para poder cambiarlo escena a escena. */
+  padding: 0 var(--texto-lado, clamp(1.5rem, 5vw, 5rem));
   /* Sin recortar: el círculo que rodea las negritas se dibuja fuera del renglón
      —el SVG se sale 8px por arriba y por abajo— y cualquier overflow distinto
      de `visible` se lo come por el lado de abajo cuando la negrita cae en la
@@ -1022,20 +1053,71 @@ html, body {
 .viaje-l-arriba { align-self: flex-start; margin-inline: auto; padding-top: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
 .viaje-l-abajo  { align-self: flex-end;  margin-inline: auto; padding-bottom: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
 
+/* Sube el texto al borde de arriba sin tocar dónde cae a lo ancho. Los
+   `arriba` y `abajo` de la lista de posiciones no servían para esto: además de
+   subir centran, y aquí la colocación horizontal tiene que quedarse como esté.
+   Por eso es un añadido y no otra posición más, y se combina con cualquiera.
+
+   Los 50px se cuentan desde el borde del marco hasta el texto, así que hay que
+   descontar dos cosas que el flex ya mete por delante: el hueco que la escena
+   reserva para el nav y el relleno del propio bloque, que está ahí para que
+   quepa el círculo de las negritas. */
+.viaje-l-texto-arriba {
+  align-self: flex-start;
+  margin-top: calc(50px - var(--viaje-l-aire-arriba) - 1rem);
+}
+
 /* Coloca el CENTRO del bloque en el porcentaje pedido: el margen lo lleva al
    punto y el translate descuenta media caja, que es la única forma de dejarlo
    centrado ahí sin conocer su ancho. Va después de las posiciones a propósito:
-   todas traen `margin-inline: auto` y, por delante, ganaban ellas. */
-.viaje-l-texto-movido {
+   todas traen `margin-inline: auto` y, por delante, ganaban ellas.
+
+   Horizontal y vertical van en clases separadas, y no en una sola con dos
+   variables, porque el valor por defecto no es neutro: una escena que sólo
+   quiere subir su texto se lo encontraba además centrado a lo ancho, por el
+   `50` de reserva del horizontal, tirando abajo la posición que tuviera. */
+.viaje-l-texto-movido-x {
   margin-left: calc(var(--texto-x, 50) * 1%);
   margin-right: 0;
   transform: translateX(-50%);
-  /* En vertical no sirve el mismo truco: un margen en porcentaje se calcula
-     sobre el ANCHO del contenedor, no sobre su alto. `top` sí va sobre el alto,
-     y al ser relativo mueve el bloque sin tocar el hueco que ocupa. Se cuenta
-     desde el centro, que es donde lo deja el flex. */
+}
+
+/* En vertical no sirve el mismo truco: un margen en porcentaje se calcula sobre
+   el ANCHO del contenedor, no sobre su alto. `top` sí va sobre el alto, y al ser
+   relativo mueve el bloque sin tocar el hueco que ocupa. Se cuenta desde el
+   centro, que es donde lo deja el flex. */
+.viaje-l-texto-movido-y {
   position: relative;
   top: calc((var(--texto-y, 50) - 50) * 1%);
+}
+
+/* Ancho a medida, para cuando el corte de línea que sale por defecto parte mal
+   la frase. El tope en `vw` se queda: sin él, un ancho pensado en el escritorio
+   desbordaría el marco en una pantalla estrecha. */
+.viaje-l-texto-ancho {
+  max-width: min(calc(var(--texto-ancho) * 1px), 80vw);
+}
+
+/* Margen a medida entre el texto y el borde del marco, para las escenas donde
+   el de siempre deja el texto demasiado justo o demasiado suelto. */
+.viaje-l-texto-margen {
+  --texto-lado: calc(var(--texto-margen) * 1px);
+}
+
+/* Pega el bloque al borde derecho sin tocar cómo se ve por dentro. La posición
+   `derecha` de la lista no valía: además de mover, cambia la alineación y el
+   ancho máximo, y hay escenas centradas que sólo quieren correrse al borde.
+
+   El margen que queda a la derecha no es cero: lo pone el relleno del propio
+   bloque, el mismo que separa por la izquierda a los textos de ese lado, así
+   que los dos bordes respiran igual en cualquier ancho de pantalla.
+
+   Va detrás de los desplazamientos a propósito: si la escena además trae uno
+   horizontal, aquí manda el borde. */
+.viaje-l-texto-derecha {
+  margin-left: auto;
+  margin-right: 0;
+  transform: none;
 }
 
 /* ── Los cinco niveles ── */
@@ -1063,17 +1145,52 @@ html, body {
   flex-shrink: 0;
 }
 
-/* En móvil no hay sitio para texto al lado del dibujo: la animación pasa a ser
-   un fondo tenue y el texto se lee encima, centrado. */
+/* En móvil no caben lado a lado el texto y el dibujo: se reparten a lo alto, el
+   texto arriba y la toma abajo.
+
+   Todos los ajustes de colocación del escritorio se anulan aquí de golpe —las
+   posiciones, los desplazamientos, el ancho y el margen a medida—. Están
+   calibrados contra un marco apaisado donde media pantalla queda libre al lado
+   del dibujo, y en vertical no significan nada: un texto empujado al 68% del
+   ancho, o con 460px de ancho fijo, en 390px de pantalla se sale o se estruja.
+   Por eso la lista es larga y no una regla sobre `.viaje-l-texto`: cada
+   modificador trae lo suyo y hay que desactivarlos uno a uno. */
 @media (max-width: 639px) {
+  .viaje-l-escena { align-items: flex-start; }
+
   .viaje-l-texto,
   .viaje-l-izquierda,
   .viaje-l-derecha,
-  .viaje-l-centro {
+  .viaje-l-centro,
+  .viaje-l-arriba,
+  .viaje-l-abajo,
+  .viaje-l-texto-movido-x,
+  .viaje-l-texto-movido-y,
+  .viaje-l-texto-ancho,
+  .viaje-l-texto-margen,
+  .viaje-l-texto-derecha,
+  .viaje-l-texto-arriba {
     max-width: none;
     margin: 0;
+    padding-block: 0;
+    transform: none;
+    top: auto;
+    align-self: auto;
     text-align: center;
+    --texto-lado: 1.25rem;
   }
+
+  /* La toma, abajo y a lo ancho. `contain` y no `cover`: el fondo del video es
+     el mismo rosa del marco, así que lo que sobra a los lados no se ve, y
+     recortando se perderían los personajes, que van pegados al borde de abajo
+     donde se apoyan sobre el mundo. */
+  .viaje-l-video {
+    top: auto;
+    height: 52%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
   .viaje-l-anim { opacity: .35; }
   .viaje-l-pasos { flex-wrap: wrap; gap: 1rem 1.25rem; }
   .viaje-l-paso { flex: 0 0 40%; }
