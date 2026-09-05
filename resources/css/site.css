@@ -1161,8 +1161,6 @@ html, body {
    Por eso la lista es larga y no una regla sobre `.viaje-l-texto`: cada
    modificador trae lo suyo y hay que desactivarlos uno a uno. */
 @media (max-width: 639px) {
-  .viaje-l-marco { background: #F6DDE9; }
-
   /* En vertical la escena deja de ser "texto a un lado del dibujo" y pasa a ser
      dos franjas apiladas: el texto arriba y la toma abajo. Se apilan de verdad,
      en columna, y no colocando la toma por encima con posiciones absolutas: así
