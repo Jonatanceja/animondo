@@ -45,7 +45,13 @@
                 {{# La caja sólo reserva sitio; el tamaño visible lo da el scale. Se mantiene
                     angosta para dejar ancho al título y a los precios, y el min-h conserva
                     la altura que la tarjeta tenía cuando la caja era más grande. #}}
-                <div class="hidden sm:block shrink-0 -translate-x-8 sm:min-h-[22rem] [&_.personaje-anim]:scale-[2.5] xl:[&_.personaje-anim]:scale-[3.6]">
+                {{# Bajado un poco: el scale crece desde el centro de la caja, así que
+                    lo que sube por arriba se salía de la tarjeta y el cuerno se metía
+                    encima del logotipo del nav. El desplazamiento va en `transform`,
+                    que no toca la maquetación: la columna sigue reservando el mismo
+                    sitio y ni el título ni los precios se mueven. Más abajo en xl,
+                    donde el personaje se pinta más grande y sobresale más. #}}
+                <div class="hidden sm:block shrink-0 -translate-x-8 translate-y-8 xl:translate-y-14 sm:min-h-[22rem] [&_.personaje-anim]:scale-[2.5] xl:[&_.personaje-anim]:scale-[3.6]">
                     {{ personajes_portada }}{{ if first }}
                     {{ partial:_personaje-media class="relative block w-40 lg:w-56 h-auto object-contain" }}
                     {{ /if }}{{ /personajes_portada }}

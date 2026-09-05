@@ -815,7 +815,9 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 4.5rem 1rem 5.5rem;
-  background: rgba(9, 9, 11, 0.94);
+  /* El azul de los títulos, no negro. Va con algo de transparencia para que la
+     página siga asomando por detrás, como estaba. */
+  background: rgba(50, 62, 129, 0.94);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -841,7 +843,10 @@ html, body {
   max-width: 100%;
   max-height: 75vh;
   border-radius: 1rem;
-  background: #000;
+  /* El mismo azul, opaco: es lo que se ve mientras la foto carga y en las bandas
+     de un video que no llena su hueco. En negro se recortaba como un recuadro
+     dentro del velo. */
+  background: #323E81;
 }
 
 .galeria-lb-cerrar {
@@ -1156,7 +1161,25 @@ html, body {
    Por eso la lista es larga y no una regla sobre `.viaje-l-texto`: cada
    modificador trae lo suyo y hay que desactivarlos uno a uno. */
 @media (max-width: 639px) {
-  .viaje-l-escena { align-items: flex-start; }
+  .viaje-l-marco { background: #F6DDE9; }
+
+  /* En vertical la escena deja de ser "texto a un lado del dibujo" y pasa a ser
+     dos franjas apiladas: el texto arriba y la toma abajo. Se apilan de verdad,
+     en columna, y no colocando la toma por encima con posiciones absolutas: así
+     el texto se centra en el hueco que le queda con un `justify-content` y no
+     hay que descontar a mano cuánto ocupa el video. Un porcentaje en `padding`
+     o en `margin` tampoco serviría de atajo, porque se calcula sobre el ANCHO
+     del contenedor y aquí lo que hay que repartir es el alto.
+
+     El orden va al revés que en el HTML —ahí el video viene antes, para quedar
+     por debajo del texto cuando se superponen en escritorio—, así que aquí se
+     invierte con `order`. Y el relleno de abajo se quita para que la toma llegue
+     al borde del marco, como cuando iba en absoluto. */
+  .viaje-l-escena {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
 
   .viaje-l-texto,
   .viaje-l-izquierda,
@@ -1185,10 +1208,26 @@ html, body {
      recortando se perderían los personajes, que van pegados al borde de abajo
      donde se apoyan sobre el mundo. */
   .viaje-l-video {
-    top: auto;
-    height: 52%;
+    position: static;
+    order: 2;
+    flex: 0 0 52%;
+    min-height: 0;
+    width: 100%;
+    height: auto;
     object-fit: contain;
     object-position: center bottom;
+  }
+
+  /* El texto se queda con lo que sobra y se centra ahí dentro. Va en columna
+     porque el bloque son varias piezas —título, párrafo, los cinco niveles— y
+     lo que hay que centrar es el conjunto, no cada una por su lado. */
+  .viaje-l-texto {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .viaje-l-anim { opacity: .35; }

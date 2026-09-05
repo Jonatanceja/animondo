@@ -211,7 +211,12 @@
             {{ if (count - 1) % 6 == 0 }}<div class="galeria-slide grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">{{ /if }}
 
                 {{ if type == 'zona' }}
-                <div class="group" data-stagger-child>
+                {{# Todo pegado abajo. Las tarjetas de una fila miden lo mismo, pero
+                    dentro el contenido caía desde arriba, así que una zona con dos
+                    renglones de descripción empujaba su foto más abajo que las de al
+                    lado y la fila quedaba desalineada. Anclando el bloque al fondo, y
+                    siendo la foto lo último, las fotos se alinean solas. #}}
+                <div class="group flex flex-col justify-end h-full" data-stagger-child>
                     {{ if titulo }}
                     <h3 class="font-display font-bold text-zinc-900 text-2xl sm:text-3xl text-center leading-tight">{{ titulo }}</h3>
                     {{ /if }}

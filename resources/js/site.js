@@ -255,6 +255,13 @@ function makeAnnoCircle(el, color, delay) {
 
     el.style.position = 'relative';
     el.style.display  = 'inline-block';
+    // El círculo va DETRÁS del texto, y para eso hace falta que la negrita sea
+    // su propio contexto de apilado. Con `z-index: -1` a secas el SVG no se
+    // quedaría detrás de la palabra: se iría detrás también del fondo del marco
+    // y del video, y desaparecería. Dándole aquí un z-index, el -1 del SVG sólo
+    // cuenta dentro de esta palabra: pinta por debajo de sus letras y por encima
+    // de todo lo que hay detrás.
+    el.style.zIndex   = '0';
 
     const padX = 14, padY = 8;
     const w  = el.offsetWidth  + padX * 2;
@@ -268,7 +275,7 @@ function makeAnnoCircle(el, color, delay) {
     const ns  = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('class', 'anno-circle');
-    svg.style.cssText = `position:absolute;left:${-padX}px;top:${-padY}px;width:${w}px;height:${h}px;pointer-events:none;overflow:visible;`;
+    svg.style.cssText = `position:absolute;left:${-padX}px;top:${-padY}px;width:${w}px;height:${h}px;pointer-events:none;overflow:visible;z-index:-1;`;
 
     const ellipse = document.createElementNS(ns, 'ellipse');
     ellipse.setAttribute('cx', cx);
