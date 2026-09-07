@@ -123,7 +123,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieAniman002
     type: escena
-    bucle_desde: 0.5
+    bucle_desde: 0.542
     video: viaje/videos/viaje-02-malabarista.webm
     zoom: 2.0
     foco_x: 18
@@ -136,7 +136,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieNiveles03
     type: escena
-    bucle_desde: 0.5
+    bucle_desde: 0.75
     video: viaje/videos/viaje-03-abeja.webm
     enabled: true
     title: '<p>El viaje completo tiene 5 niveles.</p>'
@@ -217,7 +217,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieGorras004
     type: escena
-    bucle_desde: 0.25
+    bucle_desde: 9.375
     video: viaje/videos/viaje-05-gorras.webm
     enabled: true
     title: '<p>El progreso tiene color.<br>Y viene en <strong>gorra</strong>.</p>'
@@ -233,7 +233,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieArtefac05
     type: escena
-    bucle_desde: 0.75
+    bucle_desde: 1.208
     video: viaje/videos/viaje-06-maquinas.webm
     enabled: true
     title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
@@ -249,7 +249,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieCierre006
     type: escena
-    bucle_desde: 1.5
+    bucle_desde: 1.75
     video: viaje/videos/viaje-08-cierre.webm
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
