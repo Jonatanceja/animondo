@@ -1441,6 +1441,57 @@ if (viajeL) {
     // dentro de la propia toma. Aquí sólo hay que arrancarla y pararla.
     const videos = escenas.map((e) => e.querySelector('[data-viaje-l-video]'));
 
+    // Las tomas que abren con un movimiento de cámara sólo lo enseñan la primera
+    // vuelta: al acabar vuelven al segundo marcado, no al principio. El `loop` del
+    // navegador no sirve para esto —siempre reinicia desde cero—, así que esas
+    // vienen sin él y el ciclo lo cierra este manejador. Volver atrás sale barato
+    // porque las tomas están codificadas con todos los fotogramas clave: el salto
+    // no obliga a decodificar desde ningún sitio anterior.
+    //
+    // OJO al probarlo en local: `php artisan serve` contesta 200 a las peticiones
+    // por rango y no manda `Accept-Ranges`, así que el navegador marca el video
+    // como no buscable —`seekable` acaba en 0 aunque esté entero descargado— e
+    // ignora este salto. La toma vuelve entonces al principio y parece que esto
+    // no funciona. Con un servidor que sí sirva rangos, que es cualquiera de
+    // verdad, va. Y si alguno no los sirviera, el peor caso es volver al
+    // principio: se repetiría la transición, que es como estaba antes.
+    // Saltar en el tiempo sólo funciona si quien sirve el video atiende peticiones
+    // por rango de bytes. Si no las atiende, el navegador marca la toma como no
+    // buscable —`seekable` acaba en 0 aunque esté entera descargada— y se traga
+    // el salto sin avisar: la transición volvería a verse en cada vuelta. Cuando
+    // se detecta ese caso se vuelve a pedir el archivo y se le entrega al
+    // elemento como blob, que siempre es buscable. Cuesta una descarga de más,
+    // pero sólo ocurre donde hace falta; con un servidor que sirva rangos esto
+    // no llega a dispararse.
+    function hacerBuscable(v) {
+      if (v.dataset.blob) return;
+      if (v.seekable.length && v.seekable.end(v.seekable.length - 1) > 0) return;
+      v.dataset.blob = '1';
+      fetch(v.currentSrc || v.src)
+        .then((r) => r.blob())
+        .then((b) => {
+          const sonaba = !v.paused;
+          v.src = URL.createObjectURL(b);
+          if (sonaba) v.play().catch(() => {});
+        })
+        .catch(() => {});
+    }
+
+    videos.forEach((v) => {
+      if (!v) return;
+      const desde = parseFloat(v.dataset.bucle);
+      if (!Number.isFinite(desde) || desde <= 0) return;
+
+      v.addEventListener('loadeddata', () => hacerBuscable(v));
+
+      v.addEventListener('ended', () => {
+        // Si el punto cayera fuera de la toma, mejor repetirla entera que
+        // quedarse en un fotograma congelado.
+        v.currentTime = desde < v.duration ? desde : 0;
+        v.play().catch(() => {});
+      });
+    });
+
     // Se pide la toma de la escena siguiente en cuanto se enciende la actual,
     // para que esté lista cuando el scroll llegue. Todas de golpe al cargar la
     // página son quince megas ocupando la conexión sin que nadie las esté

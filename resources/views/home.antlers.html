@@ -82,7 +82,10 @@
                 anterior y viaja hasta el suyo—, así que aquí no hay nada que
                 calcular. Va muda porque los navegadores no dejan arrancar solo
                 nada con sonido, y en bucle para que la escena siga viva
-                mientras se lee el texto.
+                mientras se lee el texto. Las que abren con movimiento de cámara
+                no repiten ese arranque: el `loop` del navegador siempre vuelve al
+                principio, así que ésas lo llevan el JS, que las devuelve al
+                segundo marcado en `data-bucle`.
 
                 `preload` sólo en la primera. Son ocho tomas y quince megas:
                 pedirlas todas al abrir la página ocuparía la conexión mucho
@@ -91,7 +94,8 @@
             {{ if video }}
             <video class="viaje-l-video" data-viaje-l-video
                    src="{{ video:url }}"
-                   muted loop playsinline disablepictureinpicture aria-hidden="true"
+                   muted playsinline disablepictureinpicture aria-hidden="true"
+                   {{ if bucle_desde }}data-bucle="{{ bucle_desde }}"{{ else }}loop{{ /if }}
                    preload="{{ if count == 1 }}auto{{ else }}none{{ /if }}"></video>
             {{ /if }}
 

@@ -195,6 +195,12 @@ tabs:
                               - mp4
                               - mov
                         -
+                          handle: bucle_desde
+                          field:
+                            type: float
+                            display: 'El bucle empieza en (segundos)'
+                            instructions: 'Sólo si la toma abre con un movimiento de cámara que viene de la escena anterior. Se reproduce entera una vez y, al acabar, vuelve a este segundo en lugar de al principio: el viaje se ve una vez y después sólo cicla la parte quieta. Vacío repite la toma completa.'
+                        -
                           handle: centro_x
                           field:
                             type: integer
