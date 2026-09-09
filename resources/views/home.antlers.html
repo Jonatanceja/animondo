@@ -225,7 +225,7 @@
                     <h3 class="font-display font-bold text-zinc-900 text-2xl sm:text-3xl text-center leading-tight">{{ titulo }}</h3>
                     {{ /if }}
                     {{ if descripcion }}
-                    <p class="font-display font-bold text-zinc-900 text-lg sm:text-xl text-center leading-snug mt-2">{{ descripcion | nl2br }}</p>
+                    <p class="font-display font-light text-zinc-900 text-lg sm:text-xl text-center leading-snug mt-2">{{ descripcion | nl2br }}</p>
                     {{ /if }}
 
                     {{# Sin portada queda el recuadro en blanco, como en la referencia,
@@ -255,11 +255,18 @@
                             </span>
                             {{ /if }}
 
-                            {{# El contador lo rellena site.js: `| count` no funciona
-                                sobre el query builder de un campo `assets`. #}}
-                            <span class="galeria-vermas" aria-hidden="true">
-                                <span class="galeria-vermas-pastilla" data-galeria-vermas></span>
-                            </span>
+                            {{# El velo que aparece al pasar por encima. Va vacío: los
+                                puntos son hermanos suyos y no hijos, porque ellos se ven
+                                siempre y este se desvanece. #}}
+                            <span class="galeria-vermas" aria-hidden="true"></span>
+
+                            {{# Un punto por foto, puestos por site.js: `| count` no
+                                funciona sobre el query builder de un campo `assets`, y
+                                además hay que descontar la portada cuando se repite
+                                dentro del campo. El número de fotos también se le añade
+                                al `aria-label` del botón, que es donde antes lo decía
+                                el texto de la pastilla. #}}
+                            <span class="galeria-bolitas" data-galeria-bolitas aria-hidden="true"></span>
                         </button>
                         {{ /if }}
                     </div>
@@ -386,9 +393,14 @@
                 {{ if imagen and count == 1 }}
                 {{ partial:_personaje-media class="absolute z-20 pointer-events-none bottom-24 left-3 w-24" }}
                 {{ elseif imagen and count == 2 }}
-                {{ partial:_personaje-media class="absolute z-20 pointer-events-none top-6 left-24 w-32 transform -rotate-14" }}
+                {{ partial:_personaje-media class="absolute z-20 pointer-events-none top-4 left-28 w-20 transform -rotate-14 sm:top-6 sm:left-24 sm:w-32" }}
                 {{ elseif imagen and count == 3 }}
-                <div class="absolute z-20 pointer-events-none top-0 right-16 w-40 [&_.personaje-anim]:scale-[2.6]">{{ partial:_personaje-media class="relative block w-full h-auto object-contain" }}</div>
+                {{# En móvil los dos se van a los bordes y encogen. El unicornio sobre todo:
+                    con `w-40` y un scale de 2.6 se pinta a 416px, que en la tarjeta ancha
+                    es el 61% pero en una de móvil pasaría del ancho entero. Los valores de
+                    escritorio se conservan en `sm:`, que antes no existían y por eso los de
+                    la tarjeta ancha se aplicaban también al teléfono. #}}
+                <div class="absolute z-20 pointer-events-none top-6 right-6 w-32 [&_.personaje-anim]:scale-[2.1] sm:top-0 sm:right-16 sm:w-40 sm:[&_.personaje-anim]:scale-[2.6]">{{ partial:_personaje-media class="relative block w-full h-auto object-contain" }}</div>
                 {{ /if }}
                 {{ /personajes_en_posicion_absoluta }}
             </div>

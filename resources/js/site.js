@@ -1307,14 +1307,32 @@ if (galerias.length) {
       return lista;
     }
 
-    // El contador de la portada: `| count` no funciona sobre el query builder
-    // de un campo `assets`, así que se cuenta aquí, ya deduplicado.
+    // Un punto por foto sobre la portada, para que se vea cuántas hay sin
+    // necesidad de leer nada. Se cuentan aquí porque `| count` no funciona sobre
+    // el query builder de un campo `assets`, y porque hay que descontar la
+    // portada si además viene repetida dentro del campo.
+    //
+    // El número deja de estar escrito, así que se le pasa al `aria-label` del
+    // botón: los puntos son decorativos y quien navega por voz se quedaría sin
+    // saber cuántas fotos va a abrir.
     items.forEach((item) => {
-      const insignia = item.querySelector('[data-galeria-vermas]');
-      if (!insignia) return;
+      const fila = item.querySelector('[data-galeria-bolitas]');
+      if (!fila) return;
       const propio = conjuntoDe(item);
-      if (!propio) { insignia.closest('.galeria-vermas').remove(); return; }
-      insignia.textContent = propio.length === 1 ? 'Ver la foto' : `Ver las ${propio.length} fotos`;
+      if (!propio || propio.length < 2) {
+        // Una sola foto no es una galería: ni puntos ni velo.
+        fila.remove();
+        item.querySelector('.galeria-vermas')?.remove();
+        return;
+      }
+      propio.forEach((_, i) => {
+        const punto = document.createElement('span');
+        punto.className = 'galeria-bolita';
+        if (i === 0) punto.setAttribute('aria-current', 'true');
+        fila.appendChild(punto);
+      });
+      const etiqueta = item.getAttribute('aria-label');
+      if (etiqueta) item.setAttribute('aria-label', `${etiqueta} (${propio.length} fotos)`);
     });
 
     // Firefox ignora `-webkit-user-drag`, así que las imágenes se desactivan

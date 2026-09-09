@@ -119,14 +119,33 @@
             {{ /if }}
 
             <div class="relative z-10 max-w-[62%]">
+                {{# El nombre manda si lo hay —Exploradores, Constructores…— y las edades
+                    pasan a subtítulo. Sin nombre, las edades siguen siendo el título,
+                    que es como estaban antes de que existiera el campo. #}}
+                {{ if titulo }}
+                <h2 class="font-display font-bold text-2xl sm:text-3xl text-[#323E81] leading-tight">{{ titulo }}</h2>
                 {{ if edades }}
+                <p class="font-display font-normal text-lg sm:text-xl text-[#323E81] leading-tight mt-0.5">{{ edades }}</p>
+                {{ /if }}
+                {{ elseif edades }}
                 <h2 class="font-display font-bold text-2xl sm:text-3xl text-[#323E81] leading-tight">{{ edades }}</h2>
                 {{ /if }}
 
-                {{# El inventario de Snipcart manda: site.js reescribe este texto contra
-                    /api/snipcart/stock. Lo que se pinta aquí es sólo el respaldo para
-                    mientras el producto no exista todavía en Snipcart. #}}
-                <p class="font-display font-semibold text-base sm:text-lg text-[#323E81] mt-1" data-lugares="{{ id }}">Quedan {{ lugares_provisional ?? 30 }} lugares</p>
+                {{# El horario de este grupo, que no es el del taller entero. El
+                    `data-time` es para que site.js lo reescriba en el formato del sitio;
+                    lo que va dentro es el respaldo por si el JS no llega a correr. #}}
+                {{ if hora_inicio && hora_fin }}
+                <p class="font-display font-normal text-base sm:text-lg text-[#323E81] leading-tight mt-1">
+                    <span data-time="{{ hora_inicio }}">{{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
+                    a
+                    <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
+                </p>
+                {{ /if }}
+
+                {{# Aquí iba un "Quedan N lugares" que reescribía site.js contra
+                    /api/snipcart/stock. Se quita de la tarjeta, pero el inventario sigue
+                    mandando donde importa: cuando un grupo se queda sin stock, el mismo
+                    JS apaga su botón y lo cambia por "Lugares agotados". #}}
 
                 {{# Producto de Snipcart. La categoría `taller-sabatino` es distinta de la
                     `taller` del taller de verano a propósito: la regla del 10% por 2 artículos

@@ -10,8 +10,8 @@ titulo_portada: |-
   Sábados Animondo
 dias:
   - sabado
-hora_inicio: '09:00'
-hora_fin: '13:00'
+hora_inicio: '09:30'
+hora_fin: '14:00'
 notas: {  }
 fecha_inicio: '2026-09-19 00:00'
 precio_mensual: 1500
@@ -23,6 +23,9 @@ grupos:
   -
     id: sab6a8grupo000000001
     type: grupo
+    titulo: Exploradores
+    hora_inicio: '09:30'
+    hora_fin: '11:00'
     enabled: true
     edades: 'De 6 a 8 años'
     color: morado
@@ -31,16 +34,22 @@ grupos:
   -
     id: sab9a12grupo00000002
     type: grupo
+    titulo: Constructores
+    hora_inicio: '11:00'
+    hora_fin: '12:30'
     enabled: true
-    edades: 'De 9 a 12 años'
+    edades: 'De 9 a 11 años'
     color: amarillo
     lugares_provisional: 30
     personaje: f0d00257-e86d-459a-b298-51afb33a6d13
   -
     id: sab13a16grupo0000003
     type: grupo
+    titulo: Realizadores
+    hora_inicio: '12:30'
+    hora_fin: '14:00'
     enabled: true
-    edades: 'De 13 a 16 años'
+    edades: 'De 12 a 16 años'
     color: coral
     lugares_provisional: 30
     personaje: 854caaf0-b67c-4131-a189-3fa047126aa6

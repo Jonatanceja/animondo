@@ -694,14 +694,16 @@ html, body {
 }
 
 /* Un velo detrás del botón: el triángulo blanco tiene que leerse igual sobre
-   un fotograma claro que sobre uno oscuro. */
+   un fotograma claro que sobre uno oscuro. Va en el azul de la marca y no en
+   negro: sobre los fotogramas, casi todos claros y de colores cálidos, la mancha
+   negra se leía como suciedad en vez de como parte del sitio. */
 .galeria-play::before {
   content: '';
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at center,
-                              rgba(9, 9, 11, 0.45) 0%,
-                              rgba(9, 9, 11, 0.12) 60%,
+                              rgba(50, 62, 129, 0.5) 0%,
+                              rgba(50, 62, 129, 0.14) 60%,
                               transparent 100%);
 }
 
@@ -711,7 +713,9 @@ html, body {
   height: 3.5rem;
   transform: scale(0.82);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  filter: drop-shadow(0 4px 12px rgba(9, 9, 11, 0.35));
+  /* Algo más opaca que la negra que había: el azul es más claro y a la misma
+     opacidad el triángulo se despegaba menos del fondo. */
+  filter: drop-shadow(0 4px 12px rgba(50, 62, 129, 0.5));
 }
 
 .galeria-item:hover .galeria-play,
@@ -750,18 +754,60 @@ html, body {
   transition: opacity 0.3s ease;
 }
 
-.galeria-vermas-pastilla {
-  padding: 0.65rem 1.35rem;
+/* Un punto por foto, sobre la portada. Sustituyen a la pastilla que decía "Ver
+   las N fotos": dicen lo mismo —cuántas hay— sin texto que leer ni que traducir,
+   y sin tapar el centro de la imagen.
+
+   Se ven siempre, no sólo al pasar por encima, que es de lo que sirven: si
+   aparecieran con el cursor no dirían nada en un teléfono, y son justamente la
+   pista de que ahí dentro hay más de una foto. Por eso van fuera del velo, que
+   sí se desvanece.
+
+   La sombra es para que se lean sobre una foto clara; sin ella los puntos
+   blancos desaparecen contra un cielo o una pared. */
+.galeria-bolitas {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.galeria-bolita {
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 9999px;
-  background: #323E81;
-  color: #fff;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(9, 9, 11, 0.35);
-  transform: scale(0.88);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 3px rgba(9, 9, 11, 0.45);
+  transition: background 0.25s ease;
+}
+
+/* El primero es la portada, que es la que se está viendo. */
+.galeria-bolita[aria-current='true'] {
+  background: #fff;
+}
+
+/* En escritorio los puntos salen al pasar por encima, con el velo. En táctil se
+   quedan siempre a la vista: ahí no hay "pasar por encima" que valga, y son la
+   única pista de que la portada esconde más fotos.
+
+   La condición mira si el dispositivo tiene puntero con hover, no el ancho de la
+   pantalla: una tablet ancha no debería esconderlos por ser ancha, ni un portátil
+   estrecho enseñarlos siempre por ser estrecho. */
+@media (hover: hover) {
+  .galeria-bolitas {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .galeria-item:hover .galeria-bolitas,
+  .galeria-item:focus-visible .galeria-bolitas {
+    opacity: 1;
+  }
 }
 
 .galeria-item:hover .galeria-vermas,
@@ -769,18 +815,9 @@ html, body {
   opacity: 1;
 }
 
-.galeria-item:hover .galeria-vermas-pastilla,
-.galeria-item:focus-visible .galeria-vermas-pastilla {
-  transform: scale(1);
-}
-
 @media (hover: none) {
   .galeria-vermas {
-    opacity: 1;
-  }
-
-  .galeria-vermas-pastilla {
-    transform: scale(1);
+    opacity: 0;
   }
 }
 
