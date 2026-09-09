@@ -133,14 +133,6 @@ tabs:
                             display: Edades
                             instructions: 'Ej: De 6 a 8 años'
                         -
-                          handle: lugares_provisional
-                          field:
-                            type: integer
-                            display: 'Lugares (provisional)'
-                            instructions: 'Sólo se muestra mientras el producto no tenga inventario en Snipcart. En cuanto Snipcart responda con stock, manda el inventario y este número se ignora.'
-                            default: 30
-                            width: 50
-                        -
                           handle: color
                           field:
                             type: select

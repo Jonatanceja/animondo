@@ -29,7 +29,6 @@ grupos:
     enabled: true
     edades: 'De 6 a 8 años'
     color: morado
-    lugares_provisional: 30
     personaje: 8c6cbe1e-c737-4083-ba31-5fac3e909b67
   -
     id: sab9a12grupo00000002
@@ -40,7 +39,6 @@ grupos:
     enabled: true
     edades: 'De 9 a 11 años'
     color: amarillo
-    lugares_provisional: 30
     personaje: f0d00257-e86d-459a-b298-51afb33a6d13
   -
     id: sab13a16grupo0000003
@@ -51,7 +49,6 @@ grupos:
     enabled: true
     edades: 'De 12 a 16 años'
     color: coral
-    lugares_provisional: 30
     personaje: 854caaf0-b67c-4131-a189-3fa047126aa6
 descripcion: '<p>Cada sábado tu hijo entra a un estudio de animación real, construye sus personajes, cuenta sus historias y aprende algo que le va a servir toda la vida: confiar en sus ideas y llevarlas hasta el final.</p>'
 alerta: '<p>¿Prefieres pagar por trimestre? <strong>$4,000</strong> si pagas por adelantado.</p>'
