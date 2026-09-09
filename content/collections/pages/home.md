@@ -233,7 +233,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieArtefac05
     type: escena
-    bucle_desde: 1.208
+    bucle_desde: 2.792
     video: viaje/videos/viaje-06-maquinas.webm
     enabled: true
     title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
@@ -249,7 +249,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieCierre006
     type: escena
-    bucle_desde: 1.75
+    bucle_desde: 4.333
     video: viaje/videos/viaje-08-cierre.webm
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
