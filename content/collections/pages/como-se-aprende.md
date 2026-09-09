@@ -1,5 +1,6 @@
 ---
 id: como-se-aprende
+published: false
 blueprint: como-se-aprende
 title: 'Como se aprende'
 slug: como-se-aprende
@@ -28,5 +29,5 @@ bloques:
     type: bloque
     enabled: true
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780536860
+updated_at: 1788990634
 ---

@@ -1,5 +1,6 @@
 ---
 id: viaje-animador
+published: false
 blueprint: viaje-animador
 title: 'El Viaje del animador'
 slug: el-viaje-del-animador
@@ -8,7 +9,7 @@ viaje_titulo: 'El Viaje del Animador'
 viaje_descripcion: '<p>Un camino creativo que se recorre paso a paso.<br><br>Cada módulo dura 3 meses.<br><br>El progreso se reconoce con una gorra.</p>'
 viaje_imagen_personajes: personajes.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780536866
+updated_at: 1788990625
 viaje_imagen_principal: foto-nino.jpg
 pasos_del_animador:
   -
