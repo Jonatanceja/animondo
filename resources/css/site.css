@@ -1068,6 +1068,24 @@ html, body {
   pointer-events: none;
 }
 
+/* El texto entra un segundo después que la escena. Cada toma abre con un
+   movimiento de cámara que viene de la escena anterior, y el texto apareciendo
+   encima mientras la imagen todavía viaja se leía como un cruce: dos cosas
+   moviéndose a la vez sin relación. Con la espera, primero llega la toma a su
+   sitio y luego habla.
+
+   Sólo al entrar. Al salir se va sin retardo —la regla de abajo no lo lleva—,
+   que si no se quedaría colgado sobre la escena siguiente. */
+.viaje-l-texto {
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.viaje-l-escena.esta-activa .viaje-l-texto {
+  opacity: 1;
+  transition-delay: 1s;
+}
+
 /* El texto va por encima de la animación. */
 .viaje-l-texto {
   position: relative;
@@ -1273,6 +1291,8 @@ html, body {
 /* Quien haya pedido menos movimiento no tiene por qué tragarse los fundidos. */
 @media (prefers-reduced-motion: reduce) {
   .viaje-l-escena { transition: none; }
+  .viaje-l-texto,
+  .viaje-l-escena.esta-activa .viaje-l-texto { transition: none; transition-delay: 0s; }
 }
 
 /* ── Las gorras del viaje ──

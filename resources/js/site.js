@@ -1619,7 +1619,10 @@ if (viajeL) {
       escenas[i]?.classList.add('esta-activa');
       // `primeraPintada` distingue el arranque —donde el mundo se coloca de
       // golpe— de un cambio de escena, que sí se recorre.
-      if (escenas[i]) { encuadrar(escenas[i], primeraPintada); animateAnnotations(escenas[i], true, 0.5); }
+      // 1.5s: el texto ahora tarda un segundo en aparecer y medio más en
+      // acabar de entrar. Con el 0.5 de antes, el círculo y el subrayado se
+      // dibujaban sobre un texto todavía invisible y se los perdía entero.
+      if (escenas[i]) { encuadrar(escenas[i], primeraPintada); animateAnnotations(escenas[i], true, 1.5); }
       reproducir(i);
       actual = i;
       primeraPintada = true;
