@@ -74,7 +74,11 @@
         {{ if type == 'escena' }}
         {{# Todas las escenas van superpuestas y sólo se ve la activa. #}}
         <div class="viaje-l-escena{{ if count == 1 }} esta-activa{{ /if }}" data-viaje-l-escena
-             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}" data-centro-y="{{ centro_y ?? 50 }}">
+             data-zoom="{{ zoom ?? 1 }}" data-foco-x="{{ foco_x ?? 50 }}" data-foco-y="{{ foco_y ?? 50 }}" data-rotacion="{{ rotacion ?? 0 }}" data-centro-x="{{ centro_x ?? 50 }}" data-centro-y="{{ centro_y ?? 50 }}"
+             {{# El mismo número por dos vías: la variable la usa el CSS para el
+                 retardo del texto, y el `data-` lo lee el JS para encadenar detrás
+                 los adornos de las negritas. #}}
+             {{ if texto_retraso }}style="--texto-retraso: {{ texto_retraso }}" data-retraso="{{ texto_retraso }}"{{ /if }}>
 
             {{# La toma de la escena, cuando la hay. Manda sobre el mundo de
                 arriba: el acercamiento y el giro vienen ya resueltos dentro del

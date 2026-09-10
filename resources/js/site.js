@@ -1619,10 +1619,16 @@ if (viajeL) {
       escenas[i]?.classList.add('esta-activa');
       // `primeraPintada` distingue el arranque —donde el mundo se coloca de
       // golpe— de un cambio de escena, que sí se recorre.
-      // 1.5s: el texto ahora tarda un segundo en aparecer y medio más en
-      // acabar de entrar. Con el 0.5 de antes, el círculo y el subrayado se
-      // dibujaban sobre un texto todavía invisible y se los perdía entero.
-      if (escenas[i]) { encuadrar(escenas[i], primeraPintada); animateAnnotations(escenas[i], true, 1.5); }
+      // Los adornos de las negritas van medio segundo detrás del texto, que es
+      // lo que éste tarda en acabar de entrar. Si se adelantan, el círculo y el
+      // subrayado se dibujan sobre un texto todavía invisible y se los pierde
+      // enteros. El retardo del texto lo pone la escena y puede variar, así que
+      // se lee de ella en vez de darlo por hecho.
+      if (escenas[i]) {
+        encuadrar(escenas[i], primeraPintada);
+        const espera = parseFloat(escenas[i].dataset.retraso);
+        animateAnnotations(escenas[i], true, (Number.isFinite(espera) ? espera : 1) + 0.5);
+      }
       reproducir(i);
       actual = i;
       primeraPintada = true;

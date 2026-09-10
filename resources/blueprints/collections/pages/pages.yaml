@@ -195,6 +195,12 @@ tabs:
                               - mp4
                               - mov
                         -
+                          handle: texto_retraso
+                          field:
+                            type: float
+                            display: 'El texto entra a los (segundos)'
+                            instructions: 'Cuánto espera el texto desde que arranca la escena. Sirve para que no se cruce con el movimiento de cámara de la toma: cuanto más largo sea ese viaje, más conviene esperar. Vacío espera 1 segundo.'
+                        -
                           handle: bucle_desde
                           field:
                             type: float
