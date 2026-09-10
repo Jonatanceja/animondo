@@ -4,15 +4,12 @@ blueprint: taller-sabatino
 title: 'Talleres sabatinos'
 template: talleres/taller-sabatino
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1787016763
+updated_at: 1789065417
 titulo_portada: |-
   Talleres
   Sábados Animondo
 dias:
   - sabado
-hora_inicio: '09:30'
-hora_fin: '14:00'
-notas: {  }
 fecha_inicio: '2026-09-19 00:00'
 precio_mensual: 1500
 precio_trimestre: 4000

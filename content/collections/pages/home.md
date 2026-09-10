@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1787786819
+updated_at: 1789065836
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -120,6 +120,9 @@ viaje_lotties_slides:
     enabled: true
     title: '<p>Un lugar donde las niñas, niños y jóvenes <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
     posicion: izquierda
+    centro_y: 50
+    rotacion: 0
+    texto_derecha: false
   -
     id: viajeLottieAniman002
     type: escena
@@ -133,6 +136,9 @@ viaje_lotties_slides:
     enabled: true
     title: '<p>Dan vida a objetos, <strong>animan</strong> dibujos y crean sus propias historias.</p><p>Para dejar de ser espectadores y convertirse en <strong>creadores.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
     posicion: izquierda
+    centro_y: 50
+    texto_arriba: false
+    texto_derecha: false
   -
     id: viajeLottieNiveles03
     type: escena
@@ -214,6 +220,8 @@ viaje_lotties_slides:
                 type: text
                 text: 'Encuentra tu propia voz'
         color: negro
+    rotacion: 0
+    texto_arriba: false
   -
     id: viajeLottieGorras004
     type: escena
@@ -230,6 +238,8 @@ viaje_lotties_slides:
     rotacion: -90
     centro_x: 78
     centro_y: 45
+    texto_arriba: false
+    texto_derecha: false
   -
     id: viajeLottieArtefac05
     type: escena
@@ -246,6 +256,8 @@ viaje_lotties_slides:
     rotacion: 52
     centro_x: 76
     centro_y: 60
+    texto_arriba: false
+    texto_derecha: false
   -
     id: viajeLottieCierre006
     type: escena
@@ -260,6 +272,8 @@ viaje_lotties_slides:
     rotacion: 0
     centro_x: 62
     centro_y: 50
+    texto_arriba: false
+    texto_derecha: false
 image_section_image: animondo-color.svg
 personajes_cards:
   - f0d00257-e86d-459a-b298-51afb33a6d13
@@ -368,19 +382,19 @@ faq:
     pregunta: '¿Qué se lleva a casa?'
     respuesta: |-
       Sus artefactos y sus animaciones.
-      Las animaciones se envían por WhatsApp.
+      Las animaciones se envían por WhatsApp y correo electrónico.
   -
     id: faqMateriales00006
     type: pregunta
     enabled: true
     pregunta: '¿Los materiales están incluidos?'
-    respuesta: 'Sí, todos. Plastilina, papel, iPads, mesas de luz. Tu hijo solo trae su creatividad; nosotros ponemos lo demás.'
+    respuesta: 'Sí, todos. Plastilina, papel, arena, sopas de pasta, iPads y mesas de luz. Tu hijo solo trae su creatividad; nosotros ponemos lo demás.'
   -
     id: faqDuracionTaller007
     type: pregunta
     enabled: true
     pregunta: '¿Cuánto dura el taller?'
-    respuesta: 'Hora y media cada sábado. Y no hay fecha de fin: el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
+    respuesta: 'Hora y media cada sábado. Hay fecha de fin, el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
 instructores_titulo: Instructores
 personajes_en_posicion_absoluta:
   - 475d4e9f-948e-4a62-8cb1-5bd643118b6a
