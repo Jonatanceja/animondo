@@ -261,7 +261,7 @@ viaje_lotties_slides:
   -
     id: viajeLottieCierre006
     type: escena
-    texto_retraso: 2.0
+    texto_retraso: 4.0
     bucle_desde: 4.333
     video: viaje/videos/viaje-08-cierre.webm
     enabled: true
