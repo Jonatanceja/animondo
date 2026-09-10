@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1789065836
+updated_at: 1789070869
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -218,7 +218,7 @@ viaje_lotties_slides:
             content:
               -
                 type: text
-                text: 'Encuentra tu propia voz'
+                text: 'Encuentra su propia voz'
         color: negro
     rotacion: 0
     texto_arriba: false
@@ -294,7 +294,7 @@ marca_titulo: '<p>Imagina<br><strong>Anima </strong><br>Comparte</p>'
 marca_imagen_logo: animondo-color.svg
 marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
-hero_video_file: video/hero-video-2.mp4
+hero_video_file: animondo-hero-video.mp4
 talleres_entries:
   - fc361f30-59ac-434a-ac78-dafd900c3887
   - 6382ddc6-e313-4ca9-9c53-00bedb84097e
