@@ -91,5 +91,27 @@ class AppServiceProvider extends ServiceProvider
 
             return $lista === null || $lista->isNotEmpty();
         });
+
+        // Si la tarjeta de la home y de /talleres enlaza y ofrece reservar, o se
+        // queda en "Próximamente".
+        //
+        // Antes lo decidía el horario del taller: con hora de inicio, abierto.
+        // Era frágil, porque ese campo es de portada y sólo describe el rango;
+        // quitarlo —cosa razonable cuando cada grupo lleva ya el suyo— dejaba la
+        // tarjeta en "Próximamente" y sin enlace, sin que nada lo hiciera evidente.
+        //
+        // Ahora se mira lo único que decide de verdad si hay algo que reservar:
+        // que queden semanas abiertas, en los talleres que se venden por semanas,
+        // o que haya grupos, en los que se venden por grupo de edad. Un taller sin
+        // ninguna de las dos cosas todavía no existe para el visitante.
+        Collection::computed('talleres', 'se_puede_reservar', function ($entry) use ($abiertas) {
+            $semanas = $abiertas($entry);
+
+            if ($semanas !== null) {
+                return $semanas->isNotEmpty();
+            }
+
+            return ! empty($entry->augmentedValue('grupos')->value());
+        });
     }
 }

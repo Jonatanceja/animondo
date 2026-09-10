@@ -12,8 +12,8 @@
     columnas. Los personajes salen del campo `personaje` del taller, y si no lo
     tiene se toma uno de la colección para que la tarjeta no quede desnuda.
 
-    Una tarjeta enlaza y ofrece reservar cuando el taller tiene horario Y le
-    quedan fechas; si no, se queda en "Próximamente" y deja de ser un enlace.
+    Una tarjeta enlaza y ofrece reservar cuando hay algo que reservar: semanas
+    abiertas, o grupos. Si no, se queda en "Próximamente" y deja de ser un enlace.
     Lo segundo sólo afecta a los talleres que se venden por semanas sueltas —los
     de verano—: cuando la última semana pasa, `hay_fechas` se vuelve falso y la
     tarjeta cambia sola, sin que nadie tenga que entrar al panel. Los demás
@@ -25,7 +25,7 @@
     {{ talleres_entries }}
     {{ if first }}
     <div class="relative pt-28 sm:pt-40 mb-6 sm:mb-0" data-taller-card>
-    {{ if hora_inicio && hay_fechas }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
+    {{ if se_puede_reservar }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
 
         {{ if personaje }}
         {{ personaje }}
@@ -62,16 +62,20 @@
 
         <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10">
             <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
-            {{ if hora_inicio && hay_fechas }}
+            {{ if se_puede_reservar }}
+            {{# El horario, sólo si el taller lleva uno de portada. Los sabatinos ya no:
+                cada grupo tiene el suyo y un rango único no decía gran cosa. #}}
+            {{ if hora_inicio }}
             <p class="font-display font-light text-2xl text-[#323E81] mb-3">
                 <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span><br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
+            {{ /if }}
             <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
             {{ else }}
             <p class="font-display font-light text-2xl text-[#323E81] mt-2">{{ mensaje_sin_fechas ?? 'Próximamente' }}</p>
             {{ /if }}
         </div>
 
-    {{ if hora_inicio && hay_fechas }}</a>{{ else }}</div>{{ /if }}
+    {{ if se_puede_reservar }}</a>{{ else }}</div>{{ /if }}
     </div>
     {{ /if }}
     {{ /talleres_entries }}
@@ -81,7 +85,7 @@
         {{ talleres_entries }}
         {{ unless first }}
         <div class="relative pt-6 sm:pt-6" data-taller-card>
-        {{ if hora_inicio && hay_fechas }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
+        {{ if se_puede_reservar }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
 
             {{ if personaje }}
             {{ personaje }}
@@ -115,20 +119,22 @@
             {{# Sin horario el bloque es mucho más corto (sólo título y "Próximamente"),
                     así que el título caía más abajo que en las tarjetas con horario.
                     Más padding inferior lo sube a la misma altura. #}}
-                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if hora_inicio && hay_fechas }}pb-8{{ else }}pb-24{{ /if }}">
+                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if se_puede_reservar }}pb-8{{ else }}pb-24{{ /if }}">
                 <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
-                {{ if hora_inicio && hay_fechas }}
+                {{ if se_puede_reservar }}
+                {{ if hora_inicio }}
                 <p class="font-display font-light text-2xl text-[#323E81] mb-3">
                     <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span>
                     de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
                 </p>
+                {{ /if }}
                 <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
                 {{ else }}
                 <p class="font-display font-light text-2xl text-[#323E81] mt-1">{{ mensaje_sin_fechas ?? 'Próximamente' }}</p>
                 {{ /if }}
             </div>
 
-        {{ if hora_inicio && hay_fechas }}</a>{{ else }}</div>{{ /if }}
+        {{ if se_puede_reservar }}</a>{{ else }}</div>{{ /if }}
         </div>
         {{ /unless }}
         {{ /talleres_entries }}
