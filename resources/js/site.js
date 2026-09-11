@@ -3,6 +3,18 @@ import { SplitText } from 'gsap/SplitText';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
+// ── Reproductor de animaciones dotLottie ───────────────────────────────────
+// Define <dotlottie-wc>, que es lo que usa el mundo de El Viaje. No sirve el
+// <dotlottie-player> de antes: aquel sólo lee archivos .lottie de la versión 1
+// y falla con un "no animation selected" ante los de la versión 2, que es lo
+// que exportan las herramientas actuales. Éste lee .json y .lottie v1 y v2.
+import { setWasmUrl } from '@lottiefiles/dotlottie-wc';
+// El runtime va en WebAssembly y por defecto se lo pide a jsdelivr. Lo servimos
+// nosotros: `?url` hace que Vite lo copie al build con su hash y devuelva la
+// ruta buena, así el sitio no depende de un CDN ajeno.
+import wasmUrl from '@lottiefiles/dotlottie-web/dotlottie-player.wasm?url';
+setWasmUrl(wasmUrl);
+
 // ── Mobile nav toggle ─────────────────────────────────────────────────────
 const hamburger   = document.getElementById('nav-hamburger');
 const mobileMenu  = document.getElementById('nav-mobile-menu');
@@ -38,6 +50,36 @@ if (navLogo) {
     navLogo.classList.toggle('logo-hidden', window.scrollY > 10);
   }, { passive: true });
 }
+
+// ── Arranque de los videos que van solos ───────────────────────────────────
+// Safari en iPhone bloquea el arranque automático con más frecuencia que el
+// resto: basta el modo de bajo consumo, o que el sistema decida que no toca.
+// Cuando lo bloquea no avisa —`play()` devuelve una promesa rechazada y ya—, así
+// que el video se queda congelado en su primer fotograma sin que nada lo diga.
+//
+// Aquí se intenta arrancarlos a mano y, si no se puede, se vuelve a intentar en
+// cuanto la persona toque la pantalla: ese gesto sí cuenta como permiso. Se
+// escucha una sola vez y se suelta, que no hace falta nada más.
+//
+// El `muted` también se pone por propiedad y no sólo por atributo: el atributo
+// se lee al construir el elemento, y si algo lo toca después iOS deja de
+// considerarlo silenciado y vuelve a bloquear.
+document.querySelectorAll('video[autoplay]').forEach((v) => {
+  v.muted = true;
+  v.setAttribute('playsinline', '');
+
+  const arrancar = () => v.play().catch(() => {});
+
+  arrancar();
+
+  const alTocar = () => {
+    arrancar();
+    document.removeEventListener('touchstart', alTocar);
+    document.removeEventListener('click', alTocar);
+  };
+  document.addEventListener('touchstart', alTocar, { once: true, passive: true });
+  document.addEventListener('click', alTocar, { once: true });
+});
 
 // ── Video section ──────────────────────────────────────────────────────────
 const videoBg = document.querySelector('.video-bg');
@@ -230,8 +272,26 @@ function shuffled(arr) {
 function makeAnnoCircle(el, color, delay) {
   // Defer SVG creation to the moment it should start drawing so layout is settled
   gsap.delayedCall(delay, () => {
+    // Un inline-block descarta su espacio final. Si el <strong> termina en espacio
+    // (el editor suele dejarlo dentro de la negrita: "…de cine </strong>y"), al
+    // cambiar el display se pegaría con la palabra siguiente → "ciney".
+    // Lo movemos fuera antes de tocar el display. Es idempotente: en la segunda
+    // pasada ya no hay espacio final que mover.
+    const ultimo = el.lastChild;
+    if (ultimo && ultimo.nodeType === Node.TEXT_NODE && /\s$/.test(ultimo.nodeValue)) {
+      ultimo.nodeValue = ultimo.nodeValue.replace(/\s+$/, '');
+      el.parentNode.insertBefore(document.createTextNode(' '), el.nextSibling);
+    }
+
     el.style.position = 'relative';
     el.style.display  = 'inline-block';
+    // El círculo va DETRÁS del texto, y para eso hace falta que la negrita sea
+    // su propio contexto de apilado. Con `z-index: -1` a secas el SVG no se
+    // quedaría detrás de la palabra: se iría detrás también del fondo del marco
+    // y del video, y desaparecería. Dándole aquí un z-index, el -1 del SVG sólo
+    // cuenta dentro de esta palabra: pinta por debajo de sus letras y por encima
+    // de todo lo que hay detrás.
+    el.style.zIndex   = '0';
 
     const padX = 14, padY = 8;
     const w  = el.offsetWidth  + padX * 2;
@@ -245,7 +305,7 @@ function makeAnnoCircle(el, color, delay) {
     const ns  = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('class', 'anno-circle');
-    svg.style.cssText = `position:absolute;left:${-padX}px;top:${-padY}px;width:${w}px;height:${h}px;pointer-events:none;overflow:visible;`;
+    svg.style.cssText = `position:absolute;left:${-padX}px;top:${-padY}px;width:${w}px;height:${h}px;pointer-events:none;overflow:visible;z-index:-1;`;
 
     const ellipse = document.createElementNS(ns, 'ellipse');
     ellipse.setAttribute('cx', cx);
@@ -313,11 +373,15 @@ const wrapper = document.getElementById('circle-scroll-wrapper');
 const circle  = document.getElementById('circle');
 
 if (wrapper && circle && window.matchMedia('(min-width: 640px)').matches) {
+  // Una posición por PANEL (no por diapositiva del CMS): las diapositivas de los
+  // niveles y de las gorras se renderizan juntas en un solo panel, así que la
+  // posición que era de las gorras ({ x: '32vw', y: '38vh' }) ya no se usa.
+  // En el panel fusionado el mundo va abajo a la derecha, y las gorras + su texto
+  // ocupan la media columna izquierda (ver home.antlers.html).
   const allFramePositions = [
     { x: '35vw',  y: '-5vh',  scale: 1    },
     { x: '-30vw', y: '25vh',  scale: 1    },
-    { x: '0vw',   y: '60vh',  scale: 1    },
-    { x: '32vw',  y: '38vh',  scale: 1    },
+    { x: '34vw',  y: '62vh',  scale: 1    },
     { x: '-30vw', y: '0vh',   scale: 1    },
     { x: '0vw',   y: '14vh',  scale: 0.83 },
   ];
@@ -550,7 +614,8 @@ const mobileViaje  = document.getElementById('mobile-viaje');
 const mobileCircle = document.getElementById('mobile-circle');
 
 if (mobileViaje && mobileCircle && !window.matchMedia('(min-width: 640px)').matches) {
-  const mScales = [1.0, 1.25, 1.25, 1.25, 1.25, 1.0];
+  // Una escala por PANEL (ver allFramePositions: niveles + gorras van juntas).
+  const mScales = [1.0, 1.25, 1.25, 1.25, 1.0];
 
   const mPanels = Array.from({ length: 6 }, (_, i) =>
     document.getElementById(`mobile-content-${i + 1}`)
@@ -729,7 +794,9 @@ const MESES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agos
 document.querySelectorAll('.taller-dias[data-dias]').forEach(el => {
   const dias = el.dataset.dias ? el.dataset.dias.split(',').map(s => s.trim()) : [];
   const isWeekdays = WEEKDAYS.every(d => dias.includes(d)) && !dias.includes('sabado') && !dias.includes('domingo');
-  if (isWeekdays) el.textContent = 'De lunes a viernes';
+  // Las tarjetas de la home lo usan en medio de una frase, así que pueden pedir
+  // su propia redacción con data-dias-texto.
+  if (isWeekdays) el.textContent = el.dataset.diasTexto || 'De lunes a viernes';
 });
 
 document.querySelectorAll('[data-time]').forEach(el => {
@@ -756,6 +823,20 @@ document.querySelectorAll('[data-date]').forEach(el => {
   } else {
     el.textContent = `Talleres semanales de ${startMes} de ${startYear}`;
   }
+});
+
+// Separador de miles. Los precios se guardan planos (1500) porque ese mismo número
+// va en data-item-price de Snipcart; aquí sólo se formatea para mostrarlo.
+document.querySelectorAll('[data-precio]').forEach(el => {
+  const n = Number(el.dataset.precio);
+  if (Number.isFinite(n)) el.textContent = n.toLocaleString('es-MX');
+});
+
+// Fecha suelta en español: "19 de septiembre". El formateador de PHP devuelve el
+// mes en inglés, así que la componemos aquí como el resto de fechas del sitio.
+document.querySelectorAll('[data-fecha-larga]').forEach(el => {
+  const [, mes, dia] = el.dataset.fechaLarga.split('-').map(Number);
+  if (MESES[mes - 1]) el.textContent = `${dia} de ${MESES[mes - 1]}`;
 });
 
 document.querySelectorAll('[data-semana-inicio]').forEach(el => {
@@ -801,9 +882,12 @@ if (tallerChar) {
   charIO.observe(tallerChar);
 }
 
-const staggerGrid = document.querySelector('[data-stagger-cards]');
-if (staggerGrid) {
+// Cada retícula lleva su propio observador: la home ya tiene varias (zonas,
+// galería de animautas, preguntas frecuentes) y con un solo querySelector las
+// demás se quedaban sin entrada.
+document.querySelectorAll('[data-stagger-cards]').forEach((staggerGrid) => {
   const staggerCards = staggerGrid.querySelectorAll('[data-stagger-child]');
+  if (!staggerCards.length) return;
   gsap.set(staggerCards, { opacity: 0, y: 36 });
   const staggerIO = new IntersectionObserver(([e]) => {
     if (!e.isIntersecting) return;
@@ -811,11 +895,16 @@ if (staggerGrid) {
     staggerIO.disconnect();
   }, { threshold: 0.1 });
   staggerIO.observe(staggerGrid);
-}
+});
 
-// ── Talleres agotados: marca en gris las semanas sin stock en Snipcart ──────
-const tallerBuyBtns = document.querySelectorAll('.snipcart-add-item[data-item-categories="taller"]');
-if (tallerBuyBtns.length) {
+// ── Disponibilidad según el inventario de Snipcart ─────────────────────────
+// Fuente única de verdad para los lugares: se apagan los botones sin stock y se
+// escribe el "Quedan N lugares" de las tarjetas. Si el inventario no responde o
+// el producto no lleva control de stock, no se afirma nada.
+const tallerBuyBtns = document.querySelectorAll('.snipcart-add-item[data-item-categories*="taller"]');
+const lugaresEls    = document.querySelectorAll('[data-lugares]');
+
+if (tallerBuyBtns.length || lugaresEls.length) {
   fetch('/api/snipcart/stock')
     .then((r) => r.json())
     .then((stock) => {
@@ -827,6 +916,17 @@ if (tallerBuyBtns.length) {
           btn.classList.add('animondo-agotado');
           btn.setAttribute('disabled', 'disabled');
           btn.textContent = 'Lugares agotados';
+        }
+      });
+
+      lugaresEls.forEach((el) => {
+        const s = stock[el.dataset.lugares];
+        if (typeof s !== 'number') return;
+        if (s > 0) {
+          el.textContent = `Quedan ${s} ${s === 1 ? 'lugar' : 'lugares'}`;
+        } else {
+          el.textContent = 'Lugares agotados';
+          el.classList.add('opacity-60');
         }
       });
     })
@@ -846,37 +946,157 @@ if (viajeBtns.length) {
   setViajeTab(0);
 }
 
-// ── Snipcart: Spanish translations ────────────────────────────────────────
+// ── Snipcart: idioma español ──────────────────────────────────────────────
+// Fuente única: public/snipcart-es.json (antes había además un objeto inline
+// aquí, desactualizado, que competía con el JSON en el mismo evento).
 document.addEventListener('snipcart.ready', () => {
-  Snipcart.api.session.setLanguage('es', {
-    default: { loading: 'Cargando...', error: 'Se ha producido un error.', success: '¡Éxito!' },
-    actions: { edit: 'Editar', cancel: 'Cancelar', continue_shopping: 'Seguir comprando', back_to_checkout: 'Volver a pago', checkout: 'Pagar', apply: 'Aplicar', dismiss: 'Descartar', type_address: 'Escribe tu dirección', use_this_address: 'Usar esta dirección', back_to_store: 'Volver a la tienda', close_cart: 'Cerrar carrito', show: 'Mostrar', hide: 'Ocultar', apply_changes: 'Aplicar cambios', yes_use_it: 'Sí, úsalo', save_changes: 'Guardar cambios', back_to_orders: 'Volver a pedidos', change_password: 'Cambiar contraseña', clear_cart: 'Vaciar carrito', add: 'Añadir' },
-    header: { title_cart_summary: 'Resumen carrito', loading: 'Cargando...' },
-    item: { quantity: 'Cantidad', quantity_short: 'Cant.', decrement_quantity: 'Reducir cantidad', increment_quantity: 'Aumentar cantidad', remove_item: 'Quitar artículo' },
-    cart: { subtotal: 'Subtotal', shipping_taxes_calculated_at_checkout: '', loading: 'Estamos preparando tu carrito...', secured_by: 'Asegurado por Snipcart', summary: 'Resumen del pedido', empty: 'Tu carrito está vacío.', invoice_number: 'Factura número', view_detailed_cart: 'Ver detalle del carrito' },
-    order: { loading: 'Estamos recuperando los detalles de tu pedido...', title: 'Pedido' },
-    discount_box: { promo_code: '¿Código promocional?', promo_code_placeholder: 'Código promocional', promocode_applied: 'Promoción aplicada' },
-    address_form: { name: 'Nombre completo', email: 'Email', firstName: 'Nombre', lastName: 'Apellido', address1: 'Dirección', address2: 'Número/Piso', city: 'Ciudad', country: 'País', phone: 'Teléfono', postalCode: 'Código Postal', province: 'Estado / Provincia', dont_see_address: 'No encuentro mi dirección' },
-    billing: { title: 'Facturación', address: 'Dirección de Facturación', continue_to_shipping: 'Seguir a envío', use_different_shipping_address: 'Usar una dirección de envío diferente' },
-    shipping: { title: 'Envío', shipping_to: 'Enviar a:', address: 'Dirección de envío', method: 'Método de envío' },
-    payment: { title: 'Pago', continue_to_payment: 'Continuar a pago', credit_card: 'Tarjeta de Crédito', place_order: 'Confirmar Pedido', preparing_payment_session: 'Preparando pago...', processing_payment: 'Procesando pago...', checkout_with: 'Pagar mediante', no_payment: 'Este pedido no requiere ningún pago.', form: { card_label: 'Tarjeta de Crédito', card_number: 'Número de Tarjeta', card_expiration: 'MM/AA', card_cvv: 'CVV', card_postal_code: 'Código Postal', invalid_number: 'El número de tarjeta no es válido.', invalid_expiration: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', invalid_postal_code: 'Código postal no válido' } },
-    cart_summary: { taxes: 'Impuestos', total: 'Total', subtotal: 'Subtotal', shipping: 'Envío', discount: 'Descuentos', quantity: 'x', calculated_at_checkout: 'Calculado antes del pago' },
-    discounts: { title: 'Descuentos' },
-    guest_checkout: { or: 'O', continue_as_a_guest: 'Continuar como invitado' },
-    signin_form: { signin: 'Identificarte', dont_have_an_account: '¿No tienes una cuenta?', email: 'Email', password: 'Contraseña', forgot_your_password: '¿Olvidaste tu contraseña?', close_form: 'Volver' },
-    register_form: { register: 'Registrarse', already_have_an_account: '¿Ya tienes una cuenta?', email: 'Email', password: 'Contraseña', confirm_password: 'Confirmar contraseña' },
-    customer: { information: 'Información de cliente' },
-    customer_dashboard: { my_account: 'Mi cuenta', ordered_on: 'Comprado el', price: 'Precio', total: 'Total', status: 'Estado', order_details: 'Detalles del Pedido', loading: 'Cargando...', no_orders: 'No se encontraron pedidos.', view_invoice: 'Ver factura', sign_out: 'Salir', orders: 'Pedidos' },
-    confirmation: { thank_you_for_your_order: 'Gracias por tu pedido', async_confirmation_notice: 'Hemos recibido tu pedido y actualmente se está preparando. Recibirás una confirmación en breve.' },
-    checkout: { shipping_taxes_calculated_when_address_provided: 'Los gastos de envío e impuestos se calcularán cuando se indique una dirección.' },
-    errors: { default: 'Ocurrió un error, inténtelo de nuevo o contáctenos.', required: 'Este campo es obligatorio', email: 'Por favor indique una dirección de correo válida', stringEmpty: 'Este campo es obligatorio', emailEmpty: 'El correo electrónico es obligatorio', promo_code_is_invalid: 'Este código promocional no es válido', promo_code_is_expired: 'Esta promoción ha expirado', card: { invalid_number: 'El número de tarjeta no es válido.', invalid_date: 'La fecha de caducidad no es válida.', invalid_cvv: 'El CVV no es válido.', expired: 'La tarjeta está caducada.', declined: 'La tarjeta ha sido rechazada.' } },
-    digital_goods: { download: 'Descargar' },
-    shippingRates: { loading: 'Cargando...' },
-  });
+  fetch('/snipcart-es.json')
+    .then(r => r.json())
+    .then(es => Snipcart.api.session.setLanguage('es', es))
+    .catch(() => {});
 });
 
-// ── Snipcart: 10% discount when 2+ talleres in cart ───────────────────────
+// ── Snipcart: transporte como producto aparte + desglose de la cuenta ─────
+document.addEventListener('snipcart.ready', () => {
+  const TRANSPORTE_INFO = '<strong>Paquete Animondo Express</strong><br>Transporte seguro. Los puntos de encuentro y horarios serán definidos antes del sábado previo a tu taller y confirmados por WhatsApp.';
+
+  function cartItems() {
+    try { return Snipcart.store.getState().cart.items.items || []; }
+    catch (e) { return []; }
+  }
+
+  // Enlace "+ Agregar transporte" bajo cada taller que lo tenga disponible.
+  function renderTransporteLinks() {
+    const items = cartItems();
+
+    document.querySelectorAll('.snipcart-item-line__title').forEach(titleEl => {
+      // Apila el bloque a lo ancho dentro de la columna del producto (no en el flex del container)
+      const line = titleEl.closest('.snipcart-item-line__product')
+        || titleEl.closest('.snipcart-item-line__container')
+        || titleEl.parentElement;
+      if (!line) return;
+
+      const title = (titleEl.textContent || '').trim();
+
+      // Empareja la fila del carrito con su item del store (por nombre)
+      const item  = items.find(i => (i.name || '').trim() === title) || null;
+      const price = item && item.metadata ? item.metadata.transportePrice : null;
+
+      const existing = line.querySelector('.animondo-transporte-add');
+
+      // No es un taller con transporte disponible → nada
+      if (!item || !price) { if (existing) existing.remove(); return; }
+
+      // ¿el transporte de este taller ya está en el carrito?
+      const transId = 'transporte-' + item.id;
+      if (items.some(it => it.id === transId)) { if (existing) existing.remove(); return; }
+
+      if (existing) return; // ya inyectado
+
+      const box = document.createElement('div');
+      box.className = 'animondo-transporte-add';
+      box.innerHTML = TRANSPORTE_INFO
+        + '<label class="animondo-cp-label">Colonia o Código Postal</label>'
+        + '<input type="text" class="animondo-transporte-cp" placeholder="Colonia o Código Postal">'
+        + '<a role="button">+ Agregar transporte (+$' + price + ' MXN)</a>';
+
+      const cpInput = box.querySelector('.animondo-transporte-cp');
+
+      box.querySelector('a').addEventListener('click', () => {
+        const cp = (cpInput.value || '').trim();
+        if (!cp) {
+          cpInput.classList.add('animondo-cp-error');
+          cpInput.focus();
+          return;
+        }
+        Snipcart.api.cart.items.add({
+          id:       transId,
+          name:     'Transporte Animondo Express — ' + item.name,
+          price:    price,
+          url:      item.url,
+          quantity: 1,
+          customFields: [
+            { name: 'Colonia o Código Postal', value: cp }
+          ],
+        });
+      });
+
+      cpInput.addEventListener('input', () => cpInput.classList.remove('animondo-cp-error'));
+
+      line.appendChild(box);
+    });
+  }
+
+  // ── Desglose de la cuenta antes del botón Pagar ──
+  function money(n) {
+    return '$' + (n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+  }
+
+  function desgloseRow(label, amount, extraClass) {
+    return '<div class="animondo-desglose__row ' + (extraClass || '') + '"><span>' + label + '</span><span>' + money(amount) + '</span></div>';
+  }
+
+  function snipcartTotal() {
+    try {
+      const c = Snipcart.store.getState().cart;
+      return [c.total, c.grandTotal, c.finalTotal].find(v => typeof v === 'number' && isFinite(v)) ?? null;
+    } catch (e) { return null; }
+  }
+
+  function renderDesglose() {
+    const footerBtns = document.querySelector('.snipcart-cart__footer-buttons');
+    const existing   = document.querySelector('.animondo-desglose');
+    const items      = cartItems();
+    if (!footerBtns || !items.length) { if (existing) existing.remove(); return; }
+
+    let tallerSum = 0, transporteSum = 0;
+    items.forEach(it => {
+      const line = (it.price || 0) * (it.quantity || 1);
+      if (String(it.id).indexOf('transporte-') === 0) transporteSum += line;
+      else tallerSum += line;
+    });
+
+    const itemsSum  = tallerSum + transporteSum;
+    let   total     = snipcartTotal();
+    if (!(total > 0)) total = itemsSum;
+    const descuento = Math.max(0, Math.round((itemsSum - total) * 100) / 100);
+
+    let box = existing;
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'animondo-desglose';
+      footerBtns.parentNode.insertBefore(box, footerBtns);
+    }
+
+    let rows = desgloseRow('Talleres', tallerSum);
+    if (descuento > 0)     rows += desgloseRow('Descuento', -descuento);
+    if (transporteSum > 0) rows += desgloseRow('Transporte', transporteSum);
+    rows += desgloseRow('Total', total, 'animondo-desglose__total');
+    box.innerHTML = rows;
+  }
+
+  function renderAll() { renderTransporteLinks(); renderDesglose(); }
+
+  if (Snipcart.store && Snipcart.store.subscribe) {
+    Snipcart.store.subscribe(renderAll);
+  }
+
+  let raf = null;
+  new MutationObserver(() => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = null; renderAll(); });
+  }).observe(document.body, { childList: true, subtree: true });
+
+  renderAll();
+});
+
+// ── Snipcart: 10% al llevar 2+ talleres de verano ─────────────────────────
+// Sólo cuenta artículos de categoría `taller` (el taller de verano). Antes contaba
+// cualquier artículo, así que un taller + su transporte ya disparaban el descuento,
+// y al volver los sabatinos productos también lo habrían disparado. Los sabatinos
+// usan la categoría `taller-sabatino` y su ahorro va en el precio del trimestre.
 const DISCOUNT_ID = 'descuento-verano-10pct';
+const CATEGORIA_DESCUENTO = 'taller';
 let syncingDiscount = false;
 
 function onCartItemChange() {
@@ -889,7 +1109,7 @@ async function syncDiscount() {
   try {
     const state     = Snipcart.store.getState();
     const all       = state.cart.items.items ?? [];
-    const real      = all.filter(i => i.id !== DISCOUNT_ID);
+    const real      = all.filter(i => i.id !== DISCOUNT_ID && (i.categories || []).includes(CATEGORIA_DESCUENTO));
     const existing  = all.find(i => i.id === DISCOUNT_ID);
     const count     = real.length;
     const subtotal  = real.reduce((s, i) => s + i.price * i.quantity, 0);
@@ -917,3 +1137,567 @@ document.addEventListener('snipcart.ready', () => {
   Snipcart.events.on('item.updated', onCartItemChange);
 });
 
+
+// ── Galerías con carrusel y lightbox ───────────────────────────────────────
+// Un solo componente para las dos galerías de la home: Espacios (fotos) y
+// Trabajos (videos). El carrusel se apoya en scroll-snap, así que el swipe en
+// táctil ya lo resuelve el navegador; aquí sólo van las flechas, los puntos y
+// el lightbox. El lightbox recorre TODOS los elementos de su galería, no sólo
+// los de la diapositiva visible.
+const galerias = Array.from(document.querySelectorAll('[data-galeria]'));
+
+if (galerias.length) {
+  // Las vistas previas nacen con preload="none" (son varios MB por video) y
+  // sólo piden metadata cuando la tarjeta se acerca a la pantalla. Como el
+  // track recorta horizontalmente, las diapositivas siguientes no intersectan
+  // hasta que el usuario navega hacia ellas.
+  //
+  // Esto sólo ahorra algo si el MP4 lleva su átomo `moov` al principio
+  // (`ffmpeg -movflags +faststart`). Si va al final, que es como salen de casi
+  // cualquier editor, el navegador tiene que descargar el archivo ENTERO para
+  // leer la metadata, y pedir el primer fotograma acaba costando lo mismo que
+  // reproducir el video. Los diez de la home ya vienen convertidos; los que se
+  // suban después desde el CP hay que pasarlos por lo mismo.
+  const previewIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(({ isIntersecting, target }) => {
+      if (!isIntersecting) return;
+      target.preload = 'metadata';
+      target.load();
+      obs.unobserve(target);
+    });
+  }, { rootMargin: '200px' });
+
+  // ── Lightbox compartido ──
+  // Trabaja con descriptores planos ({ tipo, src, alt, pie }) y no con nodos,
+  // porque el conjunto que abre una tarjeta no siempre son sus hermanas: en
+  // Trabajos es la galería entera, y en Espacios cada zona trae la suya.
+  let lb = null;          // el nodo, construido la primera vez que se abre
+  let lbItems = [];       // los descriptores del conjunto en curso
+  let lbIndex = 0;
+  let lbFocoPrevio = null;
+  let lbOverflow = '';
+
+  function construirLightbox() {
+    const el = document.createElement('div');
+    el.className = 'galeria-lightbox';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Galería');
+    el.hidden = true;
+    el.innerHTML = `
+      <button type="button" class="galeria-lb-cerrar" data-lb-cerrar aria-label="Cerrar">&times;</button>
+      <button type="button" class="galeria-lb-nav galeria-lb-prev" data-lb-prev aria-label="Anterior">&#8249;</button>
+      <div class="galeria-lb-stage" data-lb-stage></div>
+      <button type="button" class="galeria-lb-nav galeria-lb-next" data-lb-next aria-label="Siguiente">&#8250;</button>
+      <p class="galeria-lb-pie" data-lb-pie hidden></p>
+      <p class="galeria-lb-cuenta" data-lb-cuenta></p>`;
+    document.body.appendChild(el);
+
+    el.querySelector('[data-lb-cerrar]').addEventListener('click', cerrarLightbox);
+    el.querySelector('[data-lb-prev]').addEventListener('click', () => mover(-1));
+    el.querySelector('[data-lb-next]').addEventListener('click', () => mover(1));
+
+    // Clic en el fondo cierra; clic en la imagen o el video, no.
+    el.addEventListener('click', (e) => {
+      if (e.target === el || e.target === el.querySelector('[data-lb-stage]')) cerrarLightbox();
+    });
+
+    // Con el foco dentro del <video>, las flechas son para buscar en la pista:
+    // ahí no se navega la galería. Escape siempre cierra.
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { cerrarLightbox(); return; }
+      if (e.target.tagName === 'VIDEO') return;
+      if (e.key === 'ArrowLeft')  mover(-1);
+      if (e.key === 'ArrowRight') mover(1);
+    });
+
+    // Swipe, salvo sobre el video (ahí el gesto es para sus controles).
+    let x0 = null;
+    el.addEventListener('touchstart', (e) => {
+      x0 = e.target.closest('video') ? null : e.touches[0].clientX;
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) mover(dx < 0 ? 1 : -1);
+      x0 = null;
+    }, { passive: true });
+
+    return el;
+  }
+
+  function limpiarEscenario(stage) {
+    // Quitar el <video> del DOM no siempre corta la descarga: hay que pausarlo
+    // y vaciarle el src antes de tirarlo.
+    const previo = stage.querySelector('video');
+    if (previo) {
+      previo.pause();
+      previo.removeAttribute('src');
+      previo.load();
+    }
+    stage.replaceChildren();
+  }
+
+  function pintarLightbox() {
+    const item  = lbItems[lbIndex];
+    const stage = lb.querySelector('[data-lb-stage]');
+    limpiarEscenario(stage);
+
+    if (item.tipo === 'video') {
+      const video = document.createElement('video');
+      video.src         = item.src;
+      video.controls    = true;
+      video.playsInline = true;
+      video.preload     = 'auto';
+      stage.appendChild(video);
+      // Se abrió por un clic, así que normalmente el navegador deja arrancar
+      // con sonido. Si lo bloquea, quedan los controles.
+      video.play().catch(() => {});
+    } else {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt || '';
+      stage.appendChild(img);
+    }
+
+    const pie = lb.querySelector('[data-lb-pie]');
+    pie.textContent = item.pie || '';
+    pie.hidden = !item.pie;
+
+    lb.querySelector('[data-lb-cuenta]').textContent = `${lbIndex + 1} / ${lbItems.length}`;
+
+    const solaUna = lbItems.length < 2;
+    lb.querySelector('[data-lb-prev]').hidden = solaUna;
+    lb.querySelector('[data-lb-next]').hidden = solaUna;
+  }
+
+  function mover(paso) {
+    lbIndex = (lbIndex + paso + lbItems.length) % lbItems.length;
+    pintarLightbox();
+  }
+
+  function abrirLightbox(items, indice) {
+    lb = lb || construirLightbox();
+    lbItems = items;
+    lbIndex = indice;
+    lbFocoPrevio = document.activeElement;
+
+    lb.hidden = false;
+    pintarLightbox();
+    // Un frame para que la transición de opacidad tenga de dónde salir.
+    requestAnimationFrame(() => lb.classList.add('is-open'));
+
+    lbOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('[data-lb-cerrar]').focus();
+  }
+
+  function cerrarLightbox() {
+    if (!lb || lb.hidden) return;
+    limpiarEscenario(lb.querySelector('[data-lb-stage]'));
+    lb.classList.remove('is-open');
+    lb.hidden = true;
+    document.body.style.overflow = lbOverflow;
+    if (lbFocoPrevio) lbFocoPrevio.focus();
+  }
+
+  // ── Carrusel ──
+  // Sin flechas: se cambia de diapositiva con el dedo (el scroll-snap del
+  // navegador), arrastrando con el mouse, o con los puntos.
+  galerias.forEach((galeria) => {
+    const track  = galeria.querySelector('[data-galeria-track]');
+    const slides = Array.from(track.querySelectorAll('.galeria-slide'));
+    const items  = Array.from(galeria.querySelectorAll('[data-galeria-item]'));
+    const puntos = galeria.querySelector('[data-galeria-puntos]');
+
+    track.querySelectorAll('[data-galeria-preview]').forEach((v) => previewIO.observe(v));
+
+    const descriptor = (el) => ({
+      tipo: el.dataset.tipo,
+      src:  el.dataset.src,
+      alt:  el.dataset.alt,
+      pie:  el.dataset.pie,
+    });
+
+    // Qué se abre al hacer clic en una tarjeta. Si la tarjeta trae fotos
+    // propias escondidas es una portada: abre SU galería, con la portada al
+    // frente. Si no, abre la galería entera empezando por ella misma.
+    function conjuntoDe(item) {
+      const propias = item.querySelectorAll('[data-galeria-foto]');
+      if (!propias.length) return null;
+
+      const portada = descriptor(item);
+      const lista   = [portada];
+      propias.forEach((f) => {
+        // Repetir la portada dentro del campo es el error fácil de cometer
+        // desde el CP, y saldría dos veces seguidas.
+        if (f.dataset.src === portada.src) return;
+        lista.push({ tipo: 'imagen', src: f.dataset.src, alt: f.dataset.alt, pie: portada.pie });
+      });
+      return lista;
+    }
+
+    // Un punto por foto sobre la portada, para que se vea cuántas hay sin
+    // necesidad de leer nada. Se cuentan aquí porque `| count` no funciona sobre
+    // el query builder de un campo `assets`, y porque hay que descontar la
+    // portada si además viene repetida dentro del campo.
+    //
+    // El número deja de estar escrito, así que se le pasa al `aria-label` del
+    // botón: los puntos son decorativos y quien navega por voz se quedaría sin
+    // saber cuántas fotos va a abrir.
+    items.forEach((item) => {
+      const fila = item.querySelector('[data-galeria-bolitas]');
+      if (!fila) return;
+      const propio = conjuntoDe(item);
+      if (!propio || propio.length < 2) {
+        // Una sola foto no es una galería: ni puntos ni velo.
+        fila.remove();
+        item.querySelector('.galeria-vermas')?.remove();
+        return;
+      }
+      propio.forEach((_, i) => {
+        const punto = document.createElement('span');
+        punto.className = 'galeria-bolita';
+        if (i === 0) punto.setAttribute('aria-current', 'true');
+        fila.appendChild(punto);
+      });
+      const etiqueta = item.getAttribute('aria-label');
+      if (etiqueta) item.setAttribute('aria-label', `${etiqueta} (${propio.length} fotos)`);
+    });
+
+    // Firefox ignora `-webkit-user-drag`, así que las imágenes se desactivan
+    // también por atributo: si no, arrastrar una arranca un drag-and-drop del
+    // navegador y se pierde el gesto.
+    track.querySelectorAll('img').forEach((img) => { img.draggable = false; });
+
+    // Un arrastre que recorrió medio carrusel termina en un `click` sobre la
+    // tarjeta que quedó bajo el cursor. Ese no debe abrir el lightbox.
+    let recorrido = 0;
+    const galeriaEntera = items.map(descriptor);
+
+    items.forEach((item, i) => item.addEventListener('click', () => {
+      // La marca se consume aquí: así el siguiente clic (o un Enter desde el
+      // teclado, que no pasa por pointerdown) no se queda bloqueado.
+      if (recorrido > 8) { recorrido = 0; return; }
+      const propio = conjuntoDe(item);
+      if (propio) abrirLightbox(propio, 0);
+      else abrirLightbox(galeriaEntera, i);
+    }));
+
+    // Con una sola diapositiva no hay nada que navegar.
+    if (slides.length < 2) {
+      if (puntos) puntos.setAttribute('hidden', '');
+      return;
+    }
+
+    let actual = 0;
+
+    function irA(i) {
+      track.scrollTo({ left: track.clientWidth * i, behavior: 'smooth' });
+    }
+
+    const bolitas = slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'galeria-punto';
+      b.setAttribute('aria-label', `Ir al grupo ${i + 1} de ${slides.length}`);
+      b.addEventListener('click', () => irA(i));
+      puntos.appendChild(b);
+      return b;
+    });
+
+    function sincronizar() {
+      // La diapositiva activa es la que quedó más cerca del borde izquierdo.
+      actual = Math.min(Math.max(Math.round(track.scrollLeft / track.clientWidth), 0), slides.length - 1);
+      bolitas.forEach((b, i) => b.setAttribute('aria-current', String(i === actual)));
+    }
+
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sincronizar);
+    }, { passive: true });
+    window.addEventListener('resize', sincronizar);
+
+    // ── Arrastre con el mouse ──
+    // En táctil no se toca nada: el scroll-snap ya da el swipe, y meterse ahí
+    // sólo rompería el desplazamiento vertical de la página.
+    track.classList.add('es-arrastrable');
+
+    let arrastrando = false;
+    let xInicio     = 0;
+    let scrollIni   = 0;
+
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch' || e.button !== 0) return;
+      arrastrando = true;
+      recorrido   = 0;
+      xInicio     = e.clientX;
+      scrollIni   = track.scrollLeft;
+      // El snap y el scroll suave pelean con mover `scrollLeft` a mano: se
+      // apagan mientras dura el gesto y vuelven al soltar.
+      track.style.scrollSnapType = 'none';
+      track.style.scrollBehavior = 'auto';
+      track.classList.add('esta-arrastrando');
+    });
+
+    // En window y no en el track: si el cursor se sale del carrusel a media
+    // pasada, el gesto tiene que seguir vivo.
+    window.addEventListener('pointermove', (e) => {
+      if (!arrastrando) return;
+      const dx  = e.clientX - xInicio;
+      recorrido = Math.max(recorrido, Math.abs(dx));
+      track.scrollLeft = scrollIni - dx;
+    });
+
+    function soltar() {
+      if (!arrastrando) return;
+      arrastrando = false;
+      track.classList.remove('esta-arrastrando');
+      track.style.scrollBehavior = '';
+      track.style.scrollSnapType = '';
+      // Devolver el snap no siempre re-encaja solo, así que se encaja a mano.
+      irA(Math.round(track.scrollLeft / track.clientWidth));
+    }
+
+    window.addEventListener('pointerup', soltar);
+    window.addEventListener('pointercancel', soltar);
+
+    sincronizar();
+  });
+}
+
+// ── El Viaje (lotties) ─────────────────────────────────────────────────────
+// Enciende una escena u otra según por dónde va el scroll dentro de la sección.
+// A propósito no se toca el evento `wheel`: el otro viaje (#circle-scroll-wrapper)
+// sí lo secuestra, y dos manejadores peleándose por el mismo gesto es justo lo
+// que hay que evitar teniendo las dos secciones en la misma página. Aquí el
+// scroll es el del navegador y esto sólo lo observa.
+const viajeL = document.querySelector('[data-viaje-lotties]');
+
+if (viajeL) {
+  const escenas = Array.from(viajeL.querySelectorAll('[data-viaje-l-escena]'));
+
+  if (escenas.length) {
+    let actual = 0;
+    let primeraPintada = false;
+    let enPantalla = false;
+
+    // ── Las tomas ──────────────────────────────────────────────────────────
+    // Cuando la escena trae video manda él y el mundo de abajo sobra: el
+    // acercamiento, el giro y el recorrido desde la escena anterior vienen ya
+    // dentro de la propia toma. Aquí sólo hay que arrancarla y pararla.
+    const videos = escenas.map((e) => e.querySelector('[data-viaje-l-video]'));
+
+    // Las tomas que abren con un movimiento de cámara sólo lo enseñan la primera
+    // vuelta: al acabar vuelven al segundo marcado, no al principio. El `loop` del
+    // navegador no sirve para esto —siempre reinicia desde cero—, así que esas
+    // vienen sin él y el ciclo lo cierra este manejador. Volver atrás sale barato
+    // porque las tomas están codificadas con todos los fotogramas clave: el salto
+    // no obliga a decodificar desde ningún sitio anterior.
+    //
+    // OJO al probarlo en local: `php artisan serve` contesta 200 a las peticiones
+    // por rango y no manda `Accept-Ranges`, así que el navegador marca el video
+    // como no buscable —`seekable` acaba en 0 aunque esté entero descargado— e
+    // ignora este salto. La toma vuelve entonces al principio y parece que esto
+    // no funciona. Con un servidor que sí sirva rangos, que es cualquiera de
+    // verdad, va. Y si alguno no los sirviera, el peor caso es volver al
+    // principio: se repetiría la transición, que es como estaba antes.
+    // Saltar en el tiempo sólo funciona si quien sirve el video atiende peticiones
+    // por rango de bytes. Si no las atiende, el navegador marca la toma como no
+    // buscable —`seekable` acaba en 0 aunque esté entera descargada— y se traga
+    // el salto sin avisar: la transición volvería a verse en cada vuelta. Cuando
+    // se detecta ese caso se vuelve a pedir el archivo y se le entrega al
+    // elemento como blob, que siempre es buscable. Cuesta una descarga de más,
+    // pero sólo ocurre donde hace falta; con un servidor que sirva rangos esto
+    // no llega a dispararse.
+    function hacerBuscable(v) {
+      if (v.dataset.blob) return;
+      if (v.seekable.length && v.seekable.end(v.seekable.length - 1) > 0) return;
+      v.dataset.blob = '1';
+      fetch(v.currentSrc || v.src)
+        .then((r) => r.blob())
+        .then((b) => {
+          const sonaba = !v.paused;
+          v.src = URL.createObjectURL(b);
+          if (sonaba) v.play().catch(() => {});
+        })
+        .catch(() => {});
+    }
+
+    videos.forEach((v) => {
+      if (!v) return;
+      const desde = parseFloat(v.dataset.bucle);
+      if (!Number.isFinite(desde) || desde <= 0) return;
+
+      v.addEventListener('loadeddata', () => hacerBuscable(v));
+
+      v.addEventListener('ended', () => {
+        // Si el punto cayera fuera de la toma, mejor repetirla entera que
+        // quedarse en un fotograma congelado.
+        v.currentTime = desde < v.duration ? desde : 0;
+        v.play().catch(() => {});
+      });
+    });
+
+    // Se pide la toma de la escena siguiente en cuanto se enciende la actual,
+    // para que esté lista cuando el scroll llegue. Todas de golpe al cargar la
+    // página son quince megas ocupando la conexión sin que nadie las esté
+    // mirando todavía.
+    function precargar(i) {
+      const v = videos[i];
+      if (!v || v.preload === 'auto') return;
+      v.preload = 'auto';
+      v.load();
+    }
+
+    function reproducir(i) {
+      videos.forEach((v, j) => {
+        if (!v) return;
+        if (j !== i) { v.pause(); return; }
+        // Desde el principio: la toma abre con el movimiento de cámara que
+        // viene de la escena anterior, y entrar a mitad se salta justo eso.
+        v.currentTime = 0;
+        // Sin esto el navegador rechaza el arranque automático. Y `play()`
+        // devuelve una promesa que se rompe sola si la escena cambia antes de
+        // que llegue a sonar: no es un error que haya que atender.
+        v.muted = true;
+        v.play().catch(() => {});
+      });
+      precargar(i + 1);
+    }
+
+    // El mundo es uno solo para todas las escenas: cambiar de escena no cambia
+    // de imagen, mueve ésta. De ahí que la transición sea un desplazamiento y
+    // no un fundido.
+    const mundo = viajeL.querySelector('.viaje-l-anim');
+
+    // Lo coloca dentro de su caja: lo ajusta como haría `contain`, le aplica el
+    // acercamiento de la escena, lo endereza y planta el punto de foco donde
+    // diga la escena. Va en JS y no en CSS porque hace falta el tamaño real con
+    // el que se pinta —que depende de la caja— para saber cuánto desplazar.
+    // El lienzo de la animación. Un <img> lo diría con `naturalWidth`, pero el
+    // reproductor de dotLottie no expone nada parecido, así que viene en
+    // atributos desde la plantilla.
+    const anchoMundo = parseFloat(mundo?.dataset.ancho) || 1920;
+    const altoMundo  = parseFloat(mundo?.dataset.alto) || 1080;
+
+    function encuadrar(escena, animado) {
+      if (!mundo || !escena) return;
+      const caja = mundo.parentElement;
+      const cw = caja.clientWidth, ch = caja.clientHeight;
+      if (!cw || !ch) return;
+
+      const zoom = parseFloat(escena.dataset.zoom) || 1;
+      const fx = (parseFloat(escena.dataset.focoX) || 50) / 100;
+      const fy = (parseFloat(escena.dataset.focoY) || 50) / 100;
+      const giro = parseFloat(escena.dataset.rotacion) || 0;
+      const cx = (parseFloat(escena.dataset.centroX) || 50) / 100;
+      const cy = (parseFloat(escena.dataset.centroY) || 50) / 100;
+
+      const escala = Math.min(cw / anchoMundo, ch / altoMundo) * zoom;
+      const w = anchoMundo * escala;
+      const h = altoMundo * escala;
+
+      // El giro va siempre sobre el centro de la imagen, y es el desplazamiento
+      // el que compensa para dejar la zona enfocada donde toca. Girar sobre el
+      // propio punto de foco sería más directo de escribir, pero obliga a mover
+      // el `transform-origin` en cada escena, y eso no se interpola: cambia de
+      // golpe, y con una rotación ya aplicada el mundo pega un salto al empezar
+      // la transición. Se notaba al volver de una escena girada a otra que no
+      // lo estaba.
+      //
+      // Dónde cae el foco respecto al centro, una vez girado:
+      const rad = giro * Math.PI / 180;
+      const dx = fx * w - w / 2;
+      const dy = fy * h - h / 2;
+      const gx = dx * Math.cos(rad) - dy * Math.sin(rad);
+      const gy = dx * Math.sin(rad) + dy * Math.cos(rad);
+      // Se coloca el centro de modo que el foco caiga en el punto pedido.
+      const x = cw * cx - gx - w / 2;
+      const y = ch * cy - gy - h / 2;
+
+      mundo.style.visibility = 'visible';
+      const destino = {
+        width: w, height: h, x, y,
+        rotation: giro,
+        transformOrigin: '50% 50%',
+      };
+      if (animado) gsap.to(mundo, { ...destino, duration: 1.1, ease: 'power2.inOut' });
+      else gsap.set(mundo, destino);
+    }
+
+    // El reproductor tarda en arrancar (baja su runtime en WebAssembly), así que
+    // se reencuadra cuando avisa de que está listo. El evento no está garantizado
+    // en todas las versiones, de ahí el reintento por si acaso.
+    if (mundo) {
+      mundo.addEventListener('dotlottie-load', () => encuadrar(escenas[actual], false));
+      setTimeout(() => encuadrar(escenas[actual], false), 1200);
+    }
+
+    // Las negritas del título llevan el mismo adorno que en el viaje anterior:
+    // a una la rodea un círculo dibujándose y a la siguiente la subraya un
+    // trazo de marcador, alternando. El retardo es más corto que el de allí
+    // (1.1 s) porque aquí el texto no entra con su propia animación: sólo se
+    // espera a que termine el fundido de la escena.
+    function pintarEscena(i) {
+      if (i === actual && primeraPintada) return;
+      if (escenas[actual] && i !== actual) {
+        escenas[actual].classList.remove('esta-activa');
+        animateAnnotations(escenas[actual], false);
+      }
+      escenas[i]?.classList.add('esta-activa');
+      // `primeraPintada` distingue el arranque —donde el mundo se coloca de
+      // golpe— de un cambio de escena, que sí se recorre.
+      // Los adornos de las negritas van medio segundo detrás del texto, que es
+      // lo que éste tarda en acabar de entrar. Si se adelantan, el círculo y el
+      // subrayado se dibujan sobre un texto todavía invisible y se los pierde
+      // enteros. El retardo del texto lo pone la escena y puede variar, así que
+      // se lee de ella en vez de darlo por hecho.
+      if (escenas[i]) {
+        encuadrar(escenas[i], primeraPintada);
+        const espera = parseFloat(escenas[i].dataset.retraso);
+        animateAnnotations(escenas[i], true, (Number.isFinite(espera) ? espera : 1) + 0.5);
+      }
+      reproducir(i);
+      actual = i;
+      primeraPintada = true;
+    }
+
+    function alScroll() {
+      const r = viajeL.getBoundingClientRect();
+      const seVe = r.top < window.innerHeight && r.bottom > 0;
+
+      // Fuera de pantalla las tomas se paran: van en bucle, y si no seguirían
+      // gastando en decodificar algo que nadie está viendo.
+      if (!seVe) {
+        if (enPantalla) { videos.forEach((v) => v && v.pause()); enPantalla = false; }
+        return;
+      }
+      // Al volver a asomar hay que rearrancar la de la escena en curso, que
+      // `pintarEscena` no lo hará: para él la escena no ha cambiado.
+      if (!enPantalla) { enPantalla = true; if (primeraPintada) reproducir(actual); }
+
+      // La primera escena ya viene marcada como activa desde la plantilla, así
+      // que su adorno hay que dispararlo a mano —y sólo cuando la sección
+      // asoma, no al cargar la página, o se lo pierde quien aún no ha bajado.
+      if (!primeraPintada) pintarEscena(0);
+      // Cuánto se lleva recorrido de la sección, de 0 a 1. El recorrido útil es
+      // su alto menos una pantalla, que es lo que el sticky se queda quieto.
+      const recorrido = viajeL.offsetHeight - window.innerHeight;
+      if (recorrido <= 0) return;
+      const avance = Math.min(Math.max(-r.top / recorrido, 0), 1);
+      // El 0.999 evita que al tocar el final justo se salga del array.
+      pintarEscena(Math.floor(avance * escenas.length * 0.999));
+    }
+
+    let pendiente = 0;
+    window.addEventListener('scroll', () => {
+      cancelAnimationFrame(pendiente);
+      pendiente = requestAnimationFrame(alScroll);
+    }, { passive: true });
+    window.addEventListener('resize', () => { alScroll(); encuadrar(escenas[actual], false); });
+
+    alScroll();
+  }
+}

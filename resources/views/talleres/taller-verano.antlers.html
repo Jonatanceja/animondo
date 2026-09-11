@@ -5,7 +5,10 @@
 
         {{ personaje }}
         {{ if imagen || lottie }}
-        <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[36%] pointer-events-none z-40" data-reveal-char>
+        {{# El tamaño se lo da el ancho: la caja se ancla abajo a la derecha y no
+            tiene alto propio, así que al estrecharla el personaje encoge hacia
+            arriba y se queda apoyado donde estaba. #}}
+        <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[30%] pointer-events-none z-40" data-reveal-char>
             {{ partial:personaje-media class="w-full h-48 sm:h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
@@ -27,9 +30,12 @@
                     a
                     <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
                 </p>
-                {{ if resumen }}
+                {{# El rango sale de las semanas que siguen abiertas, no de todas: si
+                    las de julio ya pasaron, anunciar "de julio a agosto" mandaría a
+                    la gente a buscar unas fechas que ya no se venden. #}}
+                {{ if hay_fechas && semanas_abiertas }}
                 <p class="mt-3 font-display font-semibold text-xl text-[#323E81]"
-                   {{ resumen }}{{ if first }}data-date="{{ fecha_de_inicio format='Y-m-d' }}"{{ /if }}{{ if last }} data-date-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}{{ /resumen }}></p>
+                   {{ semanas_abiertas }}{{ if first }}data-date="{{ fecha_de_inicio format='Y-m-d' }}"{{ /if }}{{ if last }} data-date-fin="{{ fecha_de_finalizacion format='Y-m-d' }}"{{ /if }}{{ /semanas_abiertas }}></p>
                 {{ /if }}
             </div>
             {{ /if }}
@@ -43,8 +49,22 @@
     <div class="mb-4 sm:flex sm:items-center sm:gap-6 relative" data-reveal>
         {{ personaje_en_descripcion }}
         {{ if imagen || lottie }}
-        <div class="hidden sm:block sm:w-1/2 shrink-0 pointer-events-none relative">
-            {{ partial:personaje-media class="w-[160%] absolute sm:-bottom-[34rem] left-1/2 -translate-x-1/2 z-40" }}
+        {{# El personaje va en la media columna libre, a la altura de la tarjeta.
+            Antes iba en absoluto con `bottom: -34rem`, y como el contenedor se
+            queda sin alto —su único hijo estaba fuera del flujo— ese desplazamiento
+            se medía desde un punto que no era el de la tarjeta: acababa colgando
+            264px por debajo, despegado de ella. En el flujo normal lo centra la
+            propia fila, que ya es `items-center`, y queda a su lado sin cuentas.
+            El `w-[160%]` de antes tampoco hacía nada: el `max-width: 100%` que
+            Tailwind pone a las imágenes lo dejaba en el ancho de la columna.
+
+            Para agrandarlo se escala en vez de darle más ancho: un ancho mayor
+            movería el hueco que ocupa —empujaría la tarjeta o sacaría barra de
+            scroll horizontal al desbordar por la izquierda—, y la escala no toca
+            la maquetación. Es lo mismo que hacen los personajes de las tarjetas
+            de talleres. Crece desde el centro para no despegarse de la tarjeta. #}}
+        <div class="hidden sm:block sm:w-1/2 shrink-0 pointer-events-none">
+            {{ partial:personaje-media class="w-full h-auto object-contain z-40 scale-125 origin-center" }}
         </div>
         {{ /if }}
         {{ /personaje_en_descripcion }}
@@ -65,30 +85,40 @@
     <div class="block w-full font-display font-normal text-base sm:text-lg bg-[#AFFFEC] text-zinc-900 px-8 py-6 rounded-3xl mb-8 sm:text-center text-left leading-snug [&_p]:my-0 [&_p+p]:mt-3 [&_a]:underline" data-reveal>{{ mensaje_importante }}</div>
     {{ /if }}
 
-    {{# ── Semanas temáticas ───────────────────────────────────────────────────── #}}
-    {{ if resumen }}
+    {{# ── Semanas temáticas ─────────────────────────────────────────────────────
+        Sólo las que aún se pueden reservar. El filtro está en PHP —ver el
+        proveedor de servicios—, porque Antlers no compara fechas de fiar y aquí
+        equivocarse significa seguir vendiendo semanas terminadas. #}}
+    {{ if hay_fechas }}
     <div class="flex items-center justify-between flex-wrap gap-4 mb-6" data-reveal>
         <h2 class="font-display font-bold text-3xl sm:text-4xl text-zinc-800">Semanas temáticas</h2>
         <span class="font-display font-bold text-sm bg-[#F5E554] text-zinc-900 px-4 py-2 rounded-full">🎉 10% de descuento al elegir 2 o más semanas</span>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" data-stagger-cards>
-        {{ resumen }}
+        {{ semanas_abiertas }}
         {{ if type == 'opcion' }}
         <div class="relative rounded-3xl px-8 py-8 flex flex-col gap-4
-            {{ if count % 6 == 1 }}bg-[#C5CBEE]
-            {{ elseif count % 6 == 2 }}bg-[#FFC18E]
-            {{ elseif count % 6 == 3 }}bg-[#F5E554]
-            {{ elseif count % 6 == 4 }}bg-[#F1D5E5]
-            {{ elseif count % 6 == 5 }}bg-[#89F0D8]
+            {{# El color va con el número original de la semana, no con su sitio en
+                lo que queda: así una semana no cambia de color de un día para otro
+                sólo porque la anterior haya pasado. #}}
+            {{ if (count + desfase_semanas) % 6 == 1 }}bg-[#C5CBEE]
+            {{ elseif (count + desfase_semanas) % 6 == 2 }}bg-[#FFC18E]
+            {{ elseif (count + desfase_semanas) % 6 == 3 }}bg-[#F5E554]
+            {{ elseif (count + desfase_semanas) % 6 == 4 }}bg-[#F1D5E5]
+            {{ elseif (count + desfase_semanas) % 6 == 5 }}bg-[#89F0D8]
             {{ else }}bg-[#DBD5F1]{{ /if }}" data-stagger-child>
             {{ personaje }}
             {{ if imagen || lottie }}
             <div class="absolute -top-8 right-2 w-28 sm:w-32 pointer-events-none z-20">
-                {{ partial:personaje-media class="w-full object-contain object-bottom drop-shadow-md" }}
+                {{ partial:personaje-media class="w-full object-contain object-bottom" }}
             </div>
             {{ /if }}
             {{ /personaje }}
-            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-900 sm:pr-28">Semana {{ count }}</p>
+            {{# El número que le tocaba en el verano completo, no su posición entre las
+                que quedan: la que se anunció como "Semana 3" tiene que seguir
+                siéndolo cuando las dos primeras ya hayan pasado, o dejaría de
+                cuadrar con las semanas temáticas que enumera la descripción. #}}
+            <p class="font-display font-bold text-sm uppercase tracking-wide text-zinc-900 sm:pr-28">Semana {{ count + desfase_semanas }}</p>
             {{ if titulo }}
             <h3 class="font-display font-bold text-2xl sm:text-3xl text-zinc-800 -mt-2">{{ titulo }}</h3>
             {{ /if }}
@@ -146,7 +176,15 @@
             {{ /if }}
         </div>
         {{ /if }}
-        {{ /resumen }}
+        {{ /semanas_abiertas }}
+    </div>
+    {{ else }}
+    {{# Sin semanas abiertas no hay nada que reservar. Las tarjetas de la home y
+        de /talleres ya no enlazan aquí, pero la página sigue en pie para quien
+        llegue por un enlace guardado o desde el buscador. #}}
+    <div class="rounded-3xl px-8 py-10 sm:px-12 sm:py-14 text-center" style="background-color: #C5CBEE" data-reveal>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-[#323E81] mb-3">{{ mensaje_sin_fechas ?? 'Próximamente' }}</h2>
+        <p class="font-sans text-lg text-[#323E81]">Las semanas de este verano ya terminaron. En cuanto abramos las fechas nuevas las verás aquí.</p>
     </div>
     {{ /if }}
 

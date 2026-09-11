@@ -9,13 +9,13 @@ bio_color_a: '#F5E554'
 title: 'René Castillo'
 foto_de_instructor: 0fea900a46d3ff57c627e11a91665da7cc963638.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1781738660
+updated_at: 1788986876
 profesion: 'Director e instructor principal'
 biografia: |-
-  Pionero de la animación stop motion en México. Su obra ha recibido más de 50 premios y reconocimientos en festivales de cine y animación alrededor del mundo, incluyendo dos premios Ariel, dos premios Guadalajara, selección oficial en el Festival de Cannes, y un Cristal en el Festival de Annecy — el reconocimiento más alto en el mundo de la animación.
+  Pionero de la animación stop motion en México. Su obra ha recibido más de 50 premios y reconocimientos en festivales de cine y animación alrededor del mundo, incluyendo dos premios Ariel de la Academia Mexicana de Artes y Ciencias Cinematográficas, dos premios en el Festival Internacional de Cine de Guadalajara, selección oficial en el Festival de Cannes, y un premio Cristal en el Festival de Annecy, el reconocimiento más alto en el mundo de la animación.
 
-  Trabajó como animador senior en Pinocho de Guillermo del Toro, ganadora del Oscar a Mejor Película Animada 2023.
-  Dirigió, animó y escribió el cineminuto Fútbol en la Sangre para el Gobierno de Jalisco.
+  Trabajó como animador senior en "Pinocho" de Guillermo del Toro, ganadora del Oscar a Mejor Película Animada 2023.
+  Dirigió, animó y escribió el cineminuto "Fútbol en la Sangre" para el Gobierno de Jalisco con motivo de la Copa del Mundo 2026.
 
   Hoy dirige Animondo, donde transmite a la siguiente generación el oficio que ha amado toda su vida.
 personajes_en_entradas:

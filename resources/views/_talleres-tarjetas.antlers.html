@@ -1,0 +1,145 @@
+{{#
+    Las tarjetas de talleres, compartidas por la home y la página de talleres.
+    Vive aparte porque eran dos copias del mismo diseño y cualquier retoque había
+    que hacerlo dos veces —posición de los personajes, colores, separaciones—, con
+    lo fácil que era que una se quedara atrás.
+
+    Se apoya en `talleres_entries` del contexto, así que cada página muestra los
+    suyos y en el orden que tenga: la home los saca de home.md y la de talleres de
+    talleres.md.
+
+    La primera entrada es la tarjeta ancha; el resto van en una retícula de dos
+    columnas. Los personajes salen del campo `personaje` del taller, y si no lo
+    tiene se toma uno de la colección para que la tarjeta no quede desnuda.
+
+    Una tarjeta enlaza y ofrece reservar cuando hay algo que reservar: semanas
+    abiertas, o grupos. Si no, se queda en "Próximamente" y deja de ser un enlace.
+    Lo segundo sólo afecta a los talleres que se venden por semanas sueltas —los
+    de verano—: cuando la última semana pasa, `hay_fechas` se vuelve falso y la
+    tarjeta cambia sola, sin que nadie tenga que entrar al panel. Los demás
+    talleres no caducan y para ellos siempre es cierto.
+#}}
+    {{ if talleres_entries }}
+
+    {{# 2. First entry — full-width banner card #}}
+    {{ talleres_entries }}
+    {{ if first }}
+    <div class="relative pt-28 sm:pt-40 mb-6 sm:mb-0" data-taller-card>
+    {{ if se_puede_reservar }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem] transition-transform duration-300 ease-out">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem] sm:flex sm:items-center sm:min-h-[28rem]">{{ /if }}
+
+        {{ if personaje }}
+        {{ personaje }}
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
+        {{ if imagen }}
+        {{# Va por el partial y no por un <img> suelto, para que reproduzca el Lottie
+            si el personaje lo tiene y sirva WebP si no. El tamaño se da por ANCHO en
+            el contenedor: en la rama Lottie el partial aplica la clase a un <span>
+            que saca su alto del <img> interior, así que un alto fijo lo dejaría sin
+            ancho. El `relative` es el contexto del <dotlottie-player> absoluto.
+            El scale es sólo para la versión animada: el .lottie viene en un lienzo
+            16:9 con mucho margen, así que el personaje se ve más chico que su PNG
+            al mismo ancho de caja. `origin-bottom` para que crezca hacia arriba y
+            no se despegue del borde de la tarjeta. Un personaje en PNG no lo toca. #}}
+        {{# La colocación del personaje de la tarjeta ancha se pasa desde fuera:
+            está calibrada para uno concreto —el ancho de caja y sobre todo la
+            escala— y cada página pone ahí un taller distinto. Con un valor fijo,
+            un personaje de otras proporciones se desborda y tapa el título. #}}
+        <div class="{{ clase_personaje ?? 'absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto' }}">
+            {{ partial:_personaje-media class="{{ clase_media ?? 'w-full h-full object-contain object-bottom' }}" alt="Personaje de animondo" }}
+        </div>
+        {{ /if }}
+        {{ /personaje }}
+        {{ else }}
+        {{ collection:personajes limit="1" }}
+        <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
+        {{ if imagen }}
+        <div class="absolute left-[8%] right-[8%] -top-28 h-64 pointer-events-none z-10 sm:left-[20%] sm:right-auto sm:w-[42%] sm:-top-40 sm:bottom-0 sm:h-auto">
+            {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
+        </div>
+        {{ /if }}
+        {{ /collection:personajes }}
+        {{ /if }}
+
+        {{# En móvil el bloque se ancla abajo y lo sube el relleno inferior; en
+            escritorio pasa a la media columna derecha y ahí manda el `sm:py-10`. #}}
+        <div class="absolute bottom-0 left-0 right-0 px-6 pb-24 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10 sm:pb-10">
+            <h3 class="font-display font-bold text-3xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
+            {{ if se_puede_reservar }}
+            {{# El horario, sólo si el taller lleva uno de portada. Los sabatinos ya no:
+                cada grupo tiene el suyo y un rango único no decía gran cosa. #}}
+            {{ if hora_inicio }}
+            <p class="font-display font-light text-2xl text-[#323E81] mb-3">
+                <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span><br>de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}            </p>
+            {{ /if }}
+            <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
+            {{ else }}
+            <p class="font-display font-light text-2xl text-[#323E81] mt-2">{{ mensaje_sin_fechas ?? 'Próximamente' }}</p>
+            {{ /if }}
+        </div>
+
+    {{ if se_puede_reservar }}</a>{{ else }}</div>{{ /if }}
+    </div>
+    {{ /if }}
+    {{ /talleres_entries }}
+
+    {{# 3. Remaining entries — 2-column grid #}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {{ talleres_entries }}
+        {{ unless first }}
+        <div class="relative pt-6 sm:pt-6" data-taller-card>
+        {{ if se_puede_reservar }}<a href="{{ url }}" class="relative block min-h-[20rem] rounded-[2rem] transition-transform duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02]">{{ else }}<div class="relative block min-h-[20rem] rounded-[2rem]">{{ /if }}
+
+            {{ if personaje }}
+            {{ personaje }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: {{ if count == 2 }}#F1D5E5{{ else }}#F5E554{{ /if }}"></div>
+            {{ if imagen }}
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[16%] sm:right-[16%] sm:-top-32 sm:h-64">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
+            </div>
+            {{ /if }}
+            {{ /personaje }}
+            {{ elseif count == 2 }}
+            {{ collection:personajes limit="1" }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F1D5E5"></div>
+            {{ if imagen }}
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[24%] sm:right-[24%] sm:-top-24 sm:h-52">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
+            </div>
+            {{ /if }}
+            {{ /collection:personajes }}
+            {{ else }}
+            {{ collection:personajes limit="1" offset="1" }}
+            <div class="absolute inset-0 rounded-[2rem]" style="background-color: #F5E554"></div>
+            {{ if imagen }}
+            <div class="absolute pointer-events-none z-10 left-[26%] right-[26%] -top-16 h-48 sm:left-[12%] sm:right-[12%] sm:-top-44 sm:h-72">
+                {{ partial:_personaje-media class="w-full h-full object-contain object-bottom" }}
+            </div>
+            {{ /if }}
+            {{ /collection:personajes }}
+            {{ /if }}
+
+            {{# Sin horario el bloque es mucho más corto (sólo título y "Próximamente"),
+                    así que el título caía más abajo que en las tarjetas con horario.
+                    Más padding inferior lo sube a la misma altura. #}}
+                <div class="absolute bottom-0 inset-x-0 px-6 text-center z-20 {{ if se_puede_reservar }}pb-8{{ else }}pb-24{{ /if }}">
+                <h3 class="font-display font-bold text-3xl sm:text-4xl leading-tight mb-2 text-[#323E81]">{{ title }}</h3>
+                {{ if se_puede_reservar }}
+                {{ if hora_inicio }}
+                <p class="font-display font-light text-2xl text-[#323E81] mb-3">
+                    <span class="taller-dias" data-dias="{{ dias | pluck:value | join:',' }}" data-dias-texto="de lunes a viernes">{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}{{ /dias }}</span>
+                    de {{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} a {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
+                </p>
+                {{ /if }}
+                <span class="inline-block font-display font-normal text-base bg-[#323E81] text-white px-6 py-3 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">Reserva tu lugar →</span>
+                {{ else }}
+                <p class="font-display font-light text-2xl text-[#323E81] mt-1">{{ mensaje_sin_fechas ?? 'Próximamente' }}</p>
+                {{ /if }}
+            </div>
+
+        {{ if se_puede_reservar }}</a>{{ else }}</div>{{ /if }}
+        </div>
+        {{ /unless }}
+        {{ /talleres_entries }}
+    </div>
+
+    {{ /if }}

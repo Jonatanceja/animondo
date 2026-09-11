@@ -4,13 +4,13 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1782001198
+updated_at: 1789153933
 hero_type: video
 circle_image: esfera.png
 circle_slides:
   -
     id: NCmZy7_poD2v3t-GsZJ6C
-    title: '<p>Aquí las niñas, niños y jóvenes <strong>descubren</strong> que pueden <strong>animar.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    title: '<p>Un lugar donde las niñas, niños y jóvenes, <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
     type: slide
     enabled: true
   -
@@ -20,7 +20,7 @@ circle_slides:
       y convertirte en autor.
     type: slide
     enabled: true
-    title: '<p>Para dejar de ser espectadores</p><p>y convertirse en <strong>creadores.</strong></p>'
+    title: '<p>Dan vida a objetos, <strong>animan</strong> dibujos y crean sus propias historias.</p><p>Para dejar de ser espectadores y convertirse en <strong>creadores.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p><p></p>'
   -
     id: 14ZcuabGk6urDHvEuovKA
     type: slide
@@ -97,17 +97,186 @@ circle_slides:
     type: slide
     enabled: true
     title: '<p>El progreso tiene color. Y viene en <strong>gorra</strong>.</p>'
-    imagen: gorras.png
   -
     id: obUJ_0LbA36L1dnSGdgOm
     type: slide
     enabled: true
-    title: '<p>Los alumnos construyen sus propios <strong>artefactos</strong> y los usan para dar <strong>vida</strong> a sus animaciones.</p>'
+    title: '<p><strong>Artefactos</strong> Animondo</p><p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
   -
     id: _TEg250DYsZKcEXW8a6g0
     type: slide
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
+viaje_lotties_slides:
+  -
+    id: viajeLottieMundo0001
+    type: escena
+    texto_arriba: true
+    texto_y: 58
+    texto_retraso: 0.5
+    video: viaje/videos/viaje-01-mundo.mp4
+    zoom: 1.0
+    foco_x: 50
+    foco_y: 50
+    centro_x: 70
+    enabled: true
+    title: '<p>Un lugar donde las niñas, niños y jóvenes <strong>descubren</strong> el arte de la <strong>animación</strong>.</p>'
+    posicion: izquierda
+    centro_y: 50
+    rotacion: 0
+    texto_derecha: false
+  -
+    id: viajeLottieAniman002
+    type: escena
+    bucle_desde: 0.542
+    video: viaje/videos/viaje-02-malabarista.mp4
+    zoom: 2.0
+    foco_x: 18
+    foco_y: 66
+    rotacion: 90
+    centro_x: 70
+    enabled: true
+    title: '<p>Dan vida a objetos, <strong>animan</strong> dibujos y crean sus propias historias.</p><p>Para dejar de ser espectadores y convertirse en <strong>creadores.</strong></p><p>No son clases. Es un <strong>viaje creativo</strong>.</p>'
+    posicion: izquierda
+    centro_y: 50
+    texto_arriba: false
+    texto_derecha: false
+  -
+    id: viajeLottieNiveles03
+    type: escena
+    bucle_desde: 0.75
+    video: viaje/videos/viaje-03-abeja.mp4
+    enabled: true
+    title: '<p>El viaje completo tiene 5 niveles.</p>'
+    posicion: centro
+    texto_derecha: true
+    texto_y: 41
+    zoom: 2.0
+    foco_x: 68
+    foco_y: 12
+    centro_x: 20
+    centro_y: 52
+    pasos_del_creador:
+      -
+        id: viajeLottiePaso0001
+        type: pasos
+        enabled: true
+        titulo: Explorador
+        descripcion:
+          -
+            type: paragraph
+            content:
+              -
+                type: text
+                text: 'Descubre el movimiento'
+        color: verde
+      -
+        id: viajeLottiePaso0002
+        type: pasos
+        enabled: true
+        titulo: Creador
+        descripcion:
+          -
+            type: paragraph
+            content:
+              -
+                type: text
+                text: 'Inventa mundos y personajes'
+        color: azul
+      -
+        id: viajeLottiePaso0003
+        type: pasos
+        enabled: true
+        titulo: Narrador
+        descripcion:
+          -
+            type: paragraph
+            content:
+              -
+                type: text
+                text: 'Cuenta historias'
+        color: naranja
+      -
+        id: viajeLottiePaso0004
+        type: pasos
+        enabled: true
+        titulo: Director
+        descripcion:
+          -
+            type: paragraph
+            content:
+              -
+                type: text
+                text: 'Dirige proyectos'
+        color: rojo
+      -
+        id: viajeLottiePaso0005
+        type: pasos
+        enabled: true
+        titulo: Autor
+        descripcion:
+          -
+            type: paragraph
+            content:
+              -
+                type: text
+                text: 'Encuentra su propia voz'
+        color: negro
+    rotacion: 0
+    texto_arriba: false
+  -
+    id: viajeLottieGorras004
+    type: escena
+    bucle_desde: 9.375
+    video: viaje/videos/viaje-05-gorras.mp4
+    enabled: true
+    title: '<p>El progreso tiene color.<br>Y viene en <strong>gorra</strong>.</p>'
+    posicion: izquierda
+    texto_ancho: 620
+    texto_y: 24
+    zoom: 2.4
+    foco_x: 89
+    foco_y: 38
+    rotacion: -90
+    centro_x: 78
+    centro_y: 45
+    texto_arriba: false
+    texto_derecha: false
+  -
+    id: viajeLottieArtefac05
+    type: escena
+    bucle_desde: 2.792
+    video: viaje/videos/viaje-06-maquinas.mp4
+    enabled: true
+    title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
+    posicion: derecha
+    texto_margen: 50
+    texto_ancho: 460
+    zoom: 2.2
+    foco_x: 27
+    foco_y: 34
+    rotacion: 52
+    centro_x: 76
+    centro_y: 60
+    texto_arriba: false
+    texto_derecha: false
+  -
+    id: viajeLottieCierre006
+    type: escena
+    texto_retraso: 4.0
+    bucle_desde: 4.333
+    video: viaje/videos/viaje-08-cierre.mp4
+    enabled: true
+    title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
+    posicion: izquierda
+    zoom: 1.0
+    foco_x: 50
+    foco_y: 50
+    rotacion: 0
+    centro_x: 62
+    centro_y: 50
+    texto_arriba: false
+    texto_derecha: false
 image_section_image: animondo-color.svg
 personajes_cards:
   - f0d00257-e86d-459a-b298-51afb33a6d13
@@ -128,16 +297,106 @@ marca_titulo: '<p>Imagina<br><strong>Anima </strong><br>Comparte</p>'
 marca_imagen_logo: animondo-color.svg
 marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
-hero_video_file: video/hero-video-2.mp4
 talleres_entries:
-  - dd00debb-9588-4144-aa71-14f8effb67f5
-  - 6382ddc6-e313-4ca9-9c53-00bedb84097e
   - fc361f30-59ac-434a-ac78-dafd900c3887
+  - 6382ddc6-e313-4ca9-9c53-00bedb84097e
+  - dd00debb-9588-4144-aa71-14f8effb67f5
 hero_headline: '<p></p>'
 entradas:
   - 965f7a89-25ba-4d8e-95ea-40bc42966d5a
   - 8d954090-121a-44a1-8ec6-1842f2c8c67d
-  - b1a17a5e-bf7b-4502-accf-feccbe4521d0
+zonas_titulo: 'Un espacio con tres zonas'
+zonas:
+  -
+    id: zonaConstruccion0001
+    type: zona
+    enabled: true
+    titulo: Construcción
+    descripcion: |-
+      Aquí nacen sus personajes
+      y sus mundos.
+    imagen: construccion-5.jpg
+    fotos:
+      - construccion-7.jpg
+      - construccion-8.jpg
+      - construccion-1.jpg
+      - mesas-de-trabajo-2.jpg
+  -
+    id: zonaMesasDeLuz00002
+    type: zona
+    enabled: true
+    titulo: 'Mesas de luz'
+    descripcion: |-
+      Aquí dibujan y animan
+      con arena, papel, plastilina,
+      sopas de pasta y luz.
+    imagen: mesa-de-luz-3.jpg
+    fotos:
+      - mesa-de-luz-5.jpg
+      - mesa-de-luz-2.jpg
+      - opt-copia-de-20.jpg
+      - opt-copia-de-30.jpg
+  -
+    id: zonaStopMotion000003
+    type: zona
+    enabled: true
+    titulo: 'Stop motion'
+    descripcion: |-
+      Aquí los objetos cobran
+      vida en sus manos.
+    imagen: stop-motion-3.jpg
+    fotos:
+      - stop-mption-10.jpg
+      - stop-motion-11.jpg
+      - stop-motion-9.jpg
+      - stop-motion-8.jpg
+galeria_animautas_titulo: 'Esto lo hicieron animautas en Animondo'
+faq_titulo: 'Preguntas frecuentes'
+faq:
+  -
+    id: faqGruposPorEdad001
+    type: pregunta
+    enabled: true
+    pregunta: '¿Mi hijo pequeño va a estar con los grandes?'
+    respuesta: 'No. Cada edad tiene su propio horario y su propio programa. Los de 6 a 8 años entran a las 9:30, los de 9 a 12 a las 11, y los de 13 a 16 a las 12:30. Tu hijo trabaja solo con animautas de su edad.'
+  -
+    id: faqSaberDibujar002
+    type: pregunta
+    enabled: true
+    pregunta: '¿Mi hijo necesita saber dibujar?'
+    respuesta: 'No. Aquí se empieza desde cero. Lo único que hace falta son ganas de crear.'
+  -
+    id: faqFaltaUnSabado003
+    type: pregunta
+    enabled: true
+    pregunta: '¿Qué pasa si falta un sábado?'
+    respuesta: 'No pasa nada. El viaje avanza al ritmo de cada animauta, no contra el calendario. Retoma donde se quedó el sábado siguiente.'
+  -
+    id: faqEntrarEmpezado004
+    type: pregunta
+    enabled: true
+    pregunta: '¿Puede entrar aunque el grupo ya haya empezado?'
+    respuesta: 'Sí. Llega a una sesión de bienvenida, conoce las zonas y se integra al grupo el mismo sábado.'
+  -
+    id: faqSeLlevaACasa005
+    type: pregunta
+    enabled: true
+    pregunta: '¿Qué se lleva a casa?'
+    respuesta: |-
+      Sus artefactos y sus animaciones.
+      Las animaciones se envían por WhatsApp y correo electrónico.
+  -
+    id: faqMateriales00006
+    type: pregunta
+    enabled: true
+    pregunta: '¿Los materiales están incluidos?'
+    respuesta: 'Sí, todos. Plastilina, papel, arena, sopas de pasta, iPads y mesas de luz. Tu hijo solo trae su creatividad; nosotros ponemos lo demás.'
+  -
+    id: faqDuracionTaller007
+    type: pregunta
+    enabled: true
+    pregunta: '¿Cuánto dura el taller?'
+    respuesta: 'Hora y media cada sábado. No hay fecha de fin, el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
 instructores_titulo: Instructores
 personajes_en_posicion_absoluta:
   - 475d4e9f-948e-4a62-8cb1-5bd643118b6a
@@ -145,6 +404,18 @@ personajes_en_posicion_absoluta:
   - 18dd69a2-0a69-4897-a816-f5fae4b7b6c4
   - da9a7ff6-2bc2-4288-8752-21c4ce137b79
   - 854caaf0-b67c-4131-a189-3fa047126aa6
+galeria_animautas:
+  - video-animauta-06-logo.mp4
+  - video-animauta-04-logo.mp4
+  - video-animauta-09-logo.mp4
+  - video-animauta-08-logo.mp4
+  - video-animauta-07-logo.mp4
+  - video-animauta-05-logo.mp4
+  - video-animauta-03-logo.mp4
+  - video-animauta-02-logo.mp4
+  - video-animauta-01-logo.mp4
+  - video-animauta-10-logo.mp4
+hero_video_file: video/hero-animondo.mp4
 ---
 ## Welcome to your brand new Statamic site!
 

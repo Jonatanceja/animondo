@@ -1,1 +1,47 @@
-<p>404 Page not found.</p>
+{{#
+    Página 404. Se sirve con el layout completo —nav, pie y carrito—, así que
+    quien llega aquí por un enlace roto sigue teniendo por dónde seguir en vez
+    de quedarse en una pantalla muerta.
+
+    Sigue la misma forma que /gracias: bloque centrado, título grande, una línea
+    de texto y una salida clara.
+#}}
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24 min-h-[70vh] flex items-center justify-center">
+
+    <div class="max-w-2xl mx-auto text-center">
+
+        {{# Un personaje cualquiera de la colección, como en las tarjetas de
+            talleres cuando el taller no trae el suyo. Decorativo: no aporta nada
+            a quien no lo ve, de ahí el aria-hidden. #}}
+        {{ collection:personajes limit="1" }}
+        {{ if imagen || lottie }}
+        <div class="mx-auto w-40 sm:w-52 mb-6 sm:mb-8 pointer-events-none" aria-hidden="true">
+            {{ partial:_personaje-media class="block w-full h-auto object-contain" alt="" }}
+        </div>
+        {{ /if }}
+        {{ /collection:personajes }}
+
+        {{# El número es decorativo —quien lee el título ya sabe qué pasó—, pero en el
+            amarillo de la marca casi no se distinguía del fondo crema. En coral sí. #}}
+        <p class="font-display font-bold text-6xl sm:text-8xl text-[#E8907C] leading-none mb-2">404</p>
+
+        <h1 class="font-display font-bold text-3xl sm:text-5xl text-[#323E81] mb-5 sm:mb-6 leading-tight">
+            Esta página no existe
+        </h1>
+
+        <p class="font-display font-light text-xl sm:text-2xl text-zinc-700 leading-snug">
+            Puede que el enlace esté roto, o que lo que buscabas ya no esté aquí.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-10">
+            <a href="/" class="inline-block font-display font-normal text-lg text-white bg-[#323E81] px-8 py-4 rounded-full transition-colors duration-500 hover:bg-[#232B5C] hover:text-white">
+                Volver al inicio
+            </a>
+            <a href="/talleres" class="inline-block font-display font-normal text-lg text-[#323E81] bg-[#F5E554] px-8 py-4 rounded-full transition-colors duration-500 hover:bg-[#E8D94A]">
+                Ver los talleres
+            </a>
+        </div>
+
+    </div>
+
+</div>

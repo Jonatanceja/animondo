@@ -149,6 +149,216 @@ tabs:
                                             naranja: Naranja
                                             rojo: Rojo
                                             negro: Negro
+  viaje_lotties:
+    display: 'El Viaje (lotties)'
+    sections:
+      -
+        fields:
+          -
+            handle: viaje_lotties_mundo
+            field:
+              type: assets
+              display: Mundo
+              instructions: 'La animación sobre la que ocurre todo el viaje. No hay una por escena: es siempre la misma, y cada escena la encuadra a su manera con el acercamiento, el foco y el giro.'
+              max_files: 1
+              container: assets
+              allowed_extensions:
+                - lottie
+                - json
+                - webp
+                - gif
+                - png
+          -
+            handle: viaje_lotties_slides
+            field:
+              type: replicator
+              display: Escenas
+              instructions: 'Cada scroll pasa a la escena siguiente y encuadra el mundo de otra manera: se acerca a una zona, la endereza y muestra su texto.'
+              max_sets: 10
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    escena:
+                      display: Escena
+                      fields:
+                        -
+                          handle: video
+                          field:
+                            type: assets
+                            display: Video
+                            instructions: 'La toma de esta escena. Si pones una, manda ella: se ve el video a pantalla completa dentro del marco y el mundo de arriba se queda fuera, junto con el acercamiento, el foco y el giro, que ya vienen resueltos dentro de la propia toma. Si la dejas vacía, la escena vuelve a encuadrar el mundo con esos ajustes. Va sin sonido y en bucle.'
+                            max_files: 1
+                            container: assets
+                            allowed_extensions:
+                              - webm
+                              - mp4
+                              - mov
+                        -
+                          handle: texto_retraso
+                          field:
+                            type: float
+                            display: 'El texto entra a los (segundos)'
+                            instructions: 'Cuánto espera el texto desde que arranca la escena. Sirve para que no se cruce con el movimiento de cámara de la toma: cuanto más largo sea ese viaje, más conviene esperar. Vacío espera 1 segundo.'
+                        -
+                          handle: bucle_desde
+                          field:
+                            type: float
+                            display: 'El bucle empieza en (segundos)'
+                            instructions: 'Sólo si la toma abre con un movimiento de cámara que viene de la escena anterior. Se reproduce entera una vez y, al acabar, vuelve a este segundo en lugar de al principio: el viaje se ve una vez y después sólo cicla la parte quieta. Vacío repite la toma completa.'
+                        -
+                          handle: centro_x
+                          field:
+                            type: integer
+                            display: 'Dónde cae en pantalla — horizontal (%)'
+                            instructions: 'En qué punto del ancho se planta la zona enfocada. 50 la deja centrada; 70 la echa a la derecha y libera la izquierda para el texto.'
+                            default: 50
+                        -
+                          handle: centro_y
+                          field:
+                            type: integer
+                            display: 'Dónde cae en pantalla — vertical (%)'
+                            instructions: '50 la deja centrada; 30 la sube y empuja el resto del mundo hacia abajo.'
+                            default: 50
+                        -
+                          handle: zoom
+                          field:
+                            type: float
+                            display: Acercamiento
+                            instructions: '1 muestra la animación entera. 2 se acerca al doble. Por encima de 2 se ve blando: amplía más de lo que da el archivo.'
+                            default: 1
+                        -
+                          handle: foco_x
+                          field:
+                            type: integer
+                            display: 'Foco horizontal (%)'
+                            instructions: 'Qué punto queda centrado al acercarse. 0 es el borde izquierdo, 50 el centro, 100 el derecho. Sólo cuenta si el acercamiento es mayor que 1.'
+                            default: 50
+                        -
+                          handle: foco_y
+                          field:
+                            type: integer
+                            display: 'Foco vertical (%)'
+                            instructions: '0 es arriba del todo, 50 el centro, 100 abajo.'
+                            default: 50
+                        -
+                          handle: rotacion
+                          field:
+                            type: integer
+                            display: 'Giro (grados)'
+                            instructions: 'Los personajes van colocados en corro alrededor del mundo, así que los de los lados salen tumbados. Gira el mundo para enderezar al que enfocas: 90 lo levanta hacia la derecha, -90 hacia la izquierda. Gira sobre el punto de foco, así que el encuadre no se mueve.'
+                            default: 0
+                        -
+                          handle: title
+                          field:
+                            type: bard
+                            display: Título
+                            buttons:
+                              - bold
+                              - italic
+                              - underline
+                            save_html: true
+                        -
+                          handle: text
+                          field:
+                            type: textarea
+                            display: Texto
+                            instructions: 'Opcional, debajo del título. Los saltos de línea se respetan.'
+                        -
+                          handle: texto_x
+                          field:
+                            type: integer
+                            display: 'Desplazar el texto — horizontal (%)'
+                            instructions: 'Opcional. Dónde cae el centro del bloque de texto a lo ancho de la pantalla: 50 lo deja en medio, 65 lo corre a la derecha. Si lo dejas vacío manda la posición de abajo.'
+                        -
+                          handle: texto_y
+                          field:
+                            type: integer
+                            display: 'Desplazar el texto — vertical (%)'
+                            instructions: 'Opcional. 50 lo deja centrado a lo alto, 40 lo sube. No cambia el hueco que ocupa: sólo lo mueve.'
+                        -
+                          handle: texto_ancho
+                          field:
+                            type: integer
+                            display: 'Ancho del texto (px)'
+                            instructions: 'Opcional. Para cuando el corte de línea que sale solo parte mal la frase y deja una palabra suelta abajo. Vacío usa el ancho de siempre. En pantallas estrechas se ajusta solo, aunque pongas un número grande.'
+                        -
+                          handle: texto_margen
+                          field:
+                            type: integer
+                            display: 'Margen del texto al borde (px)'
+                            instructions: 'Opcional. Lo que separa el texto del borde del marco, por el lado al que esté pegado. Vacío usa el de siempre, que va entre 24 y 80px según el ancho de la pantalla.'
+                        -
+                          handle: texto_arriba
+                          field:
+                            type: toggle
+                            display: 'Pegar el texto arriba'
+                            instructions: 'Lo sube al borde de arriba del marco, a 50px, sin mover dónde cae a lo ancho: la posición de abajo sigue mandando en eso. Sirve cuando la toma llena el centro y el texto estorba ahí.'
+                            default: false
+                        -
+                          handle: texto_derecha
+                          field:
+                            type: toggle
+                            display: 'Pegar el texto a la derecha'
+                            instructions: 'Lo lleva al borde derecho del marco sin cambiar la alineación ni el ancho que tenga por su posición. Queda separado del borde lo mismo que los textos de la izquierda lo están del suyo. Si además tiene un desplazamiento horizontal, manda esto.'
+                            default: false
+                        -
+                          handle: posicion
+                          field:
+                            type: select
+                            display: 'Posición del texto'
+                            instructions: 'Dónde se coloca el texto respecto a la animación. En "El Viaje" esto iba fijado en la plantilla; aquí se elige por escena porque cada animación ocupa un sitio distinto.'
+                            default: izquierda
+                            options:
+                              izquierda: Izquierda
+                              derecha: Derecha
+                              centro: Centro
+                              arriba: Arriba
+                              abajo: Abajo
+                        -
+                          handle: gorras
+                          field:
+                            type: assets
+                            display: Gorras
+                            instructions: 'Sólo en la escena de las gorras. Van apareciendo una a una, en el orden de aquí, y la del medio se planta delante de las demás.'
+                            container: assets
+                            mode: grid
+                        -
+                          handle: pasos_del_creador
+                          field:
+                            type: replicator
+                            display: 'Pasos del creador'
+                            instructions: 'Sólo en la escena de los niveles.'
+                            sets:
+                              nuevo_grupo_de_conjuntos:
+                                display: 'Nuevo grupo de conjuntos'
+                                sets:
+                                  pasos:
+                                    display: Pasos
+                                    fields:
+                                      -
+                                        handle: titulo
+                                        field:
+                                          type: text
+                                          display: Titulo
+                                      -
+                                        handle: descripcion
+                                        field:
+                                          container: assets
+                                          remove_empty_nodes: false
+                                          type: bard
+                                          display: Descripción
+                                      -
+                                        handle: color
+                                        field:
+                                          type: select
+                                          display: Color
+                                          options:
+                                            verde: Verde
+                                            azul: Azul
+                                            naranja: Naranja
+                                            rojo: Rojo
+                                            negro: Negro
   image_section:
     display: 'Sección de descanso'
     sections:
@@ -185,6 +395,111 @@ tabs:
               display: Talleres
               collections:
                 - talleres
+  zonas:
+    display: Zonas
+    sections:
+      -
+        fields:
+          -
+            handle: zonas_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Un espacio con tres zonas'
+          -
+            handle: zonas
+            field:
+              type: replicator
+              display: Zonas
+              instructions: 'Una tarjeta por zona, de seis en seis. El orden aquí es el orden en la página y también el del lightbox.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    zona:
+                      display: Zona
+                      fields:
+                        -
+                          handle: titulo
+                          field:
+                            type: text
+                            display: Título
+                        -
+                          handle: descripcion
+                          field:
+                            type: textarea
+                            display: Descripción
+                            instructions: 'Una o dos líneas.'
+                        -
+                          handle: imagen
+                          field:
+                            type: assets
+                            display: Portada
+                            instructions: 'La foto que se ve en la página. Si la dejas vacía se muestra un recuadro en blanco.'
+                            max_files: 1
+                            container: assets
+                        -
+                          handle: fotos
+                          field:
+                            type: assets
+                            display: 'Fotos de la zona'
+                            instructions: 'Las que se abren al hacer clic en la portada. La portada va primero sola, no hace falta repetirla aquí.'
+                            container: assets
+                            mode: grid
+  galeria_animautas:
+    display: 'Galería animautas'
+    sections:
+      -
+        fields:
+          -
+            handle: galeria_animautas_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Esto lo hicieron animautas en Animondo'
+          -
+            handle: galeria_animautas
+            field:
+              type: assets
+              display: 'Videos e imágenes'
+              instructions: 'Una tarjeta por archivo, de seis en seis. El orden aquí es el orden en la página y también el del lightbox.'
+              container: assets
+              mode: grid
+  faq:
+    display: 'Preguntas frecuentes'
+    sections:
+      -
+        fields:
+          -
+            handle: faq_titulo
+            field:
+              type: text
+              display: Título
+              instructions: 'Ej: Preguntas frecuentes'
+          -
+            handle: faq
+            field:
+              type: replicator
+              display: Preguntas
+              instructions: 'Una tarjeta por pregunta. El orden aquí es el orden en la página.'
+              sets:
+                main:
+                  display: Principal
+                  sets:
+                    pregunta:
+                      display: Pregunta
+                      fields:
+                        -
+                          handle: pregunta
+                          field:
+                            type: text
+                            display: Pregunta
+                        -
+                          handle: respuesta
+                          field:
+                            type: textarea
+                            display: Respuesta
+                            instructions: 'Los saltos de línea se respetan.'
   instructores:
     display: Instructores
     sections:

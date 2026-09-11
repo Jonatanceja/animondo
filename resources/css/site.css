@@ -121,6 +121,95 @@
   z-index: 99999 !important;
 }
 
+/* ── Snipcart: carrito personalizado ─────────── */
+
+/* Oculta el selector de Cantidad de cada artículo en el carrito (conserva el precio) */
+.snipcart-item-quantity__label,
+.snipcart-item-quantity__quantity {
+  display: none !important;
+}
+
+/* Precio del artículo un poco más grande */
+.snipcart-item-quantity__price,
+.snipcart-cart-summary-item__price,
+.snipcart-cart-summary-expanded-item__price {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+
+/* Bloque "Agregar transporte" inyectado bajo cada taller en el carrito */
+.animondo-transporte-add {
+  width: 100%;
+  clear: both;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e4e4e7;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #3f3f46;
+}
+
+.animondo-transporte-add label.animondo-cp-label {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: #3f3f46;
+}
+
+.animondo-transporte-cp {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c9c9cf;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background-color: #fff;
+  color: #18181b;
+}
+
+.animondo-transporte-cp.animondo-cp-error {
+  border-color: #e02424;
+}
+
+.animondo-transporte-add a {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-weight: 700;
+  color: #323E81;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Desglose de la cuenta antes del botón Pagar (sustituye el total por defecto) */
+.snipcart-summary-fees {
+  display: none !important;
+}
+
+.animondo-desglose {
+  margin: 0.25rem 0 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e4e4e7;
+  font-size: 0.95rem;
+  color: #1f2933;
+}
+
+.animondo-desglose__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.15rem 0;
+}
+
+.animondo-desglose__total {
+  margin-top: 0.35rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid #e4e4e7;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
 /* ── Fonts ───────────────────────────────────── */
 
 @font-face {
@@ -500,10 +589,755 @@ html, body {
 
 
 
+/* ── Acordeón de preguntas frecuentes ──
+   Se anima el ::details-content del <details> nativo, que es lo único que
+   permite abrir con transición sin reimplementar el acordeón en JS. Necesita
+   interpolate-size para poder animar HACIA una altura auto, y el
+   allow-discrete para que el contenido siga visible mientras se cierra.
+   Donde no exista ::details-content el acordeón abre de golpe, que es
+   exactamente el comportamiento nativo. */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.35s ease, content-visibility 0.35s allow-discrete;
+}
+
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+
+/* Safari pinta su propio marcador aunque el summary sea list-none. */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
 /* ── Taller agotado (botón "Reservar lugar" sin stock) ── */
 .animondo-agotado {
   background-color: #d4d4d8 !important;
   color: #71717a !important;
   cursor: not-allowed !important;
   pointer-events: none;
+}
+
+/* ── Galerías con carrusel + lightbox (Espacios y Trabajos) ──
+   Un solo componente para las dos galerías de la home. El carrusel es un
+   scroller con scroll-snap, así que el swipe en táctil es nativo y el JS sólo
+   pone flechas, puntos y el lightbox. Cuántas tarjetas caben por fila lo
+   decide cada plantilla con sus clases de Tailwind; aquí sólo se define que
+   cada diapositiva ocupa el ancho completo. */
+.galeria {
+  position: relative;
+}
+
+.galeria-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.galeria-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* El arrastre nativo de una imagen o un video secuestra el gesto y lo
+   convierte en un drag-and-drop del navegador. */
+.galeria-track img,
+.galeria-track video {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.galeria-track.es-arrastrable {
+  cursor: grab;
+}
+
+.galeria-track.esta-arrastrando {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.galeria-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  /* Sin esto el `align-items: stretch` del flex estira la retícula y las
+     tarjetas de la última diapositiva (que va incompleta) crecen de más. */
+  align-content: start;
+}
+
+.galeria-item {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+/* ── Botón de reproducir ──
+   Sólo aparece al pasar el cursor. En táctil no existe el hover, así que ahí
+   se queda visible: si no, nada distinguiría un video de una foto. */
+.galeria-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Un velo detrás del botón: el triángulo blanco tiene que leerse igual sobre
+   un fotograma claro que sobre uno oscuro. Va en el azul de la marca y no en
+   negro: sobre los fotogramas, casi todos claros y de colores cálidos, la mancha
+   negra se leía como suciedad en vez de como parte del sitio. */
+.galeria-play::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center,
+                              rgba(50, 62, 129, 0.5) 0%,
+                              rgba(50, 62, 129, 0.14) 60%,
+                              transparent 100%);
+}
+
+.galeria-play svg {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  transform: scale(0.82);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Algo más opaca que la negra que había: el azul es más claro y a la misma
+     opacidad el triángulo se despegaba menos del fondo. */
+  filter: drop-shadow(0 4px 12px rgba(50, 62, 129, 0.5));
+}
+
+.galeria-item:hover .galeria-play,
+.galeria-item:focus-visible .galeria-play {
+  opacity: 1;
+}
+
+.galeria-item:hover .galeria-play svg,
+.galeria-item:focus-visible .galeria-play svg {
+  transform: scale(1);
+}
+
+@media (hover: none) {
+  .galeria-play {
+    opacity: 1;
+  }
+
+  .galeria-play svg {
+    transform: scale(1);
+  }
+}
+
+/* ── Portada de una zona ──
+   Se revela igual que el botón de reproducir: sólo en hover, y siempre visible
+   en táctil, donde no hay hover que revele nada. El velo va en el contenedor y
+   la pastilla dentro, para no depender de `::after` ni pelear por el z-index. */
+.galeria-vermas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(9, 9, 11, 0.3);
+  transition: opacity 0.3s ease;
+}
+
+/* Un punto por foto, sobre la portada. Sustituyen a la pastilla que decía "Ver
+   las N fotos": dicen lo mismo —cuántas hay— sin texto que leer ni que traducir,
+   y sin tapar el centro de la imagen.
+
+   Se ven siempre, no sólo al pasar por encima, que es de lo que sirven: si
+   aparecieran con el cursor no dirían nada en un teléfono, y son justamente la
+   pista de que ahí dentro hay más de una foto. Por eso van fuera del velo, que
+   sí se desvanece.
+
+   La sombra es para que se lean sobre una foto clara; sin ella los puntos
+   blancos desaparecen contra un cielo o una pared. */
+.galeria-bolitas {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.galeria-bolita {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 3px rgba(9, 9, 11, 0.45);
+  transition: background 0.25s ease;
+}
+
+/* El primero es la portada, que es la que se está viendo. */
+.galeria-bolita[aria-current='true'] {
+  background: #fff;
+}
+
+/* En escritorio los puntos salen al pasar por encima, con el velo. En táctil se
+   quedan siempre a la vista: ahí no hay "pasar por encima" que valga, y son la
+   única pista de que la portada esconde más fotos.
+
+   La condición mira si el dispositivo tiene puntero con hover, no el ancho de la
+   pantalla: una tablet ancha no debería esconderlos por ser ancha, ni un portátil
+   estrecho enseñarlos siempre por ser estrecho. */
+@media (hover: hover) {
+  .galeria-bolitas {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .galeria-item:hover .galeria-bolitas,
+  .galeria-item:focus-visible .galeria-bolitas {
+    opacity: 1;
+  }
+}
+
+.galeria-item:hover .galeria-vermas,
+.galeria-item:focus-visible .galeria-vermas {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .galeria-vermas {
+    opacity: 0;
+  }
+}
+
+/* ── Puntos ── */
+.galeria-puntos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.galeria-punto {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  background: #d4d4d8;
+  transition: background 0.25s ease, width 0.25s ease;
+}
+
+.galeria-punto[aria-current='true'] {
+  width: 1.75rem;
+  background: #323E81;
+}
+
+/* ── Lightbox ──
+   Lo construye site.js una sola vez y lo comparten las dos galerías. */
+.galeria-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 1rem 5.5rem;
+  /* El azul de los títulos, no negro. Va con algo de transparencia para que la
+     página siga asomando por detrás, como estaba. */
+  background: rgba(50, 62, 129, 0.94);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.galeria-lightbox[hidden] {
+  display: none;
+}
+
+.galeria-lightbox.is-open {
+  opacity: 1;
+}
+
+.galeria-lb-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.galeria-lb-stage img,
+.galeria-lb-stage video {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: 1rem;
+  /* El mismo azul, opaco: es lo que se ve mientras la foto carga y en las bandas
+     de un video que no llena su hueco. En negro se recortaba como un recuadro
+     dentro del velo. */
+  background: #323E81;
+}
+
+.galeria-lb-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding-bottom: 0.25rem;
+  transition: background 0.2s ease;
+}
+
+.galeria-lb-nav {
+  position: absolute;
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding-bottom: 0.2rem;
+  transform: translateY(-50%);
+  transition: background 0.2s ease;
+}
+
+.galeria-lb-cerrar:hover,
+.galeria-lb-nav:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.galeria-lb-prev { left: 0.75rem; }
+.galeria-lb-next { right: 0.75rem; }
+
+@media (min-width: 1024px) {
+  .galeria-lb-prev { left: 2rem; }
+  .galeria-lb-next { right: 2rem; }
+}
+
+.galeria-lb-pie {
+  position: absolute;
+  left: 50%;
+  bottom: 2.75rem;
+  transform: translateX(-50%);
+  width: min(90%, 44rem);
+  text-align: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+}
+
+.galeria-lb-pie[hidden] {
+  display: none;
+}
+
+.galeria-lb-cuenta {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── El Viaje (lotties) ──
+   La sección mide una pantalla por escena y dentro lleva un contenedor sticky
+   que se queda quieto mientras se la recorre. Ese alto es lo que le da recorrido
+   al scroll: sin él no habría nada que recorrer y las escenas se atropellarían.
+   El número de escenas lo pone la plantilla en --viaje-l-escenas. */
+.viaje-l {
+  position: relative;
+  height: calc(var(--viaje-l-escenas, 6) * 100vh);
+}
+
+.viaje-l-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* El recuadro donde vive todo: el rosa del que salen las animaciones, con las
+   esquinas y el aire que llevaba el viaje anterior. El `overflow` va aquí y no
+   en el sticky, que si no las esquinas no recortarían nada.
+
+   El rosa NO es el #F1D5E5 de la marca, y no es un descuido. Las tomas traen
+   ese mismo rosa pintado de fondo, pero el video pasa por una codificación con
+   submuestreo de color y el navegador lo devuelve en #F5D9E6: cuatro niveles
+   más arriba en rojo y verde. Con el rosa exacto de la marca aquí, la frontera
+   entre el marco y el video se ve como una raya, sobre todo en móvil, donde el
+   video ocupa la mitad de abajo y los dos rosas se tocan a lo ancho de toda la
+   pantalla. Así que este toma el valor que sale del video, no el de origen.
+
+   Si algún día cambian las tomas o el códec, hay que volver a medirlo: pintar
+   un fotograma en un canvas y leer el color de una esquina vacía. */
+.viaje-l-marco {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background: #F5D9E6;
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  .viaje-l-sticky { padding: .75rem; }
+  .viaje-l-marco  { border-radius: 1rem; }
+}
+
+/* Las escenas van una encima de otra y sólo se ve la activa. `visibility` además
+   de la opacidad: si no, la escena apagada sigue capturando el cursor. */
+.viaje-l-escena {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease;
+  /* Arriba, hueco para el nav fijo; abajo, aire para que el texto más largo no
+     llegue a tocar el borde. El de arriba va en variable porque hay que poder
+     descontarlo desde dentro, al pegar un texto al borde. */
+  --viaje-l-aire-arriba: clamp(5rem, 11vh, 7.5rem);
+  padding: var(--viaje-l-aire-arriba) 0 clamp(1.5rem, 5vh, 3rem);
+}
+
+.viaje-l-escena.esta-activa {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* La caja reserva el sitio y recorta; la animación de dentro la coloca el JS.
+   Hace falta el recorte porque las escenas que se acercan a una zona sacan el
+   resto del dibujo fuera de plano, y sin él se derramaría sobre el texto. */
+.viaje-l-anim-caja {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Sin `object-fit`: el tamaño se lo da el JS en píxeles, que es la única forma
+   de llevar un punto cualquiera del dibujo al centro sabiendo cuánto mide de
+   verdad una vez ajustado a la caja. Arranca oculta para que no se vea el
+   fotograma sin encuadrar antes del primer cálculo. */
+.viaje-l-anim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  visibility: hidden;
+}
+
+/* A media pantalla el dibujo se ve bastante más grande que repartido por todo
+   el ancho, y deja el otro lado libre para que el texto no se le encime. Pide
+   su animación recortada al dibujo (bin/lottie-a-webp.sh --recortar): con el
+   lienzo 16:9 entero, la mitad de ese hueco se iría en aire. */
+
+/* La toma de la escena, cuando la hay: ocupa el marco entero y queda por debajo
+   del texto. `cover` y no `contain` porque el video es opaco y trae su propio
+   fondo pintado; ajustado con `contain` asomaría el rosa del marco por los lados
+   en cuanto la pantalla no fuera 16:9, que es casi siempre, y el corte entre los
+   dos fondos se vería como una franja. Recorta algo por los lados, y las tomas
+   vienen holgadas de sobra para aguantarlo. */
+.viaje-l-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* El texto entra un segundo después que la escena. Cada toma abre con un
+   movimiento de cámara que viene de la escena anterior, y el texto apareciendo
+   encima mientras la imagen todavía viaja se leía como un cruce: dos cosas
+   moviéndose a la vez sin relación. Con la espera, primero llega la toma a su
+   sitio y luego habla.
+
+   Sólo al entrar. Al salir se va sin retardo —la regla de abajo no lo lleva—,
+   que si no se quedaría colgado sobre la escena siguiente. */
+.viaje-l-texto {
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.viaje-l-escena.esta-activa .viaje-l-texto {
+  opacity: 1;
+  transition-delay: calc(var(--texto-retraso, 1) * 1s);
+}
+
+/* El texto va por encima de la animación. */
+.viaje-l-texto {
+  position: relative;
+  z-index: 1;
+  max-width: min(34rem, 42vw);
+  /* La separación de los lados. Es lo que se ve como margen del texto al borde
+     del marco: los bloques se pegan al suyo, y este relleno es lo que los
+     despega. En variable para poder cambiarlo escena a escena. */
+  padding: 0 var(--texto-lado, clamp(1.5rem, 5vw, 5rem));
+  /* Sin recortar: el círculo que rodea las negritas se dibuja fuera del renglón
+     —el SVG se sale 8px por arriba y por abajo— y cualquier overflow distinto
+     de `visible` se lo come por el lado de abajo cuando la negrita cae en la
+     última línea. El desborde del texto ya lo controla la tipografía: el bloque
+     más largo son tres párrafos y ocupa 530px de los 645 disponibles.
+     El padding vertical es para que ese círculo tenga sitio. */
+  padding-block: 1rem;
+}
+
+.viaje-l-izquierda { margin-right: auto; }
+.viaje-l-derecha   { margin-left: auto; }
+.viaje-l-centro    { margin-inline: auto; max-width: min(46rem, 80vw); text-align: center; }
+
+/* Arriba y abajo se despegan del centro vertical: el contenedor es flex, así que
+   basta con alinearse uno mismo. */
+.viaje-l-arriba { align-self: flex-start; margin-inline: auto; padding-top: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
+.viaje-l-abajo  { align-self: flex-end;  margin-inline: auto; padding-bottom: clamp(3rem, 10vh, 7rem); max-width: min(46rem, 80vw); text-align: center; }
+
+/* Sube el texto al borde de arriba sin tocar dónde cae a lo ancho. Los
+   `arriba` y `abajo` de la lista de posiciones no servían para esto: además de
+   subir centran, y aquí la colocación horizontal tiene que quedarse como esté.
+   Por eso es un añadido y no otra posición más, y se combina con cualquiera.
+
+   Los 50px se cuentan desde el borde del marco hasta el texto, así que hay que
+   descontar dos cosas que el flex ya mete por delante: el hueco que la escena
+   reserva para el nav y el relleno del propio bloque, que está ahí para que
+   quepa el círculo de las negritas. */
+.viaje-l-texto-arriba {
+  align-self: flex-start;
+  margin-top: calc(50px - var(--viaje-l-aire-arriba) - 1rem);
+}
+
+/* Coloca el CENTRO del bloque en el porcentaje pedido: el margen lo lleva al
+   punto y el translate descuenta media caja, que es la única forma de dejarlo
+   centrado ahí sin conocer su ancho. Va después de las posiciones a propósito:
+   todas traen `margin-inline: auto` y, por delante, ganaban ellas.
+
+   Horizontal y vertical van en clases separadas, y no en una sola con dos
+   variables, porque el valor por defecto no es neutro: una escena que sólo
+   quiere subir su texto se lo encontraba además centrado a lo ancho, por el
+   `50` de reserva del horizontal, tirando abajo la posición que tuviera. */
+.viaje-l-texto-movido-x {
+  margin-left: calc(var(--texto-x, 50) * 1%);
+  margin-right: 0;
+  transform: translateX(-50%);
+}
+
+/* En vertical no sirve el mismo truco: un margen en porcentaje se calcula sobre
+   el ANCHO del contenedor, no sobre su alto. `top` sí va sobre el alto, y al ser
+   relativo mueve el bloque sin tocar el hueco que ocupa. Se cuenta desde el
+   centro, que es donde lo deja el flex. */
+.viaje-l-texto-movido-y {
+  position: relative;
+  top: calc((var(--texto-y, 50) - 50) * 1%);
+}
+
+/* Ancho a medida, para cuando el corte de línea que sale por defecto parte mal
+   la frase. El tope en `vw` se queda: sin él, un ancho pensado en el escritorio
+   desbordaría el marco en una pantalla estrecha. */
+.viaje-l-texto-ancho {
+  max-width: min(calc(var(--texto-ancho) * 1px), 80vw);
+}
+
+/* Margen a medida entre el texto y el borde del marco, para las escenas donde
+   el de siempre deja el texto demasiado justo o demasiado suelto. */
+.viaje-l-texto-margen {
+  --texto-lado: calc(var(--texto-margen) * 1px);
+}
+
+/* Pega el bloque al borde derecho sin tocar cómo se ve por dentro. La posición
+   `derecha` de la lista no valía: además de mover, cambia la alineación y el
+   ancho máximo, y hay escenas centradas que sólo quieren correrse al borde.
+
+   El margen que queda a la derecha no es cero: lo pone el relleno del propio
+   bloque, el mismo que separa por la izquierda a los textos de ese lado, así
+   que los dos bordes respiran igual en cualquier ancho de pantalla.
+
+   Va detrás de los desplazamientos a propósito: si la escena además trae uno
+   horizontal, aquí manda el borde. */
+.viaje-l-texto-derecha {
+  margin-left: auto;
+  margin-right: 0;
+  transform: none;
+}
+
+/* ── Los cinco niveles ── */
+.viaje-l-pasos {
+  display: flex;
+  gap: clamp(.75rem, 2vw, 2rem);
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.viaje-l-paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  max-width: 10rem;
+}
+
+.viaje-l-punto {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  margin-bottom: .75rem;
+  flex-shrink: 0;
+}
+
+/* En móvil no caben lado a lado el texto y el dibujo: se reparten a lo alto, el
+   texto arriba y la toma abajo.
+
+   Todos los ajustes de colocación del escritorio se anulan aquí de golpe —las
+   posiciones, los desplazamientos, el ancho y el margen a medida—. Están
+   calibrados contra un marco apaisado donde media pantalla queda libre al lado
+   del dibujo, y en vertical no significan nada: un texto empujado al 68% del
+   ancho, o con 460px de ancho fijo, en 390px de pantalla se sale o se estruja.
+   Por eso la lista es larga y no una regla sobre `.viaje-l-texto`: cada
+   modificador trae lo suyo y hay que desactivarlos uno a uno. */
+@media (max-width: 639px) {
+  /* En vertical la escena deja de ser "texto a un lado del dibujo" y pasa a ser
+     dos franjas apiladas: el texto arriba y la toma abajo. Se apilan de verdad,
+     en columna, y no colocando la toma por encima con posiciones absolutas: así
+     el texto se centra en el hueco que le queda con un `justify-content` y no
+     hay que descontar a mano cuánto ocupa el video. Un porcentaje en `padding`
+     o en `margin` tampoco serviría de atajo, porque se calcula sobre el ANCHO
+     del contenedor y aquí lo que hay que repartir es el alto.
+
+     El orden va al revés que en el HTML —ahí el video viene antes, para quedar
+     por debajo del texto cuando se superponen en escritorio—, así que aquí se
+     invierte con `order`. Y el relleno de abajo se quita para que la toma llegue
+     al borde del marco, como cuando iba en absoluto. */
+  .viaje-l-escena {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
+
+  .viaje-l-texto,
+  .viaje-l-izquierda,
+  .viaje-l-derecha,
+  .viaje-l-centro,
+  .viaje-l-arriba,
+  .viaje-l-abajo,
+  .viaje-l-texto-movido-x,
+  .viaje-l-texto-movido-y,
+  .viaje-l-texto-ancho,
+  .viaje-l-texto-margen,
+  .viaje-l-texto-derecha,
+  .viaje-l-texto-arriba {
+    max-width: none;
+    margin: 0;
+    padding-block: 0;
+    transform: none;
+    top: auto;
+    align-self: auto;
+    text-align: center;
+    --texto-lado: 1.25rem;
+  }
+
+  /* La toma, abajo y a lo ancho. `contain` y no `cover`: el fondo del video es
+     el mismo rosa del marco, así que lo que sobra a los lados no se ve, y
+     recortando se perderían los personajes, que van pegados al borde de abajo
+     donde se apoyan sobre el mundo. */
+  .viaje-l-video {
+    position: static;
+    order: 2;
+    flex: 0 0 52%;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
+  /* El texto se queda con lo que sobra y se centra ahí dentro. Va en columna
+     porque el bloque son varias piezas —título, párrafo, los cinco niveles— y
+     lo que hay que centrar es el conjunto, no cada una por su lado. */
+  .viaje-l-texto {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .viaje-l-anim { opacity: .35; }
+  .viaje-l-pasos { flex-wrap: wrap; gap: 1rem 1.25rem; }
+  .viaje-l-paso { flex: 0 0 40%; }
+}
+
+/* Quien haya pedido menos movimiento no tiene por qué tragarse los fundidos. */
+@media (prefers-reduced-motion: reduce) {
+  .viaje-l-escena { transition: none; }
+  .viaje-l-texto,
+  .viaje-l-escena.esta-activa .viaje-l-texto { transition: none; transition-delay: 0s; }
+}
+
+/* ── Las gorras del viaje ──
+   Van en fila, montándose unas sobre otras como en la referencia, y entran de
+   una en una. El orden de apilado sale del centro: la del medio delante y las
+   de los lados cada vez más atrás, que es lo que da la sensación de abanico. */
+.viaje-l-gorras {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: 2rem;
+}
+
+.viaje-l-gorra {
+  width: clamp(4.5rem, 11vw, 8.5rem);
+  height: auto;
+  /* El solape: cada una se mete un tercio sobre la anterior. */
+  margin-inline: -4%;
+  /* `--i` lo pone la plantilla con el índice de cada gorra. La del medio (2)
+     va delante y algo más grande; hacia los lados baja el z-index. Se usa el
+     valor absoluto de la distancia al centro, que en CSS no existe como
+     función, así que se hace con max() sobre la resta en los dos sentidos. */
+  --dist: max(calc(var(--i) - 2), calc(2 - var(--i)));
+  z-index: calc(10 - var(--dist));
+  transform: scale(calc(1 - var(--dist) * 0.07));
+  transform-origin: bottom center;
+  opacity: 0;
+}
+
+/* Entran cuando la escena se enciende, no al cargar la página. El retardo sube
+   con el índice para que aparezcan una detrás de otra. */
+.viaje-l-escena.esta-activa .viaje-l-gorra {
+  animation: viaje-l-gorra-entra .55s cubic-bezier(.2, .9, .3, 1.3) forwards;
+  animation-delay: calc(.45s + var(--i) * .13s);
+}
+
+@keyframes viaje-l-gorra-entra {
+  from { opacity: 0; transform: scale(calc((1 - var(--dist) * 0.07) * .6)) translateY(28%); }
+  to   { opacity: 1; transform: scale(calc(1 - var(--dist) * 0.07)) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viaje-l-escena.esta-activa .viaje-l-gorra { animation-duration: .01s; animation-delay: 0s; }
+}
+
+@media (max-width: 639px) {
+  .viaje-l-gorra { width: clamp(3.5rem, 17vw, 5rem); }
 }

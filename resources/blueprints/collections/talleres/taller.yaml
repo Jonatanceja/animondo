@@ -87,6 +87,13 @@ tabs:
                 domingo: Domingo
               width: 50
           -
+            handle: mensaje_sin_fechas
+            field:
+              type: text
+              display: 'Mensaje cuando no hay fechas'
+              instructions: 'Lo que dice la tarjeta en la home y en /talleres cuando el taller no tiene fechas abiertas. Vacío pone "Próximamente".'
+              placeholder: Próximamente
+          -
             handle: hora_inicio
             field:
               type: time

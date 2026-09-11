@@ -1,0 +1,199 @@
+<div class="px-4 sm:px-6 pt-32 sm:pt-44 pb-16 sm:pb-24">
+
+    {{# ── Portada ─────────────────────────────────────────────────────────── #}}
+    <section class="relative mb-6 sm:mb-8" data-reveal data-delay="0">
+
+        <div class="relative rounded-[2rem] px-8 py-10 sm:px-16 sm:py-14"
+             style="background: linear-gradient(to right, #AFFFEC, #F5E554);">
+
+            <div class="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+
+                {{# Izquierda: título, horario y notas #}}
+                {{# 48%: por debajo de eso "Sabados Animondo" se parte en dos renglones
+                    y el título pasa de dos líneas a tres. #}}
+                <div class="sm:max-w-[48%]">
+                    <h1 class="font-display font-bold leading-[0.95] text-[#323E81] text-4xl sm:text-6xl">
+                        {{ if titulo_portada }}{{ titulo_portada | nl2br }}{{ else }}{{ title }}{{ /if }}
+                    </h1>
+
+                    {{ if hora_inicio }}
+                    <p class="font-display text-2xl sm:text-3xl text-[#323E81] mt-3">
+                        {{ if dias }}{{ dias }}{{ unless first }}{{ if last }} y {{ else }}, {{ /if }}{{ /unless }}{{ label }}s{{ /dias }} {{ /if }}{{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }} - {{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}
+                    </p>
+                    {{ /if }}
+
+                    {{ if notas }}
+                    <div class="mt-4 font-sans text-sm sm:text-base text-[#323E81] leading-snug">
+                        {{ notas }}<p class="m-0">{{ value }}</p>{{ /notas }}
+                    </div>
+                    {{ /if }}
+                </div>
+
+                {{# Centro: el primer personaje, en flujo normal (no absoluto) entre el
+                    título y los datos. Sólo el primero: `first` en vez de `limit`, que
+                    no aplica al recorrer un campo.
+                    Tamaño por ANCHO, no por alto: si el personaje trae Lottie, el partial
+                    aplica la clase a un <span> que saca su alto del <img> interior, y un
+                    alto fijo lo dejaría sin ancho. El `relative` es el contexto que
+                    necesita el <dotlottie-player> absoluto. #}}
+                {{ if personajes_portada }}
+                {{# El .lottie de Cornelio está exportado en un lienzo 16:9 de 3840x2160
+                    con el personaje ocupando una porción pequeña, así que se ve chico
+                    aunque la caja sea grande. El scale compensa ese margen del archivo:
+                    agranda el dibujo sin que la columna ocupe más espacio. Sólo afecta al
+                    reproductor; un personaje en PNG viene recortado y no lo necesita. #}}
+                {{# La caja sólo reserva sitio; el tamaño visible lo da el scale. Se mantiene
+                    angosta para dejar ancho al título y a los precios, y el min-h conserva
+                    la altura que la tarjeta tenía cuando la caja era más grande. #}}
+                {{# Bajado un poco: el scale crece desde el centro de la caja, así que
+                    lo que sube por arriba se salía de la tarjeta y el cuerno se metía
+                    encima del logotipo del nav. El desplazamiento va en `transform`,
+                    que no toca la maquetación: la columna sigue reservando el mismo
+                    sitio y ni el título ni los precios se mueven. Más abajo en xl,
+                    donde el personaje se pinta más grande y sobresale más. #}}
+                <div class="hidden sm:block shrink-0 -translate-x-8 translate-y-8 xl:translate-y-14 sm:min-h-[22rem] [&_.personaje-anim]:scale-[2.5] xl:[&_.personaje-anim]:scale-[3.6]">
+                    {{ personajes_portada }}{{ if first }}
+                    {{ partial:_personaje-media class="relative block w-40 lg:w-56 h-auto object-contain" }}
+                    {{ /if }}{{ /personajes_portada }}
+                </div>
+                {{ /if }}
+
+                {{# Derecha: fecha de inicio, costos y qué incluye #}}
+                <div class="font-sans text-lg sm:text-xl text-[#323E81] leading-relaxed sm:text-left sm:pt-2">
+                    {{# El mes en español lo compone site.js; el contenido inicial es
+                        el respaldo numérico por si el JS no llega a correr. #}}
+                    {{ if fecha_inicio }}
+                    <p class="m-0">A partir del <span data-fecha-larga="{{ fecha_inicio | format:'Y-m-d' }}">{{ fecha_inicio | format:'d/m/Y' }}</span></p>
+                    {{ /if }}
+                    {{# El separador de miles lo pone site.js: el precio se guarda plano
+                        porque es el mismo número que recibe Snipcart. #}}
+                    {{ if precio_mensual }}
+                    <p class="m-0"><strong class="font-bold">$<span data-precio="{{ precio_mensual }}">{{ precio_mensual }}</span></strong> al mes</p>
+                    {{ /if }}
+                    {{ if incluye }}
+                    {{ incluye }}<p class="m-0">{{ value }}</p>{{ /incluye }}
+                    {{ /if }}
+                    {{ if precio_trimestre }}
+                    <p class="m-0">Trimestre por adelantado: <strong class="font-bold">$<span data-precio="{{ precio_trimestre }}">{{ precio_trimestre }}</span></strong></p>
+                    {{ /if }}
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    {{# ── Tarjeta de descripción ──────────────────────────────────────────────
+        Mismo degradado de la portada pero al revés (amarillo → menta), para que
+        las dos tarjetas se lean como un par y no como bloques sueltos. #}}
+    {{ if descripcion }}
+    <div class="rounded-[1.75rem] px-7 py-8 sm:px-10 sm:py-10 mb-6 sm:mb-8" style="background: linear-gradient(to right, #F5E554, #AFFFEC);" data-reveal>
+        {{ if mensaje_importante }}
+        <p class="inline-block font-display font-bold text-sm uppercase tracking-wide bg-[#323E81] text-white px-4 py-1.5 rounded-full mb-5">{{ mensaje_importante }}</p>
+        {{ /if }}
+        <div class="font-sans text-lg sm:text-xl text-[#323E81] leading-relaxed [&_p]:m-0 [&_p+p]:mt-4">{{ descripcion }}</div>
+    </div>
+    {{ /if }}
+
+    {{# ── Grupos por edad ────────────────────────────────────────────────────
+        Dos columnas: con tres grupos, el tercero cae abajo a la izquierda,
+        como en el diseño. Los personajes se salen de la tarjeta a la derecha. #}}
+    {{ if grupos }}
+    <div class="grid gap-6 sm:gap-8 sm:grid-cols-2" data-stagger-cards>
+        {{ grupos }}
+        {{ if type == 'grupo' }}
+        <div class="relative rounded-[1.75rem] px-7 py-7 sm:px-9 sm:py-9 min-h-[10rem] sm:min-h-[9rem]" data-stagger-child
+             style="background-color: {{ if color == 'amarillo' }}#F5E554{{ elseif color == 'coral' }}#E8907C{{ elseif color == 'menta' }}#AFFFEC{{ else }}#C9BFE8{{ /if }};">
+
+            {{# El personaje se asoma por arriba del borde derecho. Se escala por ALTURA
+                (relativa a la tarjeta) y no por ancho: las ilustraciones son verticales
+                y con un ancho en % se desbordaban hasta invadir la tarjeta de abajo. #}}
+            {{ if personaje }}
+            {{ personaje }}
+            {{# Altura concreta, no porcentual: el partial envuelve los PNG en <picture>,
+                que es inline y sin altura propia, así que un h-full no resolvería y la
+                imagen saldría a tamaño natural. #}}
+            <div class="pointer-events-none absolute bottom-0 right-0 translate-x-[6%] leading-none">
+                {{ partial:_personaje-media class="block h-44 sm:h-56 w-auto max-w-none object-contain object-bottom" }}
+            </div>
+            {{ /personaje }}
+            {{ /if }}
+
+            <div class="relative z-10 max-w-[62%]">
+                {{# El nombre manda si lo hay —Exploradores, Constructores…— y las edades
+                    pasan a subtítulo. Sin nombre, las edades siguen siendo el título,
+                    que es como estaban antes de que existiera el campo. #}}
+                {{ if titulo }}
+                <h2 class="font-display font-bold text-2xl sm:text-3xl text-[#323E81] leading-tight">{{ titulo }}</h2>
+                {{ if edades }}
+                <p class="font-display font-normal text-lg sm:text-xl text-[#323E81] leading-tight mt-0.5">{{ edades }}</p>
+                {{ /if }}
+                {{ elseif edades }}
+                <h2 class="font-display font-bold text-2xl sm:text-3xl text-[#323E81] leading-tight">{{ edades }}</h2>
+                {{ /if }}
+
+                {{# El horario de este grupo, que no es el del taller entero. El
+                    `data-time` es para que site.js lo reescriba en el formato del sitio;
+                    lo que va dentro es el respaldo por si el JS no llega a correr. #}}
+                {{ if hora_inicio && hora_fin }}
+                <p class="font-display font-normal text-base sm:text-lg text-[#323E81] leading-tight mt-1">
+                    <span data-time="{{ hora_inicio }}">{{ hora_inicio | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
+                    a
+                    <span data-time="{{ hora_fin }}">{{ hora_fin | format:'g:i a' | replace:'am':'a.m.' | replace:'pm':'p.m.' }}</span>
+                </p>
+                {{ /if }}
+
+                {{# Aquí iba un "Quedan N lugares" que reescribía site.js contra
+                    /api/snipcart/stock. Se quita de la tarjeta, pero el inventario sigue
+                    mandando donde importa: cuando un grupo se queda sin stock, el mismo
+                    JS apaga su botón y lo cambia por "Lugares agotados". #}}
+
+                {{# Producto de Snipcart. La categoría `taller-sabatino` es distinta de la
+                    `taller` del taller de verano a propósito: la regla del 10% por 2 artículos
+                    sólo cuenta `taller`, así que estos no la disparan. Lo de "Lugares agotados"
+                    engancha por coincidencia parcial, así que sigue aplicando a ambos. #}}
+                <button type="button"
+                    class="snipcart-add-item inline-block font-display font-bold text-lg sm:text-xl text-white bg-[#323E81] px-7 py-3 rounded-xl mt-5 cursor-pointer transition-colors duration-300 hover:bg-[#232B5C]"
+                    data-item-id="{{ id }}"
+                    data-item-name="{{ title }} — {{ edades }}"
+                    data-item-price="{{ precio_mensual }}"
+                    data-item-url="{{ url }}"
+                    {{ if descripcion_producto }}data-item-description="{{ descripcion_producto }}"{{ /if }}
+                    data-item-max-quantity="1"
+                    data-item-categories="taller-sabatino"
+                    {{ if precio_trimestre }}
+                    data-item-custom1-name="Modalidad de pago"
+                    {{# El ahorro se calcula solo: 3 meses sueltos menos el precio del trimestre.
+                        "Pago de un mes" y no "Mensual" a propósito: Snipcart sólo hace cobros
+                        recurrentes con Stripe, y aquí se cobra con el gateway propio de PayPal,
+                        así que esto es un cobro único. Decir "Mensual" haría creer al cliente
+                        que se le renueva solo. #}}
+                    data-item-custom1-options="Pago de un mes|Trimestre por adelantado{{ if precio_mensual * 3 > precio_trimestre }} — ahorras ${{ precio_mensual * 3 - precio_trimestre }}{{ /if }}[+{{ precio_trimestre - precio_mensual }}]"
+                    data-item-custom1-required="true"
+                    {{ /if }}
+                    data-item-custom2-name="Nombre del niño/a"
+                    data-item-custom2-required="true"
+                    data-item-custom3-name="Edad"
+                    data-item-custom3-required="true"
+                    data-item-custom4-name="Nombre del padre o tutor"
+                    data-item-custom4-required="true"
+                    data-item-custom5-name="Teléfono de contacto"
+                    data-item-custom5-required="true"
+                    data-item-custom6-name="Notas o alergias"
+                    data-item-custom6-type="textarea">
+                    Reserva tu lugar
+                </button>
+            </div>
+        </div>
+        {{ /if }}
+        {{ /grupos }}
+    </div>
+    {{ /if }}
+
+    {{# ── Aviso final ─────────────────────────────────────────────────────────── #}}
+    {{ if alerta }}
+    <div class="rounded-[1.75rem] bg-[#323E81] text-white px-7 py-6 sm:px-10 sm:py-7 mt-6 sm:mt-8 text-center font-display text-xl sm:text-2xl leading-snug [&_p]:m-0 [&_strong]:font-bold" data-reveal>
+        {{ alerta }}
+    </div>
+    {{ /if }}
+
+</div>

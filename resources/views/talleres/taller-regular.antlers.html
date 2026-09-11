@@ -6,8 +6,7 @@
         {{ personaje }}
         {{ if imagen }}
         <div class="w-full sm:absolute sm:right-0 sm:-bottom-20 sm:w-[36%] pointer-events-none z-20" data-reveal-char>
-            <img src="{{ imagen:url }}" alt="{{ title }}"
-                 class="w-full h-48 sm:h-full object-contain object-bottom">
+            {{ partial:_personaje-media class="w-full h-48 sm:h-full object-contain object-bottom" }}
         </div>
         {{ /if }}
         {{ /personaje }}

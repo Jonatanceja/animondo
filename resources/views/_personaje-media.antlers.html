@@ -1,19 +1,43 @@
 {{#
     Muestra el personaje:
-      · si tiene animación Lottie la reproduce (autoplay+loop);
+      · si tiene animación la reproduce;
       · si no, usa la imagen.
     Las imágenes PNG/JPG se sirven en WebP con <picture> (fallback al original).
     Acepta el parámetro `class` para el tamaño/posición y `alt` para el texto alt.
 
-    El <dotlottie-player> no tiene altura propia, así que usamos la imagen como
-    "espaciador" invisible (define el tamaño/aspecto) y superponemos el reproductor
-    encima, ocupando el mismo espacio que ocuparía la imagen.
+    El campo `lottie` admite dos clases de animación, y no se muestran igual:
+
+      · .webp o .gif — mapa de bits. Los personajes están dibujados a mano y
+        exportados como secuencia de imágenes, así que un .lottie de esos pesa
+        megas para nada: el formato guarda cada fotograma entero y no comprime
+        entre uno y otro. Convertidos con `bin/lottie-a-webp.sh` pesan diez
+        veces menos, y aquí son un <img> corriente: sin reproductor y con
+        lazy-load del navegador.
+
+      · .lottie o .json — vectorial, que es para lo que sirve el formato. Va al
+        reproductor. El <dotlottie-player> no tiene altura propia, así que
+        usamos la imagen como "espaciador" invisible (define el tamaño y el
+        aspecto) y superponemos el reproductor encima.
+
+    Las dos ramas marcan la animación con la clase `.personaje-anim`, que es a
+    la que apuntan las `[&_.personaje-anim]:scale-*` de quien usa el partial:
+    el lienzo trae mucho aire alrededor del dibujo y hay que agrandarlo para
+    que el personaje llene su hueco. La clase va en la animación y no en el
+    contenedor porque el contenedor es el que reserva el sitio en la retícula,
+    y escalarlo movería a los vecinos.
+
+    El script respeta el lienzo original justamente para que el .webp entre en
+    el lugar de su .lottie sin retocar esas escalas.
 #}}
 {{ if lottie }}
-<span class="{{ class }}" style="display:inline-block; line-height:0;">
-    {{ if imagen }}<img src="{{ imagen:url }}" alt="" aria-hidden="true" style="display:block; width:100%; height:auto; visibility:hidden;">{{ /if }}
-    <dotlottie-player src="{{ lottie:url }}" autoplay loop background="transparent" style="position:absolute; inset:0; width:100%; height:100%;"></dotlottie-player>
-</span>
+    {{ if lottie:extension == "webp" || lottie:extension == "gif" }}
+    <img src="{{ lottie:url }}" alt="{{ alt ?? title }}" class="personaje-anim {{ class }}" loading="lazy">
+    {{ else }}
+    <span class="{{ class }}" style="display:inline-block; line-height:0;">
+        {{ if imagen }}<img src="{{ imagen:url }}" alt="" aria-hidden="true" style="display:block; width:100%; height:auto; visibility:hidden;">{{ /if }}
+        <dotlottie-player class="personaje-anim" src="{{ lottie:url }}" autoplay loop background="transparent" style="position:absolute; inset:0; width:100%; height:100%;"></dotlottie-player>
+    </span>
+    {{ /if }}
 {{ elseif imagen }}
     {{ if imagen:extension == "png" || imagen:extension == "jpg" || imagen:extension == "jpeg" }}
     <picture>

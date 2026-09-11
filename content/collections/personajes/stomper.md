@@ -4,7 +4,8 @@ blueprint: personaje
 title: Stomper
 cargo: Animador
 color: '#FFC18E'
+lottie: lotties/arana.webp
 imagen: arana-v002.png
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1780019304
+updated_at: 1788291262
 ---
