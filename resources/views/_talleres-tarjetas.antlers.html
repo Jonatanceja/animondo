@@ -60,8 +60,10 @@
         {{ /collection:personajes }}
         {{ /if }}
 
-        <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10">
-            <h3 class="font-display font-bold text-4xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
+        {{# En móvil el bloque se ancla abajo y lo sube el relleno inferior; en
+            escritorio pasa a la media columna derecha y ahí manda el `sm:py-10`. #}}
+        <div class="absolute bottom-0 left-0 right-0 px-6 pb-24 text-center z-20 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:w-1/2 sm:ml-auto sm:px-8 sm:py-10 sm:pb-10">
+            <h3 class="font-display font-bold text-3xl sm:text-5xl leading-tight mb-3 text-[#323E81]">{{ title }}</h3>
             {{ if se_puede_reservar }}
             {{# El horario, sólo si el taller lleva uno de portada. Los sabatinos ya no:
                 cada grupo tiene el suyo y un rango único no decía gran cosa. #}}
