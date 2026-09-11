@@ -4,7 +4,7 @@ blueprint: pages
 title: Inicio
 template: home
 updated_by: db71c86b-0af0-4094-bf90-d6f668283c12
-updated_at: 1789070869
+updated_at: 1789153933
 hero_type: video
 circle_image: esfera.png
 circle_slides:
@@ -112,7 +112,7 @@ viaje_lotties_slides:
     id: viajeLottieMundo0001
     type: escena
     texto_arriba: true
-    video: viaje/videos/viaje-01-mundo.webm
+    video: viaje/videos/viaje-01-mundo.mp4
     zoom: 1.0
     foco_x: 50
     foco_y: 50
@@ -127,7 +127,7 @@ viaje_lotties_slides:
     id: viajeLottieAniman002
     type: escena
     bucle_desde: 0.542
-    video: viaje/videos/viaje-02-malabarista.webm
+    video: viaje/videos/viaje-02-malabarista.mp4
     zoom: 2.0
     foco_x: 18
     foco_y: 66
@@ -143,7 +143,7 @@ viaje_lotties_slides:
     id: viajeLottieNiveles03
     type: escena
     bucle_desde: 0.75
-    video: viaje/videos/viaje-03-abeja.webm
+    video: viaje/videos/viaje-03-abeja.mp4
     enabled: true
     title: '<p>El viaje completo tiene 5 niveles.</p>'
     posicion: centro
@@ -226,7 +226,7 @@ viaje_lotties_slides:
     id: viajeLottieGorras004
     type: escena
     bucle_desde: 9.375
-    video: viaje/videos/viaje-05-gorras.webm
+    video: viaje/videos/viaje-05-gorras.mp4
     enabled: true
     title: '<p>El progreso tiene color.<br>Y viene en <strong>gorra</strong>.</p>'
     posicion: izquierda
@@ -244,7 +244,7 @@ viaje_lotties_slides:
     id: viajeLottieArtefac05
     type: escena
     bucle_desde: 2.792
-    video: viaje/videos/viaje-06-maquinas.webm
+    video: viaje/videos/viaje-06-maquinas.mp4
     enabled: true
     title: '<p>Los animautas construyen sus propias <strong>máquinas de cine </strong>y las usan para dar vida a sus animaciones.</p>'
     posicion: derecha
@@ -263,7 +263,7 @@ viaje_lotties_slides:
     type: escena
     texto_retraso: 4.0
     bucle_desde: 4.333
-    video: viaje/videos/viaje-08-cierre.webm
+    video: viaje/videos/viaje-08-cierre.mp4
     enabled: true
     title: '<p><strong>Asegura tu lugar.</strong><br>Cupos limitados.</p>'
     posicion: izquierda
@@ -295,7 +295,6 @@ marca_titulo: '<p>Imagina<br><strong>Anima </strong><br>Comparte</p>'
 marca_imagen_logo: animondo-color.svg
 marca_imagen_personajes: animondo-imagen-grupal.png
 hero_video_source: upload
-hero_video_file: animondo-hero-video.mp4
 talleres_entries:
   - fc361f30-59ac-434a-ac78-dafd900c3887
   - 6382ddc6-e313-4ca9-9c53-00bedb84097e
@@ -395,7 +394,7 @@ faq:
     type: pregunta
     enabled: true
     pregunta: '¿Cuánto dura el taller?'
-    respuesta: 'Hora y media cada sábado. Hay fecha de fin, el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
+    respuesta: 'Hora y media cada sábado. No hay fecha de fin, el animauta avanza por niveles a su propio ritmo, todo el año en calendario escolar.'
 instructores_titulo: Instructores
 personajes_en_posicion_absoluta:
   - 475d4e9f-948e-4a62-8cb1-5bd643118b6a
@@ -414,6 +413,7 @@ galeria_animautas:
   - video-animauta-02-logo.mp4
   - video-animauta-01-logo.mp4
   - video-animauta-10-logo.mp4
+hero_video_file: video/hero-animondo.mp4
 ---
 ## Welcome to your brand new Statamic site!
 
