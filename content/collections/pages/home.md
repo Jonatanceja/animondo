@@ -112,6 +112,8 @@ viaje_lotties_slides:
     id: viajeLottieMundo0001
     type: escena
     texto_arriba: true
+    texto_y: 58
+    texto_retraso: 0.5
     video: viaje/videos/viaje-01-mundo.mp4
     zoom: 1.0
     foco_x: 50

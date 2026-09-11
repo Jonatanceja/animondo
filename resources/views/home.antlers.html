@@ -18,7 +18,10 @@
     <div class="video-inner">
         {{ if hero_video_source == 'upload' }}
             {{ if hero_video_file }}
-            <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline src="{{ hero_video_file:url }}"></video>
+            {{# `preload="auto"` a propósito: si el arranque se bloquea —cosa habitual en
+                iPhone con el modo de bajo consumo— al menos el primer fotograma ya está
+                pintado y no se ve un hueco negro. El reintento lo lleva site.js. #}}
+            <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline preload="auto" disablepictureinpicture src="{{ hero_video_file:url }}"></video>
             {{ /if }}
         {{ else }}
             {{ if hero_video_url }}

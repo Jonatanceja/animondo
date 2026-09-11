@@ -51,6 +51,36 @@ if (navLogo) {
   }, { passive: true });
 }
 
+// ── Arranque de los videos que van solos ───────────────────────────────────
+// Safari en iPhone bloquea el arranque automático con más frecuencia que el
+// resto: basta el modo de bajo consumo, o que el sistema decida que no toca.
+// Cuando lo bloquea no avisa —`play()` devuelve una promesa rechazada y ya—, así
+// que el video se queda congelado en su primer fotograma sin que nada lo diga.
+//
+// Aquí se intenta arrancarlos a mano y, si no se puede, se vuelve a intentar en
+// cuanto la persona toque la pantalla: ese gesto sí cuenta como permiso. Se
+// escucha una sola vez y se suelta, que no hace falta nada más.
+//
+// El `muted` también se pone por propiedad y no sólo por atributo: el atributo
+// se lee al construir el elemento, y si algo lo toca después iOS deja de
+// considerarlo silenciado y vuelve a bloquear.
+document.querySelectorAll('video[autoplay]').forEach((v) => {
+  v.muted = true;
+  v.setAttribute('playsinline', '');
+
+  const arrancar = () => v.play().catch(() => {});
+
+  arrancar();
+
+  const alTocar = () => {
+    arrancar();
+    document.removeEventListener('touchstart', alTocar);
+    document.removeEventListener('click', alTocar);
+  };
+  document.addEventListener('touchstart', alTocar, { once: true, passive: true });
+  document.addEventListener('click', alTocar, { once: true });
+});
+
 // ── Video section ──────────────────────────────────────────────────────────
 const videoBg = document.querySelector('.video-bg');
 if (videoBg) {
